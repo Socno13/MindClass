@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindClass - Plataforma Educativa Integrada</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        },
+                        darkbg: '#0a0d14',
+                        darkcard: '#121824',
+                        darkcard2: '#182030',
+                        darkborder: '#1f293d'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0d14; }
+        ::-webkit-scrollbar-thumb { background: #1f293d; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #374151; }
+    </style>
+</head>
+<body class="bg-darkbg text-slate-100 font-sans min-h-screen flex flex-col md:flex-row overflow-x-hidden md:overflow-hidden antialiased selection:bg-brand-500 selection:text-white pb-16 md:pb-0">
+
+    <!-- BARRA LATERAL (SIDEBAR) EN DESKTOP / MENÚ MÓVIL -->
+    <aside class="w-full md:w-64 bg-[#0d121f] border-b md:border-b-0 md:border-r border-darkborder flex flex-col justify-between flex-shrink-0 z-20">
+        <div>
+            <!-- LOGO Y BRANDING -->
+            <div class="p-4 md:p-5 border-b border-darkborder flex items-center justify-between md:justify-start gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 text-white flex items-center justify-center font-black text-xl shadow-lg shadow-brand-500/30">
+                        MC
+                    </div>
+                    <div>
+                        <h1 class="font-extrabold text-lg tracking-tight text-white flex items-center gap-1.5">
+                            MindClass
+                        </h1>
+                        <p class="text-[10px] font-medium text-slate-400">Ecosistema Escolar</p>
+                    </div>
+                </div>
+
+                <!-- Botón de Menú para Móviles -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg bg-darkcard border border-darkborder text-slate-300">
+                    ☰
+                </button>
+            </div>
+
+            <!-- NAVEGACIÓN PRINCIPAL -->
+            <div id="sidebar-menu" class="hidden md:block p-3 space-y-6">
+                <div>
+                    <p class="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-500 mb-2">Académico</p>
+                    <nav class="space-y-1">
+                        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-darkcard transition group">
+                            <span class="text-base group-hover:scale-110 transition">📊</span> Dashboard
+                        </button>
+                        <button onclick="switchTab('notas')" id="nav-notas" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-darkcard transition group">
+                            <span class="text-base group-hover:scale-110 transition">📝</span> Libreta de Notas
+                        </button>
+                    </nav>
+                </div>
+
+                <div>
+                    <p class="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-500 mb-2">Pilares MindClass</p>
+                    <nav class="space-y-1">
+                        <button onclick="switchTab('aula')" id="nav-aula" class="nav-btn active w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold bg-brand-600 text-white shadow-md shadow-brand-500/20 transition group">
+                            <span class="text-base group-hover:scale-110 transition">📌</span> AulaSync & Pomodoro
+                        </button>
+                        <button onclick="switchTab('aprende')" id="nav-aprende" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-darkcard transition group">
+                            <span class="text-base group-hover:scale-110 transition">📚</span> AprendeJunto
+                        </button>
+                        <button onclick="switchTab('voz')" id="nav-voz" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-darkcard transition group">
+                            <span class="text-base group-hover:scale-110 transition">🗳️</span> VozEscolar
+                        </button>
+                        <button onclick="switchTab('cuida')" id="nav-cuida" class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-darkcard transition group">
+                            <span class="text-base group-hover:scale-110 transition">🛠️</span> ColeCuida
+                        </button>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <!-- PERFIL INFERIOR -->
+        <div class="hidden md:block p-3 border-t border-darkborder bg-[#090d17]">
+            <div class="flex items-center gap-3 p-2 rounded-xl bg-darkcard border border-darkborder">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center font-bold text-xs text-white">
+                    RS
+                </div>
+                <div class="overflow-hidden">
+                    <p id="user-name" class="text-xs font-bold text-white truncate">Rodrigo Silverio</p>
+                    <p id="user-role-label" class="text-[10px] text-slate-400 truncate">Estudiante • 3° Secundaria</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ÁREA PRINCIPAL -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        
+        <!-- ENCABEZADO SUPERIOR -->
+        <header class="h-16 border-b border-darkborder bg-[#0d121f]/80 backdrop-blur-md px-4 md:px-6 flex items-center justify-between z-10">
+            <h2 id="header-title" class="font-extrabold text-sm md:text-base text-white tracking-tight truncate">AulaSync - Agenda & Pomodoro</h2>
+            
+            <div class="flex items-center gap-3 md:gap-4">
+                <div class="flex items-center gap-2">
+                    <span class="hidden sm:inline text-[11px] font-semibold text-slate-400">Rol:</span>
+                    <select id="role-select" onchange="changeRole(this.value)" class="bg-darkcard border border-darkborder text-[11px] md:text-xs font-bold text-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-brand-500">
+                        <option value="Estudiante">Estudiante</option>
+                        <option value="Profesor">Profesor (Tutor)</option>
+                        <option value="Padre">Padre de Familia</option>
+                    </select>
+                </div>
+                
+                <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-darkcard border border-darkborder text-slate-300 hover:text-white transition">
+                    🌙
+                </button>
+            </div>
+        </header>
+
+        <!-- PANEL DE CONTENIDOS -->
+        <div class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
+
+            <!-- 1. DASHBOARD -->
+            <section id="view-dashboard" class="view-panel hidden space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+                    <div class="p-5 rounded-2xl bg-darkcard border border-darkborder shadow-xl">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Promedio Ponderado</p>
+                        <div class="flex items-baseline gap-3 mt-3">
+                            <span class="text-3xl font-black text-brand-400">17.8</span>
+                            <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-bold border border-emerald-500/20">AD - Destacado</span>
+                        </div>
+                    </div>
+                    <div class="p-5 rounded-2xl bg-darkcard border border-darkborder shadow-xl">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Módulos Activos</p>
+                        <div class="flex items-baseline gap-3 mt-3">
+                            <span class="text-3xl font-black text-indigo-400">4 Pilares</span>
+                            <span class="px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-bold border border-indigo-500/20">MindClass</span>
+                        </div>
+                    </div>
+                    <div class="p-5 rounded-2xl bg-darkcard border border-darkborder shadow-xl sm:col-span-2 lg:col-span-1">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Tareas Pendientes</p>
+                        <div class="flex items-baseline gap-3 mt-3">
+                            <span id="dash-tasks-count" class="text-3xl font-black text-amber-400">3</span>
+                            <span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 text-xs font-bold border border-amber-500/20">Esta Semana</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-darkcard border border-darkborder shadow-xl">
+                    <h3 class="text-sm font-bold text-white mb-4 flex items-center gap-2">📢 Comunicados Institucionales MindClass</h3>
+                    <div class="space-y-3">
+                        <div class="p-4 rounded-xl bg-darkcard2 border border-darkborder flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                            <div>
+                                <h4 class="text-xs font-bold text-white">Publicación de Fechas para Evaluaciones Bimestrales</h4>
+                                <p class="text-[11px] text-slate-400 mt-1">Dirección Académica • Publicado hoy</p>
+                            </div>
+                            <span class="px-3 py-1 rounded-lg bg-brand-500/10 text-brand-400 text-xs font-bold border border-brand-500/20">Oficial</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. LIBRETA DE NOTAS -->
+            <section id="view-notas" class="view-panel hidden space-y-6">
+                <div class="p-5 rounded-2xl bg-darkcard border border-darkborder shadow-xl">
+                    <h3 class="text-sm font-bold text-white mb-4">📝 Libreta de Calificaciones</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead>
+                                <tr class="border-b border-darkborder text-slate-400 font-bold uppercase">
+                                    <th class="pb-3 pr-4">Área Curricular</th>
+                                    <th class="pb-3 px-2">Comp. 1</th>
+                                    <th class="pb-3 px-2">Comp. 2</th>
+                                    <th class="pb-3 px-2">Promedio</th>
+                                    <th class="pb-3 pl-2">Nivel de Logro</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-darkborder text-slate-300">
+                                <tr>
+                                    <td class="py-3.5 font-bold text-white pr-4">Matemática</td>
+                                    <td class="py-3.5 px-2">18</td>
+                                    <td class="py-3.5 px-2">17</td>
+                                    <td class="py-3.5 px-2 font-extrabold text-brand-400">17.5</td>
+                                    <td class="py-3.5 pl-2"><span class="px-2.5 py-0.5 rounded-lg bg-emerald-500/10 text-emerald-400 font-bold border border-emerald-500/20">AD</span></td>
