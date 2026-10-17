@@ -51,7 +51,7 @@
     <div id="authModal" class="fixed inset-0 bg-darkBg z-50 flex items-center justify-center">
         <div class="w-full h-full flex flex-col md:flex-row">
             
-            <!-- COLUMNA IZQUIERDA: IMAGEN / ILUSTRACIÓN INSTITUCIONAL -->
+            <!-- COLUMNA IZQUIERDA: IMAGEN INSTITUCIONAL -->
             <div class="hidden md:flex md:w-1/2 lg:w-7/12 relative bg-cover bg-center items-end p-12 overflow-hidden" style="background-image: url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop');">
                 <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-darkBg/60 to-transparent"></div>
                 <div class="relative z-10 space-y-3">
@@ -98,7 +98,7 @@
                     </div>
 
                     <!-- BOTÓN PRINCIPAL ESTILO GOOGLE -->
-                    <button onclick="handleGoogleAccess()" type="button" class="w-full bg-red-600 hover:bg-red-500 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-lg shadow-red-600/20 flex items-center justify-between group">
+                    <button onclick="openGoogleAccountPicker()" type="button" class="w-full bg-red-600 hover:bg-red-500 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-lg shadow-red-600/20 flex items-center justify-between group">
                         <div class="flex items-center space-x-3">
                             <div class="w-7 h-7 bg-white rounded-lg flex items-center justify-center text-red-600 font-black text-sm shadow">
                                 G
@@ -162,6 +162,74 @@
 
                 <div class="pt-6 text-[10px] text-slate-600 text-center">
                     MindClass v3.5 • I.E.P. Milagros de Dios
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL EMERGENTE: SELECTOR DE CUENTAS DE GOOGLE -->
+    <div id="googleAccountModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-[#1e1e1e] border border-gray-800 text-white rounded-3xl w-full max-w-md p-6 shadow-2xl space-y-6 relative">
+            <button onclick="closeGoogleModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Encabezado Google -->
+            <div class="space-y-1">
+                <div class="flex items-center space-x-2">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                    </svg>
+                    <span class="text-sm font-medium text-gray-300">Iniciar sesión con Google</span>
+                </div>
+                <h3 class="text-2xl font-normal text-white pt-2">Selecciona una cuenta</h3>
+                <p class="text-xs text-gray-400">Ir a <span class="text-blue-400 font-medium">socno13.github.io/MindClass</span></p>
+            </div>
+
+            <!-- Lista de cuentas pregrabadas / disponibles -->
+            <div class="space-y-1 border-t border-b border-gray-800 py-2">
+                
+                <!-- Cuenta Institucional Rodrigo -->
+                <div onclick="selectGoogleUser('Rodrigo Fernando SILVERIO LUQUE', 'rodrigo_silverio@colegiomilagrosdedios.edu.pe')" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/10 cursor-pointer transition-colors">
+                    <div class="w-9 h-9 rounded-full bg-accentBlue text-white font-bold flex items-center justify-center text-xs">
+                        RF
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <p class="text-xs font-semibold text-white truncate">Rodrigo Fernando SILVERIO LUQUE</p>
+                        <p class="text-[11px] text-gray-400 truncate">rodrigo_silverio@colegiomilagrosdedios.edu.pe</p>
+                    </div>
+                </div>
+
+                <!-- Cuenta Tifanny -->
+                <div onclick="selectGoogleUser('Tifanny Lévano Vargas', 'tifanny_levano@colegiomilagrosdedios.edu.pe')" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/10 cursor-pointer transition-colors">
+                    <div class="w-9 h-9 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-xs">
+                        TL
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <p class="text-xs font-semibold text-white truncate">Tifanny Lévano Vargas</p>
+                        <p class="text-[11px] text-gray-400 truncate">tifanny_levano@colegiomilagrosdedios.edu.pe</p>
+                    </div>
+                </div>
+
+                <!-- Botón: Usar otra cuenta -->
+                <div onclick="promptCustomAccount()" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/10 cursor-pointer transition-colors text-blue-400">
+                    <div class="w-9 h-9 rounded-full bg-gray-800 flex items-center justify-center text-xs">
+                        <i class="fa-solid fa-user-plus"></i>
+                    </div>
+                    <span class="text-xs font-medium">Usar otra cuenta</span>
+                </div>
+            </div>
+
+            <!-- Footer modal -->
+            <div class="flex justify-between items-center text-[11px] text-gray-500 pt-1">
+                <span>Español (España)</span>
+                <div class="space-x-3">
+                    <a href="#" class="hover:underline">Ayuda</a>
+                    <a href="#" class="hover:underline">Privacidad</a>
+                    <a href="#" class="hover:underline">Términos</a>
                 </div>
             </div>
         </div>
@@ -502,7 +570,7 @@
         let currentUser = JSON.parse(localStorage.getItem('mindclass_user')) || null;
 
         document.addEventListener('DOMContentLoaded', function() {
-            if (currentUser) {
+            if (currentUser && currentUser.email) {
                 document.getElementById('authModal').classList.add('hidden');
                 updateUserUI();
                 initFirebaseListeners();
@@ -511,19 +579,43 @@
             }
         });
 
-        // ACCESO RÁPIDO ESTILO "CONTINUAR CON GOOGLE"
-        function handleGoogleAccess() {
-            const defaultEmail = "estudiante@colegiomilagrosdedios.edu.pe";
+        // FUNCIONES DEL MODAL SELECTOR DE CUENTA GOOGLE
+        function openGoogleAccountPicker() {
+            document.getElementById('googleAccountModal').classList.remove('hidden');
+        }
+
+        function closeGoogleModal() {
+            document.getElementById('googleAccountModal').classList.add('hidden');
+        }
+
+        function selectGoogleUser(name, email) {
             currentUser = {
                 id: 'usr_' + Date.now(),
-                name: 'Estudiante Milagros de Dios',
-                email: defaultEmail,
+                name: name,
+                email: email,
                 grade: '4° Secundaria'
             };
             localStorage.setItem('mindclass_user', JSON.stringify(currentUser));
+            closeGoogleModal();
             document.getElementById('authModal').classList.add('hidden');
             updateUserUI();
             initFirebaseListeners();
+        }
+
+        function promptCustomAccount() {
+            const userEmail = prompt("Ingresa tu correo institucional (@colegiomilagrosdedios.edu.pe):");
+            if (!userEmail) return;
+
+            if (!userEmail.trim().toLowerCase().endsWith(REQUIRED_DOMAIN)) {
+                alert("Acceso denegado: El correo debe ser " + REQUIRED_DOMAIN);
+                return;
+            }
+
+            const cleanEmail = userEmail.trim().toLowerCase();
+            const rawName = cleanEmail.split('@')[0].replace('.', ' ');
+            const formattedName = rawName.charAt(0).toUpperCase() + rawName.slice(1);
+
+            selectGoogleUser(formattedName, cleanEmail);
         }
 
         // ACCESO MANUAL CON VALIDACIÓN DE CÓDIGO
@@ -535,12 +627,12 @@
             const code = document.getElementById('manualCode').value.trim();
 
             if (!email.endsWith(REQUIRED_DOMAIN)) {
-                showAuthAlert("El correo debe ser " + REQUIRED_DOMAIN);
+                showAuthAlert("El correo debe terminar en " + REQUIRED_DOMAIN);
                 return;
             }
 
             if (GRADE_CODES[grade] !== code) {
-                showAuthAlert("Código de acceso incorrecto para el grado seleccionado.");
+                showAuthAlert("Código de acceso incorrecto para " + grade);
                 return;
             }
 
@@ -550,6 +642,7 @@
                 email: email,
                 grade: grade
             };
+
             localStorage.setItem('mindclass_user', JSON.stringify(currentUser));
             document.getElementById('authModal').classList.add('hidden');
             updateUserUI();
@@ -565,6 +658,7 @@
 
         function logout() {
             localStorage.removeItem('mindclass_user');
+            currentUser = null;
             location.reload();
         }
 
