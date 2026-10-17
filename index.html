@@ -47,76 +47,122 @@
 </head>
 <body class="h-full flex overflow-hidden antialiased selection:bg-accentBlue selection:text-white">
 
-    <!-- AUTHENTICATION / REGISTRATION MODAL -->
-    <div id="authModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
-        <div class="bg-sidebarBg border border-borderBg rounded-2xl w-full max-w-md p-6 shadow-2xl relative">
-            <div class="text-center mb-6">
-                <div class="w-12 h-12 bg-accentBlue text-white rounded-xl flex items-center justify-center mx-auto mb-3 font-bold text-xl shadow-lg shadow-accentBlue/30">
-                    M
+    <!-- AUTHENTICATION LANDING / MODAL ESTILO CYT -->
+    <div id="authModal" class="fixed inset-0 bg-darkBg z-50 flex items-center justify-center">
+        <div class="w-full h-full flex flex-col md:flex-row">
+            
+            <!-- COLUMNA IZQUIERDA: IMAGEN / ILUSTRACIÓN INSTITUCIONAL -->
+            <div class="hidden md:flex md:w-1/2 lg:w-7/12 relative bg-cover bg-center items-end p-12 overflow-hidden" style="background-image: url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop');">
+                <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-darkBg/60 to-transparent"></div>
+                <div class="relative z-10 space-y-3">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accentBlue/20 border border-accentBlue/40 text-lightBlue text-xs font-semibold backdrop-blur-md">
+                        <i class="fa-solid fa-graduation-cap"></i> Ecosistema Digital Escolar
+                    </div>
+                    <h1 class="text-4xl lg:text-5xl font-extrabold text-white leading-tight">
+                        MindClass
+                    </h1>
+                    <p class="text-slate-300 text-sm max-w-lg leading-relaxed">
+                        Conocimiento para comprender, herramientas para transformar. Plataforma colaborativa oficial para la comunidad de la I.E.P. Milagros de Dios.
+                    </p>
                 </div>
-                <h2 class="text-2xl font-bold text-white">MindClass</h2>
-                <p class="text-xs text-slate-400">Plataforma Educativa • I.E.P. Milagros de Dios</p>
             </div>
 
-            <!-- Auth Tabs -->
-            <div class="flex bg-darkBg p-1 rounded-xl mb-6 border border-borderBg text-xs">
-                <button id="tabLoginBtn" type="button" onclick="switchAuthTab('login')" class="flex-1 py-2 font-semibold rounded-lg bg-accentBlue text-white transition-all">Iniciar Sesión</button>
-                <button id="tabRegisterBtn" type="button" onclick="switchAuthTab('register')" class="flex-1 py-2 font-semibold rounded-lg text-slate-400 hover:text-white transition-all">Registrarse</button>
-            </div>
+            <!-- COLUMNA DERECHA: FORMULARIO DE INGRESO INSTITUCIONAL -->
+            <div class="w-full md:w-1/2 lg:w-5/12 bg-sidebarBg border-l border-borderBg p-8 lg:p-12 flex flex-col justify-between overflow-y-auto custom-scrollbar">
+                
+                <div class="space-y-8 max-w-md mx-auto w-full my-auto">
+                    <!-- LOGO Y TÍTULOS -->
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-accentBlue rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-accentBlue/30">
+                                M
+                            </div>
+                            <div>
+                                <h2 class="text-lg font-bold text-white leading-none">MindClass</h2>
+                                <p class="text-[10px] text-slate-400">I.E.P. Milagros de Dios</p>
+                            </div>
+                        </div>
 
-            <!-- LOGIN FORM -->
-            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Correo Institucional</label>
-                    <input type="email" id="loginEmail" placeholder="usuario@colegiomilagrosdedios.edu.pe" required class="w-full bg-darkBg border border-borderBg rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-accentBlue">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Contraseña</label>
-                    <input type="password" id="loginPass" required class="w-full bg-darkBg border border-borderBg rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-accentBlue">
-                </div>
-                <button type="submit" class="w-full bg-accentBlue hover:bg-hoverBlue text-white font-semibold py-2.5 rounded-xl transition-colors shadow-lg shadow-accentBlue/20 text-xs">
-                    Ingresar a MindClass
-                </button>
-            </form>
+                        <div class="pt-4">
+                            <h3 class="text-2xl font-extrabold text-white tracking-tight">Ingreso institucional</h3>
+                            <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                                Accede a tus clases, chat de salón, recursos colaborativos y actividades escolares.
+                            </p>
+                        </div>
+                    </div>
 
-            <!-- REGISTER FORM -->
-            <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-3 hidden">
-                <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Nombre Completo</label>
-                    <input type="text" id="regName" placeholder="Ej. Rodrigo Silverio" required class="w-full bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Correo Electrónico</label>
-                    <input type="email" id="regEmail" placeholder="estudiante@colegiomilagrosdedios.edu.pe" required class="w-full bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
-                    <p class="text-[10px] text-amber-400 mt-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Debe ser @colegiomilagrosdedios.edu.pe</p>
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Grado Académico (Sin Secciones)</label>
-                    <select id="regGrade" required class="w-full bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
-                        <option value="1° Secundaria">1° Secundaria</option>
-                        <option value="2° Secundaria">2° Secundaria</option>
-                        <option value="3° Secundaria">3° Secundaria</option>
-                        <option value="4° Secundaria" selected>4° Secundaria</option>
-                        <option value="5° Secundaria">5° Secundaria</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Código de Acceso del Grado</label>
-                    <input type="password" id="regCode" placeholder="Ej. CMD-4SEC" required class="w-full bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
-                    <p class="text-[10px] text-slate-500 mt-0.5">Códigos: CMD-1SEC, CMD-2SEC, CMD-3SEC, CMD-4SEC, CMD-5SEC</p>
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Contraseña</label>
-                    <input type="password" id="regPass" required class="w-full bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
-                </div>
-                <button type="submit" class="w-full bg-accentBlue hover:bg-hoverBlue text-white font-semibold py-2.5 rounded-xl transition-colors shadow-lg shadow-accentBlue/20 text-xs mt-2">
-                    Crear Cuenta Estudiantil
-                </button>
-            </form>
+                    <!-- INDICACIÓN DEL DOMINIO -->
+                    <div class="bg-darkBg border border-borderBg rounded-xl p-3 flex items-center space-x-3 text-xs text-slate-300">
+                        <i class="fa-regular fa-envelope text-accentBlue text-sm"></i>
+                        <span>Usa tu correo <strong class="text-white">@colegiomilagrosdedios.edu.pe</strong></span>
+                    </div>
 
-            <div id="authAlert" class="hidden mt-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center space-x-2">
-                <i class="fa-solid fa-circle-exclamation text-sm"></i>
-                <span id="authAlertMsg">Error en la autenticación</span>
+                    <!-- BOTÓN PRINCIPAL ESTILO GOOGLE -->
+                    <button onclick="handleGoogleAccess()" type="button" class="w-full bg-red-600 hover:bg-red-500 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-lg shadow-red-600/20 flex items-center justify-between group">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-7 h-7 bg-white rounded-lg flex items-center justify-center text-red-600 font-black text-sm shadow">
+                                G
+                            </div>
+                            <div class="text-left">
+                                <p class="text-xs font-bold text-white">Continuar con Google</p>
+                                <p class="text-[10px] text-red-100/80">Acceso institucional seguro</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+
+                    <div class="relative flex py-1 items-center">
+                        <div class="flex-grow border-t border-borderBg"></div>
+                        <span class="flex-shrink mx-4 text-[10px] text-slate-500 uppercase font-semibold tracking-wider">o acceso manual</span>
+                        <div class="flex-grow border-t border-borderBg"></div>
+                    </div>
+
+                    <!-- FORMULARIO SECUNDARIO DE INGRESO MANUAL -->
+                    <form onsubmit="handleManualLogin(event)" class="space-y-3">
+                        <div>
+                            <label class="block text-[11px] font-medium text-slate-300 mb-1">Nombre Completo</label>
+                            <input type="text" id="manualName" placeholder="Ej. Rodrigo Silverio" required class="w-full bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-medium text-slate-300 mb-1">Correo Institucional</label>
+                            <input type="email" id="manualEmail" placeholder="usuario@colegiomilagrosdedios.edu.pe" required class="w-full bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[11px] font-medium text-slate-300 mb-1">Grado</label>
+                                <select id="manualGrade" required class="w-full bg-darkBg border border-borderBg rounded-xl px-2 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
+                                    <option value="1° Secundaria">1° Secundaria</option>
+                                    <option value="2° Secundaria">2° Secundaria</option>
+                                    <option value="3° Secundaria">3° Secundaria</option>
+                                    <option value="4° Secundaria" selected>4° Secundaria</option>
+                                    <option value="5° Secundaria">5° Secundaria</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-medium text-slate-300 mb-1">Código Grado</label>
+                                <input type="password" id="manualCode" placeholder="CMD-4SEC" required class="w-full bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-accentBlue hover:bg-hoverBlue text-white font-semibold py-2.5 rounded-xl transition-colors text-xs mt-2">
+                            Ingresar a la Plataforma
+                        </button>
+                    </form>
+
+                    <div id="authAlert" class="hidden p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center space-x-2">
+                        <i class="fa-solid fa-circle-exclamation text-sm"></i>
+                        <span id="authAlertMsg">Error en la autenticación</span>
+                    </div>
+
+                    <!-- LEYENDA INFERIOR -->
+                    <p class="text-[10px] text-slate-500 text-center leading-relaxed">
+                        El acceso depende del rol y matrícula registrados. La plataforma no almacena contraseñas personales.
+                    </p>
+                </div>
+
+                <div class="pt-6 text-[10px] text-slate-600 text-center">
+                    MindClass v3.5 • I.E.P. Milagros de Dios
+                </div>
             </div>
         </div>
     </div>
@@ -232,19 +278,16 @@
 
             <!-- TOP HEADER BAR -->
             <header class="h-14 bg-sidebarBg border-b border-borderBg flex items-center justify-end px-6 space-x-4">
-                <!-- Notifications -->
                 <button class="relative text-slate-400 hover:text-white text-sm" title="Notificaciones">
                     <i class="fa-regular fa-bell"></i>
                     <span class="absolute -top-1 -right-1 w-2 h-2 bg-accentBlue rounded-full"></span>
                 </button>
 
-                <!-- Role Dropdown Badge -->
                 <div class="flex items-center space-x-2 bg-darkBg border border-borderBg px-3 py-1 rounded-full">
                     <i class="fa-solid fa-user-graduate text-accentBlue text-xs"></i>
                     <span class="text-xs font-medium text-slate-200">Estudiante</span>
                 </div>
 
-                <!-- Theme Switch Toggle -->
                 <label class="relative inline-flex items-center cursor-pointer">
                     <input type="checkbox" checked class="sr-only peer" disabled>
                     <div class="w-8 h-4 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-accentBlue"></div>
@@ -254,10 +297,8 @@
             <!-- MAIN DYNAMIC CONTAINER -->
             <main class="flex-1 overflow-y-auto custom-scrollbar p-6">
 
-                <!-- SECTION 1: APRENDEJUNTO (ACTIVE BY DEFAULT) -->
+                <!-- SECTION 1: APRENDEJUNTO -->
                 <section id="sec-aprende-junto" class="content-sec space-y-6">
-                    
-                    <!-- Header Banner -->
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
                             <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-accentBlue/10 border border-accentBlue/30 text-accentBlue text-[10px] font-bold uppercase tracking-wider mb-2">
@@ -273,7 +314,6 @@
                         </button>
                     </div>
 
-                    <!-- Inner Navigation Tabs -->
                     <div class="flex border-b border-borderBg space-x-2 text-xs overflow-x-auto custom-scrollbar pb-1">
                         <button onclick="switchAprendeTab('dudas')" id="tab-dudas" class="aprende-tab-btn px-4 py-2.5 rounded-t-xl font-semibold bg-accentBlue text-white flex items-center space-x-2 whitespace-nowrap">
                             <i class="fa-solid fa-comments"></i>
@@ -293,20 +333,14 @@
                         </button>
                     </div>
 
-                    <!-- TAB 1: DUDAS & EXPLICACIONES -->
                     <div id="sub-dudas" class="aprende-sub-sec space-y-4">
                         <div class="flex justify-between items-center text-xs text-slate-400 px-1">
                             <span>Preguntas activas de estudiantes</span>
                             <span id="qCountText">Sincronizado en vivo</span>
                         </div>
-
-                        <!-- Posts Feed Container -->
-                        <div id="qFeedContainer" class="space-y-4">
-                            <!-- Rendered dynamically -->
-                        </div>
+                        <div id="qFeedContainer" class="space-y-4"></div>
                     </div>
 
-                    <!-- TAB 2: APUNTES COLABORATIVOS -->
                     <div id="sub-apuntes" class="aprende-sub-sec space-y-4 hidden">
                         <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-3">
                             <h3 class="font-bold text-white text-sm">Banco de Fichas y Resúmenes Compartidos</h3>
@@ -334,7 +368,6 @@
                         </div>
                     </div>
 
-                    <!-- TAB 3: DEBATES & MÉTODOS -->
                     <div id="sub-debates" class="aprende-sub-sec space-y-4 hidden">
                         <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-3">
                             <h3 class="font-bold text-white text-sm">Comparación de Estrategias y Métodos</h3>
@@ -350,7 +383,6 @@
                         </div>
                     </div>
 
-                    <!-- TAB 4: RECONOCIMIENTOS & MEDALLAS -->
                     <div id="sub-reconocimientos" class="aprende-sub-sec space-y-4 hidden">
                         <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4">
                             <h3 class="font-bold text-white text-sm flex items-center gap-2">
@@ -375,7 +407,6 @@
                             </div>
                         </div>
                     </div>
-
                 </section>
 
                 <!-- SECTION 2: DASHBOARD -->
@@ -416,9 +447,7 @@
                             </span>
                         </div>
 
-                        <div id="salonChatFeed" class="flex-1 overflow-y-auto custom-scrollbar my-4 space-y-3 pr-2">
-                            <!-- Messages rendered dynamically -->
-                        </div>
+                        <div id="salonChatFeed" class="flex-1 overflow-y-auto custom-scrollbar my-4 space-y-3 pr-2"></div>
 
                         <form onsubmit="sendSalonMessage(event)" class="flex gap-2 pt-2 border-t border-borderBg">
                             <input type="text" id="salonInput" placeholder="Escribe un mensaje para tu salón..." required class="flex-1 bg-darkBg border border-borderBg rounded-xl px-4 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
@@ -438,9 +467,7 @@
                         </h2>
                         <p class="text-xs text-slate-400 mb-6">Cada estudiante tiene permitido emitir únicamente <strong>un solo voto</strong> por iniciativa.</p>
 
-                        <div id="pollsContainer" class="space-y-4">
-                            <!-- Polls rendered dynamically -->
-                        </div>
+                        <div id="pollsContainer" class="space-y-4"></div>
                     </div>
                 </section>
 
@@ -448,9 +475,8 @@
         </div>
     </div>
 
-    <!-- MAIN JAVASCRIPT LOGIC WITH FIREBASE -->
+    <!-- MAIN JAVASCRIPT LOGIC -->
     <script>
-        // Configuración oficial de tu proyecto Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDjN7AUD5eUf_Dff0PZmccCBDLozqvY4KE",
             authDomain: "mindclass-13r11.firebaseapp.com",
@@ -461,11 +487,9 @@
             appId: "1:86015013267:web:cd4f64fdc91b536fb3b366"
         };
 
-        // Inicializar Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // INSTITUTIONAL CONFIG
         const REQUIRED_DOMAIN = "@colegiomilagrosdedios.edu.pe";
         const GRADE_CODES = {
             "1° Secundaria": "CMD-1SEC",
@@ -475,10 +499,9 @@
             "5° Secundaria": "CMD-5SEC"
         };
 
-        // USER DE LOCALSTORAGE (Si es la primera vez, será null para exigir registro/login)
         let currentUser = JSON.parse(localStorage.getItem('mindclass_user')) || null;
 
-        window.onload = function() {
+        document.addEventListener('DOMContentLoaded', function() {
             if (currentUser) {
                 document.getElementById('authModal').classList.add('hidden');
                 updateUserUI();
@@ -486,53 +509,15 @@
             } else {
                 document.getElementById('authModal').classList.remove('hidden');
             }
-        };
+        });
 
-        function switchAuthTab(tab) {
-            const loginForm = document.getElementById('loginForm');
-            const registerForm = document.getElementById('registerForm');
-            const loginBtn = document.getElementById('tabLoginBtn');
-            const regBtn = document.getElementById('tabRegisterBtn');
-
-            if (tab === 'login') {
-                loginForm.classList.remove('hidden');
-                registerForm.classList.add('hidden');
-                loginBtn.className = "flex-1 py-2 font-semibold rounded-lg bg-accentBlue text-white transition-all";
-                regBtn.className = "flex-1 py-2 font-semibold rounded-lg text-slate-400 hover:text-white transition-all";
-            } else {
-                loginForm.classList.add('hidden');
-                registerForm.classList.remove('hidden');
-                regBtn.className = "flex-1 py-2 font-semibold rounded-lg bg-accentBlue text-white transition-all";
-                loginBtn.className = "flex-1 py-2 font-semibold rounded-lg text-slate-400 hover:text-white transition-all";
-            }
-            hideAuthAlert();
-        }
-
-        function showAuthAlert(msg) {
-            const alertBox = document.getElementById('authAlert');
-            const alertMsg = document.getElementById('authAlertMsg');
-            alertMsg.innerText = msg;
-            alertBox.classList.remove('hidden');
-        }
-
-        function hideAuthAlert() {
-            document.getElementById('authAlert').classList.add('hidden');
-        }
-
-        function handleLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value.trim();
-            const pass = document.getElementById('loginPass').value.trim();
-
-            if (!email.endsWith(REQUIRED_DOMAIN)) {
-                showAuthAlert("El correo debe pertenecer al dominio " + REQUIRED_DOMAIN);
-                return;
-            }
-
+        // ACCESO RÁPIDO ESTILO "CONTINUAR CON GOOGLE"
+        function handleGoogleAccess() {
+            const defaultEmail = "estudiante@colegiomilagrosdedios.edu.pe";
             currentUser = {
                 id: 'usr_' + Date.now(),
-                name: email.split('@')[0].replace('.', ' '),
-                email: email,
+                name: 'Estudiante Milagros de Dios',
+                email: defaultEmail,
                 grade: '4° Secundaria'
             };
             localStorage.setItem('mindclass_user', JSON.stringify(currentUser));
@@ -541,16 +526,16 @@
             initFirebaseListeners();
         }
 
-        function handleRegister(e) {
+        // ACCESO MANUAL CON VALIDACIÓN DE CÓDIGO
+        function handleManualLogin(e) {
             e.preventDefault();
-            const name = document.getElementById('regName').value.trim();
-            const email = document.getElementById('regEmail').value.trim();
-            const grade = document.getElementById('regGrade').value;
-            const code = document.getElementById('regCode').value.trim();
-            const pass = document.getElementById('regPass').value.trim();
+            const name = document.getElementById('manualName').value.trim();
+            const email = document.getElementById('manualEmail').value.trim();
+            const grade = document.getElementById('manualGrade').value;
+            const code = document.getElementById('manualCode').value.trim();
 
             if (!email.endsWith(REQUIRED_DOMAIN)) {
-                showAuthAlert("El correo institucional debe ser " + REQUIRED_DOMAIN);
+                showAuthAlert("El correo debe ser " + REQUIRED_DOMAIN);
                 return;
             }
 
@@ -571,6 +556,13 @@
             initFirebaseListeners();
         }
 
+        function showAuthAlert(msg) {
+            const alertBox = document.getElementById('authAlert');
+            const alertMsg = document.getElementById('authAlertMsg');
+            alertMsg.innerText = msg;
+            alertBox.classList.remove('hidden');
+        }
+
         function logout() {
             localStorage.removeItem('mindclass_user');
             location.reload();
@@ -586,7 +578,6 @@
             document.getElementById('chatGradeName').innerText = currentUser.grade;
         }
 
-        // NAVIGATION TABS
         function navigate(secId) {
             document.querySelectorAll('.content-sec').forEach(s => s.classList.add('hidden'));
             document.getElementById('sec-' + secId).classList.remove('hidden');
@@ -616,13 +607,11 @@
             else modal.classList.add('hidden');
         }
 
-        // FIREBASE SYNC & LISTENERS
         function initFirebaseListeners() {
             loadAprendePublications();
             loadSalonChat();
         }
 
-        // PUBLICACIONES APRENDEJUNTO EN FIREBASE
         function handleCreatePublication(e) {
             e.preventDefault();
             const subject = document.getElementById('pubSubject').value;
@@ -676,7 +665,6 @@
             });
         }
 
-        // CHAT DE SALÓN EN FIREBASE
         function sendSalonMessage(e) {
             e.preventDefault();
             const input = document.getElementById('salonInput');
