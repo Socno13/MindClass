@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="es" class="dark h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindClass - I.E.P. Milagros de Dios</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#080d19',
+                        sidebarBg: '#0b1329',
+                        cardBg: '#0f182e',
+                        borderBg: '#1b2640',
+                        accentBlue: '#2563eb',
+                        hoverBlue: '#1d4ed8',
+                        lightBlue: '#38bdf8'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #080d19;
+            color: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0b1329; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1b2640; border-radius: 9999px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #2563eb; }
+    </style>
+</head>
+<body class="h-full flex overflow-hidden antialiased selection:bg-accentBlue selection:text-white">
+
+    <!-- AUTHENTICATION / REGISTRATION MODAL -->
+    <div id="authModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="bg-sidebarBg border border-borderBg rounded-2xl w-full max-w-md p-6 shadow-2xl relative">
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 bg-accentBlue text-white rounded-xl flex items-center justify-center mx-auto mb-3 font-bold text-xl shadow-lg shadow-accentBlue/30">
+                    M
+                </div>
+                <h2 class="text-2xl font-bold text-white">MindClass</h2>
+                <p class="text-xs text-slate-400">Plataforma Educativa • I.E.P. Milagros de Dios</p>
+            </div>
+
+            <!-- Auth Tabs -->
+            <div class="flex bg-darkBg p-1 rounded-xl mb-6 border border-borderBg text-xs">
+                <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 py-2 font-semibold rounded-lg bg-accentBlue text-white transition-all">Iniciar Sesión</button>
+                <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 py-2 font-semibold rounded-lg text-slate-400 hover:text-white transition-all">Registrarse</button>
+            </div>
+
+            <!-- LOGIN FORM -->
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Correo Institucional</label>
+                    <input type="email" id="loginEmail" placeholder="usuario@colegiomilagrosdedios.edu.pe" required class="w-full bg-darkBg border border-borderBg rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-accentBlue">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Contraseña</label>
+                    <input type="password" id="loginPass" required class="w-full bg-darkBg border border-borderBg rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-accentBlue">
+                </div>
+                <button type="submit" class="w-full bg-accentBlue hover:bg-hoverBlue text-white font-semibold py-2.5 rounded-xl transition-colors shadow-lg shadow-accentBlue/20 text-xs">
+                    Ingresar a MindClass
+                </button>
+            </form>
+
+            <!-- REGISTER FORM -->
+            <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-3 hidden">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Nombre Completo</label>
+                    <input type="text" id="regName" placeholder="Ej. Rodrigo Silverio" required class="w-full bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Correo Electrónico</label>
+                    <input type="email" id="regEmail" placeholder="estudiante@colegiomilagrosdedios.edu.pe" required class="w-full bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
+                    <p class="text-[10px] text-amber-400 mt-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Debe ser @colegiomilagrosdedios.edu.pe</p>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Grado Académico (Sin Secciones)</label>
+                    <select id="regGrade" required class="w-full bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
+                        <option value="1° Secundaria">1° Secundaria</option>
+                        <option value="2° Secundaria">2° Secundaria</option>
+                        <option value="3° Secundaria">3° Secundaria</option>
+                        <option value="4° Secundaria" selected>4° Secundaria</option>
+                        <option value="5° Secundaria">5° Secundaria</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Código de Acceso del Grado</label>
+                    <input type="password" id="regCode" placeholder="Ej. CMD-4SEC" required class="w-full bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
+                    <p class="text-[10px] text-slate-500 mt-0.5">Códigos: CMD-1SEC, CMD-2SEC, CMD-3SEC, CMD-4SEC, CMD-5SEC</p>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Contraseña</label>
+                    <input type="password" id="regPass" required class="w-full bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
+                </div>
+                <button type="submit" class="w-full bg-accentBlue hover:bg-hoverBlue text-white font-semibold py-2.5 rounded-xl transition-colors shadow-lg shadow-accentBlue/20 text-xs mt-2">
+                    Crear Cuenta Estudiantil
+                </button>
+            </form>
+
+            <div id="authAlert" class="hidden mt-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center space-x-2">
+                <i class="fa-solid fa-circle-exclamation text-sm"></i>
+                <span id="authAlertMsg">Error en la autenticación</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PUBLISH MODAL FOR APRENDEJUNTO -->
+    <div id="publishModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-sidebarBg border border-borderBg rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-borderBg pb-3">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-pen-to-square text-accentBlue"></i> Publicar en AprendeJunto
+                </h3>
+                <button onclick="togglePublishModal(false)" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="handleCreatePublication(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Curso / Materia</label>
+                    <select id="pubSubject" required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-accentBlue">
+                        <option value="Álgebra">Álgebra</option>
+                        <option value="Geometría">Geometría</option>
+                        <option value="Física y CyT">Física y CyT</option>
+                        <option value="Comunicación">Comunicación</option>
+                        <option value="Inglés">Inglés</option>
+                        <option value="Historia">Historia</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Título de la Duda o Recurso</label>
+                    <input type="text" id="pubTitle" placeholder="Ej. ¿Por qué el resultado de esta ecuación es negativo?" required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-accentBlue">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Detalle / Procedimiento</label>
+                    <textarea id="pubContent" rows="4" placeholder="Explica detalladamente tu consulta o escribe tu resumen..." required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-accentBlue resize-none"></textarea>
+                </div>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="togglePublishModal(false)" class="px-4 py-2 rounded-xl text-xs font-medium text-slate-400 hover:bg-darkBg">Cancelar</button>
+                    <button type="submit" class="bg-accentBlue hover:bg-hoverBlue text-white px-5 py-2 rounded-xl text-xs font-semibold shadow-md shadow-accentBlue/20">Publicar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN APP STRUCTURE -->
+    <div class="flex w-full h-full">
+
+        <!-- LEFT SIDEBAR -->
+        <aside class="w-64 bg-sidebarBg border-r border-borderBg flex flex-col justify-between flex-shrink-0">
+            <div>
+                <!-- Branding Header -->
+                <div class="p-4 border-b border-borderBg flex items-center space-x-3">
+                    <div class="w-9 h-9 bg-accentBlue rounded-xl flex items-center justify-center text-white font-black text-lg shadow-md shadow-accentBlue/30">
+                        M
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-white text-sm leading-tight">MindClass</h1>
+                        <p class="text-[10px] text-slate-400">Ecosistema Escolar</p>
+                    </div>
+                </div>
+
+                <!-- Profile Box -->
+                <div class="m-3 p-3 bg-darkBg border border-borderBg rounded-2xl flex items-center justify-between">
+                    <div class="flex items-center space-x-3 min-w-0">
+                        <div id="userAvatar" class="w-9 h-9 rounded-full bg-accentBlue flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
+                            RS
+                        </div>
+                        <div class="min-w-0">
+                            <h2 id="sidebarUserName" class="text-xs font-bold text-white truncate">Rodrigo Silverio</h2>
+                            <p id="sidebarUserGrade" class="text-[10px] text-slate-400 truncate">Grado: 4° Secundaria</p>
+                        </div>
+                    </div>
+                    <button onclick="logout()" title="Cerrar sesión" class="text-slate-400 hover:text-red-400 text-xs ml-1">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+
+                <!-- Navigation Items -->
+                <nav class="px-3 space-y-1 mt-2">
+                    <button onclick="navigate('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:bg-darkBg hover:text-white transition-all">
+                        <i class="fa-solid fa-table-cells-large w-4 text-center"></i>
+                        <span>Dashboard</span>
+                    </button>
+
+                    <button onclick="navigate('chat-salon')" id="nav-chat-salon" class="nav-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:bg-darkBg hover:text-white transition-all">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-solid fa-comments w-4 text-center text-emerald-400"></i>
+                            <span>Chat de Salón</span>
+                        </div>
+                        <span class="text-[9px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-500/20">Aula</span>
+                    </button>
+
+                    <button onclick="navigate('aprende-junto')" id="nav-aprende-junto" class="nav-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium bg-accentBlue text-white transition-all shadow-md shadow-accentBlue/20">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-solid fa-users-between-lines w-4 text-center"></i>
+                            <span>AprendeJunto</span>
+                        </div>
+                        <span class="text-[9px] bg-sky-400/20 text-sky-300 font-bold px-1.5 py-0.5 rounded uppercase">NUEVO</span>
+                    </button>
+
+                    <button onclick="navigate('voz-escolar')" id="nav-voz-escolar" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:bg-darkBg hover:text-white transition-all">
+                        <i class="fa-solid fa-check-to-slot w-4 text-center text-purple-400"></i>
+                        <span>VozEscolar</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Footer Text -->
+            <div class="p-4 border-t border-borderBg text-[10px] text-slate-500 text-center">
+                MindClass v3.5 • IEP Milagros de Dios
+            </div>
+        </aside>
+
+        <!-- RIGHT CONTENT AREA -->
+        <div class="flex-1 flex flex-col min-w-0 bg-darkBg">
+
+            <!-- TOP HEADER BAR -->
+            <header class="h-14 bg-sidebarBg border-b border-borderBg flex items-center justify-end px-6 space-x-4">
+                <!-- Notifications -->
+                <button class="relative text-slate-400 hover:text-white text-sm" title="Notificaciones">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="absolute -top-1 -right-1 w-2 h-2 bg-accentBlue rounded-full"></span>
+                </button>
+
+                <!-- Role Dropdown Badge -->
+                <div class="flex items-center space-x-2 bg-darkBg border border-borderBg px-3 py-1 rounded-full">
+                    <i class="fa-solid fa-user-graduate text-accentBlue text-xs"></i>
+                    <span class="text-xs font-medium text-slate-200">Estudiante</span>
+                </div>
+
+                <!-- Theme Switch Toggle -->
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" checked class="sr-only peer" disabled>
+                    <div class="w-8 h-4 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-accentBlue"></div>
+                </label>
+            </header>
+
+            <!-- MAIN DYNAMIC CONTAINER -->
+            <main class="flex-1 overflow-y-auto custom-scrollbar p-6">
+
+                <!-- SECTION 1: APRENDEJUNTO (ACTIVE BY DEFAULT) -->
+                <section id="sec-aprende-junto" class="content-sec space-y-6">
+                    
+                    <!-- Header Banner -->
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-accentBlue/10 border border-accentBlue/30 text-accentBlue text-[10px] font-bold uppercase tracking-wider mb-2">
+                                MÓDULO COLABORATIVO
+                            </div>
+                            <h2 class="text-2xl font-extrabold text-white tracking-tight">AprendeJunto</h2>
+                            <p class="text-xs text-slate-400 mt-1">Espacio de ayuda mutua, aclaración de dudas, recursos compartidos y reconocimientos.</p>
+                        </div>
+
+                        <button onclick="togglePublishModal(true)" class="bg-accentBlue hover:bg-hoverBlue text-white px-4 py-2.5 rounded-xl font-semibold text-xs transition-colors shadow-lg shadow-accentBlue/20 flex items-center space-x-2 self-start md:self-auto">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Publicar en la Comunidad</span>
+                        </button>
+                    </div>
+
+                    <!-- Inner Navigation Tabs -->
+                    <div class="flex border-b border-borderBg space-x-2 text-xs overflow-x-auto custom-scrollbar pb-1">
+                        <button onclick="switchAprendeTab('dudas')" id="tab-dudas" class="aprende-tab-btn px-4 py-2.5 rounded-t-xl font-semibold bg-accentBlue text-white flex items-center space-x-2 whitespace-nowrap">
+                            <i class="fa-solid fa-comments"></i>
+                            <span>1. Dudas & Explicaciones</span>
+                        </button>
+                        <button onclick="switchAprendeTab('apuntes')" id="tab-apuntes" class="aprende-tab-btn px-4 py-2.5 rounded-t-xl font-semibold text-slate-400 hover:text-white flex items-center space-x-2 whitespace-nowrap">
+                            <i class="fa-solid fa-book-open"></i>
+                            <span>2. Apuntes Colaborativos</span>
+                        </button>
+                        <button onclick="switchAprendeTab('debates')" id="tab-debates" class="aprende-tab-btn px-4 py-2.5 rounded-t-xl font-semibold text-slate-400 hover:text-white flex items-center space-x-2 whitespace-nowrap">
+                            <i class="fa-solid fa-brain"></i>
+                            <span>3. Debates & Métodos</span>
+                        </button>
+                        <button onclick="switchAprendeTab('reconocimientos')" id="tab-reconocimientos" class="aprende-tab-btn px-4 py-2.5 rounded-t-xl font-semibold text-slate-400 hover:text-white flex items-center space-x-2 whitespace-nowrap">
+                            <i class="fa-solid fa-trophy"></i>
+                            <span>4. Reconocimientos & Medallas</span>
+                        </button>
+                    </div>
+
+                    <!-- TAB 1: DUDAS & EXPLICACIONES -->
+                    <div id="sub-dudas" class="aprende-sub-sec space-y-4">
+                        <div class="flex justify-between items-center text-xs text-slate-400 px-1">
+                            <span>Preguntas activas de estudiantes</span>
+                            <span id="qCountText">1 todos registrados</span>
+                        </div>
+
+                        <!-- Posts Feed Container -->
+                        <div id="qFeedContainer" class="space-y-4">
+                            <!-- Rendered dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: APUNTES COLABORATIVOS -->
+                    <div id="sub-apuntes" class="aprende-sub-sec space-y-4 hidden">
+                        <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-3">
+                            <h3 class="font-bold text-white text-sm">Banco de Fichas y Resúmenes Compartidos</h3>
+                            <p class="text-xs text-slate-400">En esta sección los estudiantes suben esquemas y resúmenes para repasos grupales.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+                                <div class="bg-darkBg border border-borderBg rounded-xl p-3.5 space-y-2">
+                                    <span class="text-[10px] bg-accentBlue/20 text-accentBlue px-2 py-0.5 rounded font-bold">Física • 4° Sec</span>
+                                    <h4 class="text-xs font-bold text-white">Resumen MRUV y Leyes de Newton</h4>
+                                    <p class="text-[11px] text-slate-400">Esquema con fórmulas principales y guía de signos para despeje de aceleración.</p>
+                                    <div class="flex justify-between items-center text-[10px] text-slate-500 pt-2 border-t border-borderBg/50">
+                                        <span>Aportado por: Rodrigo S.</span>
+                                        <button onclick="likeApunte(this)" class="text-accentBlue hover:underline"><i class="fa-regular fa-thumbs-up mr-1"></i>Útil (8)</button>
+                                    </div>
+                                </div>
+                                <div class="bg-darkBg border border-borderBg rounded-xl p-3.5 space-y-2">
+                                    <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded font-bold">Comunicación • Todo el Colegio</span>
+                                    <h4 class="text-xs font-bold text-white">Ficha de conectores lógicos para ensayos</h4>
+                                    <p class="text-[11px] text-slate-400">Listado clasificado de conectores de causa, efecto y contraste para redacción.</p>
+                                    <div class="flex justify-between items-center text-[10px] text-slate-500 pt-2 border-t border-borderBg/50">
+                                        <span>Aportado por: Lucía M.</span>
+                                        <button onclick="likeApunte(this)" class="text-accentBlue hover:underline"><i class="fa-regular fa-thumbs-up mr-1"></i>Útil (14)</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: DEBATES & MÉTODOS -->
+                    <div id="sub-debates" class="aprende-sub-sec space-y-4 hidden">
+                        <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-3">
+                            <h3 class="font-bold text-white text-sm">Comparación de Estrategias y Métodos</h3>
+                            <div class="bg-darkBg border border-borderBg rounded-xl p-4 space-y-2">
+                                <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-bold">Debate Matemático</span>
+                                <h4 class="text-xs font-bold text-white">¿Método de Igualación o Sustitución para sistemas 2x2?</h4>
+                                <p class="text-xs text-slate-300">¿Cuál método resulta más rápido y menos propenso a errores con fracciones?</p>
+                                <div class="pt-2 flex gap-2">
+                                    <button class="bg-accentBlue/20 text-accentBlue border border-accentBlue/30 text-xs px-3 py-1.5 rounded-lg hover:bg-accentBlue hover:text-white transition-all">Sustitución es más rápido</button>
+                                    <button class="bg-slate-800 text-slate-300 border border-borderBg text-xs px-3 py-1.5 rounded-lg hover:bg-slate-700 transition-all">Reducción es mejor</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: RECONOCIMIENTOS & MEDALLAS -->
+                    <div id="sub-reconocimientos" class="aprende-sub-sec space-y-4 hidden">
+                        <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4">
+                            <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-award text-amber-400"></i> Tabla de Reconocimientos Estudiantiles
+                            </h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <div class="bg-darkBg border border-borderBg rounded-xl p-3 text-center">
+                                    <i class="fa-solid fa-medal text-amber-400 text-2xl mb-1"></i>
+                                    <h4 class="text-xs font-bold text-white">Lucía Mendoza</h4>
+                                    <p class="text-[10px] text-slate-400">Explicadora Top (15 votos útiles)</p>
+                                </div>
+                                <div class="bg-darkBg border border-borderBg rounded-xl p-3 text-center">
+                                    <i class="fa-solid fa-star text-sky-400 text-2xl mb-1"></i>
+                                    <h4 class="text-xs font-bold text-white">Rodrigo Silverio</h4>
+                                    <p class="text-[10px] text-slate-400">Colaborador Destacado (8 aportes)</p>
+                                </div>
+                                <div class="bg-darkBg border border-borderBg rounded-xl p-3 text-center">
+                                    <i class="fa-solid fa-heart text-red-400 text-2xl mb-1"></i>
+                                    <h4 class="text-xs font-bold text-white">Mateo Quispe</h4>
+                                    <p class="text-[10px] text-slate-400">Compañero Ejemplar</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- SECTION 2: DASHBOARD -->
+                <section id="sec-dashboard" class="content-sec space-y-6 hidden">
+                    <div class="bg-cardBg border border-borderBg rounded-2xl p-6 relative overflow-hidden">
+                        <h2 class="text-xl font-bold text-white mb-1">Bienvenido a MindClass 👋</h2>
+                        <p class="text-xs text-slate-400 mb-6">Resumen de actividad escolar de tu cuenta.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div class="bg-darkBg border border-borderBg p-4 rounded-xl">
+                                <span class="text-[11px] text-slate-400 font-medium">Grado Registrado</span>
+                                <p id="dashGradeText" class="text-base font-bold text-accentBlue mt-1">4° Secundaria</p>
+                            </div>
+                            <div class="bg-darkBg border border-borderBg p-4 rounded-xl">
+                                <span class="text-[11px] text-slate-400 font-medium">Estado del Salón</span>
+                                <p class="text-base font-bold text-emerald-400 mt-1">Sección Única Activa</p>
+                            </div>
+                            <div class="bg-darkBg border border-borderBg p-4 rounded-xl">
+                                <span class="text-[11px] text-slate-400 font-medium">Votos en VozEscolar</span>
+                                <p id="dashVotesText" class="text-base font-bold text-purple-400 mt-1">Registrados</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 3: CHAT DE SALÓN -->
+                <section id="sec-chat-salon" class="content-sec space-y-4 hidden">
+                    <div class="bg-cardBg border border-borderBg rounded-2xl p-5 flex flex-col h-[75vh]">
+                        <div class="flex items-center justify-between pb-3 border-b border-borderBg">
+                            <div>
+                                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                                    <i class="fa-solid fa-comments text-emerald-400"></i>
+                                    Chat Exclusivo de <span id="chatGradeName" class="text-accentBlue">4° Secundaria</span>
+                                </h3>
+                                <p class="text-xs text-slate-400">Espacio de conversación privado sólo para los miembros de tu grado.</p>
+                            </div>
+                            <span class="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-full font-bold">
+                                <i class="fa-solid fa-lock mr-1"></i>Acceso Seguro
+                            </span>
+                        </div>
+
+                        <div id="salonChatFeed" class="flex-1 overflow-y-auto custom-scrollbar my-4 space-y-3 pr-2">
+                            <!-- Messages rendered dynamically -->
+                        </div>
+
+                        <form onsubmit="sendSalonMessage(event)" class="flex gap-2 pt-2 border-t border-borderBg">
+                            <input type="text" id="salonInput" placeholder="Escribe un mensaje para tu salón..." required class="flex-1 bg-darkBg border border-borderBg rounded-xl px-4 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
+                            <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-xl text-xs font-semibold transition-colors">
+                                Enviar
+                            </button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- SECTION 4: VOZ ESCOLAR -->
+                <section id="sec-voz-escolar" class="content-sec space-y-6 hidden">
+                    <div class="bg-cardBg border border-borderBg rounded-2xl p-6">
+                        <h2 class="text-lg font-bold text-white mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-check-to-slot text-purple-400"></i>
+                            VozEscolar - Sistema Anti-Spam de Votaciones
+                        </h2>
+                        <p class="text-xs text-slate-400 mb-6">Cada estudiante tiene permitido emitir únicamente <strong>un solo voto</strong> por iniciativa.</p>
+
+                        <div id="pollsContainer" class="space-y-4">
+                            <!-- Polls rendered dynamically -->
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- MAIN JAVASCRIPT LOGIC -->
+    <script>
+        // INSTITUTIONAL CONFIG
+        const REQUIRED_DOMAIN = "@colegiomilagrosdedios.edu.pe";
+        const GRADE_CODES = {
+            "1° Secundaria": "CMD-1SEC",
+            "2° Secundaria": "CMD-2SEC",
+            "3° Secundaria": "CMD-3SEC",
+            "4° Secundaria": "CMD-4SEC",
+            "5° Secundaria": "CMD-5SEC"
+        };
+
+        // DEFAULT USER
+        const DEFAULT_USER = {
+            id: 'usr_rodrigo',
+            name: 'Rodrigo Silverio',
+            email: 'rodrigo@colegiomilagrosdedios.edu.pe',
+            grade: '4° Secundaria'
+        };
+
+        // STATE VARIABLES
+        let currentUser = JSON.parse(localStorage.getItem('mc_current_user')) || DEFAULT_USER;
+        let users = JSON.parse(localStorage.getItem('mc_users')) || [DEFAULT_USER];
+        let qPosts = JSON.parse(localStorage.getItem('mc_q_posts')) || [
+            {
+                id: 'post-1',
+                subject: 'Álgebra',
+                author: 'Mateo Quispe',
+                grade: '4° Sec',
+                time: 'Hace 2 horas',
+                title: '¿Por qué el resultado de esta ecuación es negativo?',
+                content: 'Al resolver -3(x - 4) = 15, al despejar x me da un valor negativo (-1). ¿Alguien me puede detallar el paso a paso del cambio de signo?',
+                usefulVotes: 5,
+                votedUsers: [],
+                replies: [
+                    {
+                        author: 'Lucía Mendoza',
+                        grade: '4° Sec',
+                        text: '¡Hola Mateo! Paso a paso:\n1) Aplicas propiedad distributiva: -3x + 12 = 15\n2) Restas 12 en ambos lados: -3x = 3\n3) Divides entre -3: x = 3 / (-3) = -1.\nEs negativo porque estás dividiendo un número positivo (+3) entre uno negativo (-3).'
+                    }
+                ]
+            }
+        ];
+        let salonMessages = JSON.parse(localStorage.getItem('mc_salon_messages')) || [];
+        let polls = JSON.parse(localStorage.getItem('mc_polls')) || [
+            {
+                id: 'poll-1',
+                question: '¿Qué iniciativa prefieres para el proyecto de ciencias inter-salones?',
+                options: [
+                    { id: 'opt1', text: 'Feria de Robótica y Automatización', votes: 14 },
+                    { id: 'opt2', text: 'Proyecto Ecología y Reciclaje', votes: 9 }
+                ],
+                votedUsers: []
+            }
+        ];
+
+        // INITIALIZE APP
+        window.onload = function() {
+            if (!localStorage.getItem('mc_current_user')) {
+                localStorage.setItem('mc_current_user', JSON.stringify(currentUser));
+            }
+            updateProfileDisplays();
+            renderQFeed();
+            renderSalonChat();
+            renderPolls();
+        };
+
+        // PROFILE DISPLAY UPDATER
+        function updateProfileDisplays() {
+            document.getElementById('sidebarUserName').innerText = currentUser.name;
+            document.getElementById('sidebarUserGrade').innerText = `Grado: ${currentUser.grade}`;
+            document.getElementById('dashGradeText').innerText = currentUser.grade;
+            document.getElementById('chatGradeName').innerText = currentUser.grade;
+            
+            // Initials
+            const parts = currentUser.name.split(' ');
+            const initials = parts.length > 1 ? parts[0][0] + parts[1][0] : parts[0][0];
+            document.getElementById('userAvatar').innerText = initials.toUpperCase();
+        }
+
+        // AUTHENTICATION LOGIC
+        function switchAuthTab(tab) {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const tabLoginBtn = document.getElementById('tabLoginBtn');
+            const tabRegisterBtn = document.getElementById('tabRegisterBtn');
+            document.getElementById('authAlert').classList.add('hidden');
+
+            if (tab === 'login') {
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+                tabLoginBtn.className = "flex-1 py-2 font-semibold rounded-lg bg-accentBlue text-white transition-all";
+                tabRegisterBtn.className = "flex-1 py-2 font-semibold rounded-lg text-slate-400 hover:text-white transition-all";
+            } else {
+                loginForm.classList.add('hidden');
+                registerForm.classList.remove('hidden');
+                tabRegisterBtn.className = "flex-1 py-2 font-semibold rounded-lg bg-accentBlue text-white transition-all";
+                tabLoginBtn.className = "flex-1 py-2 font-semibold rounded-lg text-slate-400 hover:text-white transition-all";
+            }
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim().toLowerCase();
+            const grade = document.getElementById('regGrade').value;
+            const code = document.getElementById('regCode').value.trim();
+
+            if (!email.endsWith(REQUIRED_DOMAIN)) {
+                showAuthAlert(`El correo debe finalizar con ${REQUIRED_DOMAIN}`);
+                return;
+            }
+
+            if (GRADE_CODES[grade] !== code) {
+                showAuthAlert(`Código de acceso incorrecto para ${grade}`);
+                return;
+            }
+
+            const newUser = { id: 'usr_' + Date.now(), name, email, grade };
+            users.push(newUser);
+            localStorage.setItem('mc_users', JSON.stringify(users));
+
+            currentUser = newUser;
+            localStorage.setItem('mc_current_user', JSON.stringify(currentUser));
+
+            document.getElementById('authModal').classList.add('hidden');
+            updateProfileDisplays();
+            renderSalonChat();
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const user = users.find(u => u.email === email);
+
+            if (!user) {
+                showAuthAlert("Correo no registrado. Por favor crea una cuenta.");
+                return;
+            }
+
+            currentUser = user;
+            localStorage.setItem('mc_current_user', JSON.stringify(currentUser));
+            document.getElementById('authModal').classList.add('hidden');
+            updateProfileDisplays();
+            renderSalonChat();
+        }
+
+        function showAuthAlert(msg) {
+            const alertBox = document.getElementById('authAlert');
+            document.getElementById('authAlertMsg').innerText = msg;
+            alertBox.classList.remove('hidden');
+        }
+
+        function logout() {
+            document.getElementById('authModal').classList.remove('hidden');
+        }
+
+        // NAVIGATION LOGIC
+        function navigate(secId) {
+            document.querySelectorAll('.content-sec').forEach(s => s.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                b.className = "nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:bg-darkBg hover:text-white transition-all";
+            });
+
+            document.getElementById(`sec-${secId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`nav-${secId}`);
+            if (activeBtn) {
+                activeBtn.className = "nav-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium bg-accentBlue text-white transition-all shadow-md shadow-accentBlue/20";
+            }
+        }
+
+        function switchAprendeTab(tabId) {
+            document.querySelectorAll('.aprende-sub-sec').forEach(s => s.classList.add('hidden'));
+            document.querySelectorAll('.aprende-tab-btn').forEach(b => {
+                b.className = "aprende-tab-btn px-4 py-2.5 rounded-t-xl font-semibold text-slate-400 hover:text-white flex items-center space-x-2 whitespace-nowrap";
+            });
+
+            document.getElementById(`sub-${tabId}`).classList.remove('hidden');
+            const activeTab = document.getElementById(`tab-${tabId}`);
+            if (activeTab) {
+                activeTab.className = "aprende-tab-btn px-4 py-2.5 rounded-t-xl font-semibold bg-accentBlue text-white flex items-center space-x-2 whitespace-nowrap";
+            }
+        }
+
+        // PUBLICATION MODAL
+        function togglePublishModal(show) {
+            document.getElementById('publishModal').classList.toggle('hidden', !show);
+        }
+
+        function handleCreatePublication(e) {
+            e.preventDefault();
+            const subject = document.getElementById('pubSubject').value;
+            const title = document.getElementById('pubTitle').value.trim();
+            const content = document.getElementById('pubContent').value.trim();
+
+            const newPost = {
+                id: 'post-' + Date.now(),
+                subject,
+                author: currentUser.name,
+                grade: currentUser.grade,
+                time: 'Hace un momento',
+                title,
+                content,
+                usefulVotes: 0,
+                votedUsers: [],
+                replies: []
+            };
+
+            qPosts.unshift(newPost);
+            localStorage.setItem('mc_q_posts', JSON.stringify(qPosts));
+            togglePublishModal(false);
+            document.getElementById('pubTitle').value = '';
+            document.getElementById('pubContent').value = '';
+            renderQFeed();
+        }
+
+        // Q&A FEED RENDERER
+        function renderQFeed() {
+            const container = document.getElementById('qFeedContainer');
+            container.innerHTML = '';
+            document.getElementById('qCountText').innerText = `${qPosts.length} todos registrados`;
+
+            qPosts.forEach(post => {
+                const card = document.createElement('div');
+                card.className = "bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4 shadow-sm";
+
+                const hasVoted = post.votedUsers && post.votedUsers.includes(currentUser.id);
+
+                let repliesHTML = post.replies.map(r => `
+                    <div class="bg-darkBg/60 border border-borderBg/80 rounded-xl p-3 space-y-1">
+                        <div class="flex items-center space-x-2 text-[11px] font-bold text-accentBlue">
+                            <span>${r.author} (${r.grade})</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed whitespace-pre-line">${r.text}</p>
+                    </div>
+                `).join('');
+
+                card.innerHTML = `
+                    <!-- Header meta -->
+                    <div class="text-[11px] text-slate-400 font-medium">
+                        <span class="text-accentBlue font-bold">${post.subject}</span>
+                        <span class="mx-1">•</span>
+                        <span>Publicado por ${post.author} (${post.grade})</span>
+                        <span class="mx-1">•</span>
+                        <span>${post.time}</span>
+                    </div>
+
+                    <!-- Question Title & Body -->
+                    <div>
+                        <h3 class="text-sm font-bold text-white mb-2">${post.title}</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed bg-darkBg border border-borderBg/50 rounded-xl p-3">${post.content}</p>
+                    </div>
+
+                    <!-- Replies Section -->
+                    <div class="space-y-3 pt-1">
+                        <div class="flex justify-between items-center text-[11px] text-slate-400 border-b border-borderBg/40 pb-2">
+                            <span class="font-bold uppercase tracking-wider text-[10px] text-slate-500"><i class="fa-solid fa-comments mr-1"></i>Explicaciones y Procedimientos (${post.replies.length})</span>
+                            <button onclick="voteUseful('${post.id}')" ${hasVoted ? 'disabled' : ''} class="bg-darkBg hover:bg-slate-800 border border-borderBg text-slate-300 text-xs px-2.5 py-1 rounded-lg flex items-center space-x-1.5 transition-colors disabled:opacity-50">
+                                <i class="fa-regular fa-thumbs-up text-accentBlue"></i>
+                                <span>Explicación útil (${post.usefulVotes})</span>
+                            </button>
+                        </div>
+
+                        ${repliesHTML}
+
+                        <!-- Reply Input -->
+                        <form onsubmit="handleSendReply(event, '${post.id}')" class="flex gap-2 pt-1">
+                            <input type="text" placeholder="Escribe tu explicación paso a paso..." required class="flex-1 bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
+                            <button type="submit" class="bg-accentBlue hover:bg-hoverBlue text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm transition-colors">
+                                Responder
+                            </button>
+                        </form>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function voteUseful(postId) {
+            const post = qPosts.find(p => p.id === postId);
+            if (post && !post.votedUsers.includes(currentUser.id)) {
+                post.usefulVotes += 1;
+                post.votedUsers.push(currentUser.id);
+                localStorage.setItem('mc_q_posts', JSON.stringify(qPosts));
+                renderQFeed();
+            }
+        }
+
+        function handleSendReply(e, postId) {
+            e.preventDefault();
+            const input = e.target.querySelector('input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const post = qPosts.find(p => p.id === postId);
+            if (post) {
+                post.replies.push({
+                    author: currentUser.name,
+                    grade: currentUser.grade,
+                    text
+                });
+                localStorage.setItem('mc_q_posts', JSON.stringify(qPosts));
+                input.value = '';
+                renderQFeed();
+            }
+        }
+
+        function likeApunte(btn) {
+            btn.innerHTML = `<i class="fa-solid fa-thumbs-up mr-1 text-accentBlue"></i>¡Registrado!`;
+            btn.disabled = true;
+        }
+
+        // CHAT DE SALÓN LOGIC
+        function renderSalonChat() {
+            const container = document.getElementById('salonChatFeed');
+            container.innerHTML = '';
+
+            const gradeMsgs = salonMessages.filter(m => m.grade === currentUser.grade);
+
+            if (gradeMsgs.length === 0) {
+                container.innerHTML = `<p class="text-center text-xs text-slate-500 py-10">No hay mensajes recientes en el chat de ${currentUser.grade}.</p>`;
+                return;
+            }
+
+            gradeMsgs.forEach(m => {
+                const isMe = m.userId === currentUser.id;
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'}`;
+                msgDiv.innerHTML = `
+                    <div class="max-w-[80%] ${isMe ? 'bg-accentBlue text-white rounded-2xl rounded-tr-none' : 'bg-darkBg text-slate-200 border border-borderBg rounded-2xl rounded-tl-none'} p-3 text-xs">
+                        <div class="text-[10px] opacity-75 mb-1 font-bold">${isMe ? 'Tú' : m.userName} • ${m.time}</div>
+                        <p class="break-words">${m.text}</p>
+                    </div>
+                `;
+                container.appendChild(msgDiv);
+            });
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendSalonMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('salonInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const now = new Date();
+            const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            salonMessages.push({
+                id: 'm_' + Date.now(),
+                userId: currentUser.id,
+                userName: currentUser.name,
+                grade: currentUser.grade,
+                text,
+                time
+            });
+
+            localStorage.setItem('mc_salon_messages', JSON.stringify(salonMessages));
+            input.value = '';
+            renderSalonChat();
+        }
+
+        // POLLS LOGIC
+        function renderPolls() {
+            const container = document.getElementById('pollsContainer');
+            container.innerHTML = '';
+
+            polls.forEach(poll => {
+                const totalVotes = poll.options.reduce((sum, o) => sum + o.votes, 0);
+                const userHasVoted = poll.votedUsers.includes(currentUser.id);
+
+                let optionsHTML = poll.options.map(opt => {
+                    const pct = totalVotes > 0 ? Math.round((opt.votes / totalVotes) * 100) : 0;
+                    return `
+                        <button onclick="votePoll('${poll.id}', '${opt.id}')" ${userHasVoted ? 'disabled' : ''} class="w-full text-left p-3 rounded-xl border border-borderBg bg-darkBg hover:border-accentBlue/50 relative overflow-hidden transition-all disabled:opacity-80">
+                            <div class="absolute top-0 bottom-0 left-0 bg-accentBlue/20" style="width: ${pct}%"></div>
+                            <div class="relative flex justify-between items-center text-xs">
+                                <span class="font-medium text-slate-200">${opt.text}</span>
+                                <span class="font-bold text-accentBlue">${pct}% (${opt.votes})</span>
+                            </div>
+                        </button>
+                    `;
+                }).join('');
+
+                const card = document.createElement('div');
+                card.className = "bg-darkBg border border-borderBg rounded-2xl p-4 space-y-3";
+                card.innerHTML = `
+                    <h3 class="font-bold text-xs text-white">${poll.question}</h3>
+                    <div class="space-y-2">${optionsHTML}</div>
+                    <p class="text-[10px] text-slate-500">${userHasVoted ? '✓ Tu voto ya fue registrado en esta consulta.' : 'Selecciona una opción para votar'}</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function votePoll(pollId, optId) {
+            const poll = polls.find(p => p.id === pollId);
+            if (poll && !poll.votedUsers.includes(currentUser.id)) {
+                const opt = poll.options.find(o => o.id === optId);
+                if (opt) {
+                    opt.votes += 1;
+                    poll.votedUsers.push(currentUser.id);
+                    localStorage.setItem('mc_polls', JSON.stringify(polls));
+                    renderPolls();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
