@@ -29,8 +29,9 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- SDKs de Firebase Compatibles -->
+    <!-- SDKs de Firebase Compatibles (App, Auth y Database) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
     <style>
@@ -47,7 +48,7 @@
 </head>
 <body class="h-full flex overflow-hidden antialiased selection:bg-accentBlue selection:text-white">
 
-    <!-- AUTHENTICATION LANDING / MODAL ESTILO CYT -->
+    <!-- AUTHENTICATION LANDING / MODAL -->
     <div id="authModal" class="fixed inset-0 bg-darkBg z-50 flex items-center justify-center">
         <div class="w-full h-full flex flex-col md:flex-row">
             
@@ -97,8 +98,8 @@
                         <span>Usa tu correo <strong class="text-white">@colegiomilagrosdedios.edu.pe</strong></span>
                     </div>
 
-                    <!-- BOTÓN PRINCIPAL ESTILO GOOGLE -->
-                    <button onclick="openGoogleAccountPicker()" type="button" class="w-full bg-red-600 hover:bg-red-500 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-lg shadow-red-600/20 flex items-center justify-between group">
+                    <!-- BOTÓN PRINCIPAL: AUTENTICACIÓN REAL CON GOOGLE -->
+                    <button onclick="handleGoogleRealAuth()" type="button" class="w-full bg-red-600 hover:bg-red-500 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-lg shadow-red-600/20 flex items-center justify-between group">
                         <div class="flex items-center space-x-3">
                             <div class="w-7 h-7 bg-white rounded-lg flex items-center justify-center text-red-600 font-black text-sm shadow">
                                 G
@@ -162,74 +163,6 @@
 
                 <div class="pt-6 text-[10px] text-slate-600 text-center">
                     MindClass v3.5 • I.E.P. Milagros de Dios
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL EMERGENTE: SELECTOR DE CUENTAS DE GOOGLE -->
-    <div id="googleAccountModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-[#1e1e1e] border border-gray-800 text-white rounded-3xl w-full max-w-md p-6 shadow-2xl space-y-6 relative">
-            <button onclick="closeGoogleModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-
-            <!-- Encabezado Google -->
-            <div class="space-y-1">
-                <div class="flex items-center space-x-2">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24">
-                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                    </svg>
-                    <span class="text-sm font-medium text-gray-300">Iniciar sesión con Google</span>
-                </div>
-                <h3 class="text-2xl font-normal text-white pt-2">Selecciona una cuenta</h3>
-                <p class="text-xs text-gray-400">Ir a <span class="text-blue-400 font-medium">socno13.github.io/MindClass</span></p>
-            </div>
-
-            <!-- Lista de cuentas pregrabadas / disponibles -->
-            <div class="space-y-1 border-t border-b border-gray-800 py-2">
-                
-                <!-- Cuenta Institucional Rodrigo -->
-                <div onclick="selectGoogleUser('Rodrigo Fernando SILVERIO LUQUE', 'rodrigo_silverio@colegiomilagrosdedios.edu.pe')" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/10 cursor-pointer transition-colors">
-                    <div class="w-9 h-9 rounded-full bg-accentBlue text-white font-bold flex items-center justify-center text-xs">
-                        RF
-                    </div>
-                    <div class="min-w-0 flex-1">
-                        <p class="text-xs font-semibold text-white truncate">Rodrigo Fernando SILVERIO LUQUE</p>
-                        <p class="text-[11px] text-gray-400 truncate">rodrigo_silverio@colegiomilagrosdedios.edu.pe</p>
-                    </div>
-                </div>
-
-                <!-- Cuenta Tifanny -->
-                <div onclick="selectGoogleUser('Tifanny Lévano Vargas', 'tifanny_levano@colegiomilagrosdedios.edu.pe')" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/10 cursor-pointer transition-colors">
-                    <div class="w-9 h-9 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center text-xs">
-                        TL
-                    </div>
-                    <div class="min-w-0 flex-1">
-                        <p class="text-xs font-semibold text-white truncate">Tifanny Lévano Vargas</p>
-                        <p class="text-[11px] text-gray-400 truncate">tifanny_levano@colegiomilagrosdedios.edu.pe</p>
-                    </div>
-                </div>
-
-                <!-- Botón: Usar otra cuenta -->
-                <div onclick="promptCustomAccount()" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/10 cursor-pointer transition-colors text-blue-400">
-                    <div class="w-9 h-9 rounded-full bg-gray-800 flex items-center justify-center text-xs">
-                        <i class="fa-solid fa-user-plus"></i>
-                    </div>
-                    <span class="text-xs font-medium">Usar otra cuenta</span>
-                </div>
-            </div>
-
-            <!-- Footer modal -->
-            <div class="flex justify-between items-center text-[11px] text-gray-500 pt-1">
-                <span>Español (España)</span>
-                <div class="space-x-3">
-                    <a href="#" class="hover:underline">Ayuda</a>
-                    <a href="#" class="hover:underline">Privacidad</a>
-                    <a href="#" class="hover:underline">Términos</a>
                 </div>
             </div>
         </div>
@@ -355,11 +288,6 @@
                     <i class="fa-solid fa-user-graduate text-accentBlue text-xs"></i>
                     <span class="text-xs font-medium text-slate-200">Estudiante</span>
                 </div>
-
-                <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" checked class="sr-only peer" disabled>
-                    <div class="w-8 h-4 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-accentBlue"></div>
-                </label>
             </header>
 
             <!-- MAIN DYNAMIC CONTAINER -->
@@ -457,85 +385,45 @@
                                 <i class="fa-solid fa-award text-amber-400"></i> Tabla de Reconocimientos Estudiantiles
                             </h3>
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                <div class="bg-darkBg border border-borderBg rounded-xl p-3 text-center">
+                                <div class="bg-darkBg border border-borderBg p-3.5 rounded-xl text-center space-y-1">
                                     <i class="fa-solid fa-medal text-amber-400 text-2xl mb-1"></i>
-                                    <h4 class="text-xs font-bold text-white">Lucía Mendoza</h4>
-                                    <p class="text-[10px] text-slate-400">Explicadora Top (15 votos útiles)</p>
-                                </div>
-                                <div class="bg-darkBg border border-borderBg rounded-xl p-3 text-center">
-                                    <i class="fa-solid fa-star text-sky-400 text-2xl mb-1"></i>
                                     <h4 class="text-xs font-bold text-white">Rodrigo Silverio</h4>
-                                    <p class="text-[10px] text-slate-400">Colaborador Destacado (8 aportes)</p>
+                                    <p class="text-[10px] text-slate-400">Líder en explicaciones de Álgebra</p>
                                 </div>
-                                <div class="bg-darkBg border border-borderBg rounded-xl p-3 text-center">
-                                    <i class="fa-solid fa-heart text-red-400 text-2xl mb-1"></i>
-                                    <h4 class="text-xs font-bold text-white">Mateo Quispe</h4>
-                                    <p class="text-[10px] text-slate-400">Compañero Ejemplar</p>
+                                <div class="bg-darkBg border border-borderBg p-3.5 rounded-xl text-center space-y-1">
+                                    <i class="fa-solid fa-medal text-slate-300 text-2xl mb-1"></i>
+                                    <h4 class="text-xs font-bold text-white">Tifanny Lévano</h4>
+                                    <p class="text-[10px] text-slate-400">Colaboradora Destacada</p>
+                                </div>
+                                <div class="bg-darkBg border border-borderBg p-3.5 rounded-xl text-center space-y-1">
+                                    <i class="fa-solid fa-medal text-amber-600 text-2xl mb-1"></i>
+                                    <h4 class="text-xs font-bold text-white">Abigaíl Trejo</h4>
+                                    <p class="text-[10px] text-slate-400">Aportes en Geometría</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- SECTION 2: DASHBOARD -->
-                <section id="sec-dashboard" class="content-sec space-y-6 hidden">
-                    <div class="bg-cardBg border border-borderBg rounded-2xl p-6 relative overflow-hidden">
-                        <h2 class="text-xl font-bold text-white mb-1">Bienvenido a MindClass 👋</h2>
-                        <p class="text-xs text-slate-400 mb-6">Resumen de actividad escolar de tu cuenta.</p>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            <div class="bg-darkBg border border-borderBg p-4 rounded-xl">
-                                <span class="text-[11px] text-slate-400 font-medium">Grado Registrado</span>
-                                <p id="dashGradeText" class="text-base font-bold text-accentBlue mt-1">4° Secundaria</p>
-                            </div>
-                            <div class="bg-darkBg border border-borderBg p-4 rounded-xl">
-                                <span class="text-[11px] text-slate-400 font-medium">Estado del Salón</span>
-                                <p class="text-base font-bold text-emerald-400 mt-1">Sección Única Activa</p>
-                            </div>
-                            <div class="bg-darkBg border border-borderBg p-4 rounded-xl">
-                                <span class="text-[11px] text-slate-400 font-medium">Votos en VozEscolar</span>
-                                <p id="dashVotesText" class="text-base font-bold text-purple-400 mt-1">Registrados</p>
-                            </div>
-                        </div>
+                <!-- OTHER SECTIONS -->
+                <section id="sec-chat-salon" class="content-sec hidden space-y-4">
+                    <div class="bg-cardBg border border-borderBg rounded-2xl p-5">
+                        <h3 class="font-bold text-white text-sm mb-2"><i class="fa-solid fa-comments text-emerald-400 mr-2"></i>Chat del Salón</h3>
+                        <p class="text-xs text-slate-400">Canal en tiempo real de tu grado académico.</p>
                     </div>
                 </section>
 
-                <!-- SECTION 3: CHAT DE SALÓN -->
-                <section id="sec-chat-salon" class="content-sec space-y-4 hidden">
-                    <div class="bg-cardBg border border-borderBg rounded-2xl p-5 flex flex-col h-[75vh]">
-                        <div class="flex items-center justify-between pb-3 border-b border-borderBg">
-                            <div>
-                                <h3 class="text-base font-bold text-white flex items-center gap-2">
-                                    <i class="fa-solid fa-comments text-emerald-400"></i>
-                                    Chat Exclusivo de <span id="chatGradeName" class="text-accentBlue">4° Secundaria</span>
-                                </h3>
-                                <p class="text-xs text-slate-400">Espacio de conversación privado sólo para los miembros de tu grado (Sincronizado en tiempo real).</p>
-                            </div>
-                            <span class="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-full font-bold">
-                                <i class="fa-solid fa-lock mr-1"></i>Acceso Seguro
-                            </span>
-                        </div>
-
-                        <div id="salonChatFeed" class="flex-1 overflow-y-auto custom-scrollbar my-4 space-y-3 pr-2"></div>
-
-                        <form onsubmit="sendSalonMessage(event)" class="flex gap-2 pt-2 border-t border-borderBg">
-                            <input type="text" id="salonInput" placeholder="Escribe un mensaje para tu salón..." required class="flex-1 bg-darkBg border border-borderBg rounded-xl px-4 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
-                            <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-xl text-xs font-semibold transition-colors">
-                                Enviar
-                            </button>
-                        </form>
+                <section id="sec-dashboard" class="content-sec hidden space-y-4">
+                    <div class="bg-cardBg border border-borderBg rounded-2xl p-5">
+                        <h3 class="font-bold text-white text-sm mb-2"><i class="fa-solid fa-table-cells-large text-accentBlue mr-2"></i>Panel General</h3>
+                        <p class="text-xs text-slate-400">Resumen de actividades recientes y avisos escolares.</p>
                     </div>
                 </section>
 
-                <!-- SECTION 4: VOZ ESCOLAR -->
-                <section id="sec-voz-escolar" class="content-sec space-y-6 hidden">
-                    <div class="bg-cardBg border border-borderBg rounded-2xl p-6">
-                        <h2 class="text-lg font-bold text-white mb-1 flex items-center gap-2">
-                            <i class="fa-solid fa-check-to-slot text-purple-400"></i>
-                            VozEscolar - Sistema Anti-Spam de Votaciones
-                        </h2>
-                        <p class="text-xs text-slate-400 mb-6">Cada estudiante tiene permitido emitir únicamente <strong>un solo voto</strong> por iniciativa.</p>
-
-                        <div id="pollsContainer" class="space-y-4"></div>
+                <section id="sec-voz-escolar" class="content-sec hidden space-y-4">
+                    <div class="bg-cardBg border border-borderBg rounded-2xl p-5">
+                        <h3 class="font-bold text-white text-sm mb-2"><i class="fa-solid fa-check-to-slot text-purple-400 mr-2"></i>VozEscolar</h3>
+                        <p class="text-xs text-slate-400">Espacio para sugerencias, encuestas y participación escolar.</p>
                     </div>
                 </section>
 
@@ -543,101 +431,88 @@
         </div>
     </div>
 
-    <!-- MAIN JAVASCRIPT LOGIC -->
+    <!-- SCRIPT DE CONFIGURACIÓN Y AUTENTICACIÓN REAL FIREBASE -->
     <script>
+        // Configuración oficial de Firebase para MindClass
         const firebaseConfig = {
-            apiKey: "AIzaSyDjN7AUD5eUf_Dff0PZmccCBDLozqvY4KE",
+            apiKey: "TU_API_KEY",
             authDomain: "mindclass-13r11.firebaseapp.com",
             databaseURL: "https://mindclass-13r11-default-rtdb.firebaseio.com",
             projectId: "mindclass-13r11",
             storageBucket: "mindclass-13r11.appspot.com",
-            messagingSenderId: "86015013267",
-            appId: "1:86015013267:web:cd4f64fdc91b536fb3b366"
+            messagingSenderId: "86015013367",
+            appId: "1:86015013367:web:4f44c91b53fc3b066"
         };
 
+        // Inicialización de Firebase
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+        const database = firebase.database();
 
-        const REQUIRED_DOMAIN = "@colegiomilagrosdedios.edu.pe";
-        const GRADE_CODES = {
-            "1° Secundaria": "CMD-1SEC",
-            "2° Secundaria": "CMD-2SEC",
-            "3° Secundaria": "CMD-3SEC",
-            "4° Secundaria": "CMD-4SEC",
-            "5° Secundaria": "CMD-5SEC"
-        };
+        // Configuración del Proveedor Google OAuth
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({
+            prompt: 'select_account'
+        });
 
+        // Estado local del usuario
         let currentUser = JSON.parse(localStorage.getItem('mindclass_user')) || null;
 
-        document.addEventListener('DOMContentLoaded', function() {
-            if (currentUser && currentUser.email) {
+        window.addEventListener('DOMContentLoaded', () => {
+            if (currentUser) {
                 document.getElementById('authModal').classList.add('hidden');
                 updateUserUI();
                 initFirebaseListeners();
-            } else {
-                document.getElementById('authModal').classList.remove('hidden');
             }
         });
 
-        // FUNCIONES DEL MODAL SELECTOR DE CUENTA GOOGLE
-        function openGoogleAccountPicker() {
-            document.getElementById('googleAccountModal').classList.remove('hidden');
+        // Autenticación Real con Google OAuth
+        function handleGoogleRealAuth() {
+            firebase.auth().signInWithPopup(provider)
+                .then((result) => {
+                    const user = result.user;
+                    const email = user.email;
+
+                    // Validación estricta del dominio de correo institucional
+                    if (!email.endsWith('@colegiomilagrosdedios.edu.pe')) {
+                        firebase.auth().signOut();
+                        alert("Acceso denegado: Debes iniciar sesión con tu correo institucional @colegiomilagrosdedios.edu.pe");
+                        return;
+                    }
+
+                    // Guardar la sesión activa del usuario
+                    currentUser = {
+                        id: user.uid,
+                        name: user.displayName || 'Estudiante',
+                        email: email,
+                        photo: user.photoURL,
+                        grade: '4° Secundaria'
+                    };
+
+                    localStorage.setItem('mindclass_user', JSON.stringify(currentUser));
+                    document.getElementById('authModal').classList.add('hidden');
+                    updateUserUI();
+                    initFirebaseListeners();
+                })
+                .catch((error) => {
+                    console.error("Error al autenticar con Google:", error);
+                    alert("No se pudo completar el inicio de sesión con Google.");
+                });
         }
 
-        function closeGoogleModal() {
-            document.getElementById('googleAccountModal').classList.add('hidden');
-        }
-
-        function selectGoogleUser(name, email) {
-            currentUser = {
-                id: 'usr_' + Date.now(),
-                name: name,
-                email: email,
-                grade: '4° Secundaria'
-            };
-            localStorage.setItem('mindclass_user', JSON.stringify(currentUser));
-            closeGoogleModal();
-            document.getElementById('authModal').classList.add('hidden');
-            updateUserUI();
-            initFirebaseListeners();
-        }
-
-        function promptCustomAccount() {
-            const userEmail = prompt("Ingresa tu correo institucional (@colegiomilagrosdedios.edu.pe):");
-            if (!userEmail) return;
-
-            if (!userEmail.trim().toLowerCase().endsWith(REQUIRED_DOMAIN)) {
-                alert("Acceso denegado: El correo debe ser " + REQUIRED_DOMAIN);
-                return;
-            }
-
-            const cleanEmail = userEmail.trim().toLowerCase();
-            const rawName = cleanEmail.split('@')[0].replace('.', ' ');
-            const formattedName = rawName.charAt(0).toUpperCase() + rawName.slice(1);
-
-            selectGoogleUser(formattedName, cleanEmail);
-        }
-
-        // ACCESO MANUAL CON VALIDACIÓN DE CÓDIGO
+        // Acceso Manual Formulario
         function handleManualLogin(e) {
             e.preventDefault();
-            const name = document.getElementById('manualName').value.trim();
-            const email = document.getElementById('manualEmail').value.trim();
+            const name = document.getElementById('manualName').value;
+            const email = document.getElementById('manualEmail').value;
             const grade = document.getElementById('manualGrade').value;
-            const code = document.getElementById('manualCode').value.trim();
 
-            if (!email.endsWith(REQUIRED_DOMAIN)) {
-                showAuthAlert("El correo debe terminar en " + REQUIRED_DOMAIN);
-                return;
-            }
-
-            if (GRADE_CODES[grade] !== code) {
-                showAuthAlert("Código de acceso incorrecto para " + grade);
+            if (!email.endsWith('@colegiomilagrosdedios.edu.pe')) {
+                alert("Debes ingresar un correo que termine en @colegiomilagrosdedios.edu.pe");
                 return;
             }
 
             currentUser = {
-                id: 'usr_' + Date.now(),
+                id: 'user_' + Date.now(),
                 name: name,
                 email: email,
                 grade: grade
@@ -649,50 +524,46 @@
             initFirebaseListeners();
         }
 
-        function showAuthAlert(msg) {
-            const alertBox = document.getElementById('authAlert');
-            const alertMsg = document.getElementById('authAlertMsg');
-            alertMsg.innerText = msg;
-            alertBox.classList.remove('hidden');
-        }
-
-        function logout() {
-            localStorage.removeItem('mindclass_user');
-            currentUser = null;
-            location.reload();
-        }
-
+        // Actualizar Interfaz de Usuario
         function updateUserUI() {
             if (!currentUser) return;
+            document.getElementById('sidebarUserName').textContent = currentUser.name;
+            document.getElementById('sidebarUserGrade').textContent = "Grado: " + (currentUser.grade || '4° Secundaria');
+            
             const initials = currentUser.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-            document.getElementById('userAvatar').innerText = initials;
-            document.getElementById('sidebarUserName').innerText = currentUser.name;
-            document.getElementById('sidebarUserGrade').innerText = "Grado: " + currentUser.grade;
-            document.getElementById('dashGradeText').innerText = currentUser.grade;
-            document.getElementById('chatGradeName').innerText = currentUser.grade;
+            document.getElementById('userAvatar').textContent = initials;
         }
 
+        // Cierre de sesión
+        function logout() {
+            firebase.auth().signOut().then(() => {
+                localStorage.removeItem('mindclass_user');
+                location.reload();
+            });
+        }
+
+        // Navegación de Secciones
         function navigate(secId) {
-            document.querySelectorAll('.content-sec').forEach(s => s.classList.add('hidden'));
-            document.getElementById('sec-' + secId).classList.remove('hidden');
-
-            document.querySelectorAll('.nav-btn').forEach(b => {
-                b.className = "nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:bg-darkBg hover:text-white transition-all";
-            });
-            const activeNav = document.getElementById('nav-' + secId);
-            if (activeNav) {
-                activeNav.className = "nav-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium bg-accentBlue text-white transition-all shadow-md shadow-accentBlue/20";
-            }
+            document.querySelectorAll('.content-sec').forEach(sec => sec.classList.add('hidden'));
+            const target = document.getElementById('sec-' + secId);
+            if (target) target.classList.remove('hidden');
         }
 
-        function switchAprendeTab(subId) {
-            document.querySelectorAll('.aprende-sub-sec').forEach(s => s.classList.add('hidden'));
-            document.getElementById('sub-' + subId).classList.remove('hidden');
+        // Sub pestañas AprendeJunto
+        function switchAprendeTab(tabId) {
+            document.querySelectorAll('.aprende-sub-sec').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById('sub-' + tabId).classList.remove('hidden');
 
-            document.querySelectorAll('.aprende-tab-btn').forEach(b => {
-                b.className = "aprende-tab-btn px-4 py-2.5 rounded-t-xl font-semibold text-slate-400 hover:text-white flex items-center space-x-2 whitespace-nowrap";
+            document.querySelectorAll('.aprende-tab-btn').forEach(btn => {
+                btn.classList.remove('bg-accentBlue', 'text-white');
+                btn.classList.add('text-slate-400');
             });
-            document.getElementById('tab-' + subId).className = "aprende-tab-btn px-4 py-2.5 rounded-t-xl font-semibold bg-accentBlue text-white flex items-center space-x-2 whitespace-nowrap";
+
+            const activeBtn = document.getElementById('tab-' + tabId);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-accentBlue', 'text-white');
+                activeBtn.classList.remove('text-slate-400');
+            }
         }
 
         function togglePublishModal(show) {
@@ -701,111 +572,65 @@
             else modal.classList.add('hidden');
         }
 
+        // Escuchadores de Realtime Database en Vivo
         function initFirebaseListeners() {
-            loadAprendePublications();
-            loadSalonChat();
+            const qRef = database.ref('aprendeJunto/questions');
+            qRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                const container = document.getElementById('qFeedContainer');
+                if (!container) return;
+                container.innerHTML = '';
+
+                if (!data) {
+                    container.innerHTML = '<p class="text-xs text-slate-500 text-center py-6">No hay preguntas activas aún.</p>';
+                    return;
+                }
+
+                Object.keys(data).reverse().forEach(key => {
+                    const q = data[key];
+                    const qCard = document.createElement('div');
+                    qCard.className = 'bg-cardBg border border-borderBg rounded-2xl p-4 space-y-3';
+                    qCard.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <span class="text-[10px] bg-accentBlue/20 text-accentBlue px-2 py-0.5 rounded font-bold">${q.subject}</span>
+                            <span class="text-[10px] text-slate-500">${q.authorGrade || '4° Sec'}</span>
+                        </div>
+                        <h4 class="text-xs font-bold text-white">${q.title}</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">${q.content}</p>
+                        <div class="flex justify-between items-center text-[10px] text-slate-500 pt-2 border-t border-borderBg/50">
+                            <span>Preguntado por: ${q.authorName}</span>
+                            <button class="text-accentBlue hover:underline"><i class="fa-solid fa-reply mr-1"></i>Responder</button>
+                        </div>
+                    `;
+                    container.appendChild(qCard);
+                });
+            });
         }
 
+        // Crear Publicación en Realtime Database
         function handleCreatePublication(e) {
             e.preventDefault();
             const subject = document.getElementById('pubSubject').value;
-            const title = document.getElementById('pubTitle').value.trim();
-            const content = document.getElementById('pubContent').value.trim();
+            const title = document.getElementById('pubTitle').value;
+            const content = document.getElementById('pubContent').value;
 
-            if (!title || !content) return;
-
-            db.ref('aprende_junto_posts').push({
+            const newQRef = database.ref('aprendeJunto/questions').push();
+            newQRef.set({
                 subject: subject,
                 title: title,
                 content: content,
-                author: currentUser.name,
-                grade: currentUser.grade,
-                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            });
-
-            document.getElementById('pubTitle').value = '';
-            document.getElementById('pubContent').value = '';
-            togglePublishModal(false);
-        }
-
-        function loadAprendePublications() {
-            db.ref('aprende_junto_posts').on('value', (snapshot) => {
-                const container = document.getElementById('qFeedContainer');
-                container.innerHTML = '';
-                const data = snapshot.val();
-                
-                if (!data) {
-                    container.innerHTML = '<div class="text-xs text-slate-500 text-center py-4">No hay publicaciones todavía. ¡Sé el primero en compartir!</div>';
-                    return;
-                }
-
-                Object.values(data).forEach(p => {
-                    const card = document.createElement('div');
-                    card.className = 'bg-cardBg border border-borderBg rounded-2xl p-4 space-y-2 shadow-sm';
-                    card.innerHTML = `
-                        <div class="flex justify-between items-center">
-                            <span class="text-[10px] bg-accentBlue/20 text-accentBlue px-2 py-0.5 rounded font-bold">${p.subject} • ${p.grade}</span>
-                            <span class="text-[10px] text-slate-500">${p.time}</span>
-                        </div>
-                        <h4 class="text-sm font-bold text-white">${p.title}</h4>
-                        <p class="text-xs text-slate-300 leading-relaxed">${p.content}</p>
-                        <div class="flex justify-between items-center text-[11px] text-slate-400 pt-2 border-t border-borderBg/50">
-                            <span>Publicado por: <strong class="text-white">${p.author}</strong></span>
-                            <button onclick="likeApunte(this)" class="text-accentBlue hover:underline"><i class="fa-regular fa-thumbs-up mr-1"></i>Útil</button>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-            });
-        }
-
-        function sendSalonMessage(e) {
-            e.preventDefault();
-            const input = document.getElementById('salonInput');
-            const text = input.value.trim();
-            if (!text) return;
-
-            const gradeKey = currentUser.grade.replace(/[^a-zA-Z0-9]/g, '_');
-            db.ref('chat_salon_' + gradeKey).push({
-                sender: currentUser.name,
-                text: text,
-                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            });
-
-            input.value = '';
-        }
-
-        function loadSalonChat() {
-            const gradeKey = currentUser.grade.replace(/[^a-zA-Z0-9]/g, '_');
-            db.ref('chat_salon_' + gradeKey).on('value', (snapshot) => {
-                const container = document.getElementById('salonChatFeed');
-                container.innerHTML = '';
-                const data = snapshot.val();
-
-                if (!data) {
-                    container.innerHTML = '<div class="text-center text-xs text-slate-500 py-6">El chat de tu salón está listo. ¡Envía el primer mensaje!</div>';
-                    return;
-                }
-
-                Object.values(data).forEach(m => {
-                    const msgDiv = document.createElement('div');
-                    msgDiv.className = 'bg-darkBg border border-borderBg rounded-xl p-3 space-y-1';
-                    msgDiv.innerHTML = `
-                        <div class="flex justify-between items-center text-[10px]">
-                            <span class="font-bold text-accentBlue">${m.sender}</span>
-                            <span class="text-slate-500">${m.time}</span>
-                        </div>
-                        <p class="text-xs text-slate-200">${m.text}</p>
-                    `;
-                    container.appendChild(msgDiv);
-                });
-                container.scrollTop = container.scrollHeight;
+                authorName: currentUser ? currentUser.name : 'Estudiante',
+                authorGrade: currentUser ? currentUser.grade : '4° Secundaria',
+                timestamp: Date.now()
+            }).then(() => {
+                togglePublishModal(false);
+                document.getElementById('pubTitle').value = '';
+                document.getElementById('pubContent').value = '';
             });
         }
 
         function likeApunte(btn) {
-            btn.innerHTML = '<i class="fa-solid fa-thumbs-up mr-1"></i>¡Marcado como útil!';
-            btn.className = "text-emerald-400 font-bold";
+            btn.classList.toggle('text-emerald-400');
         }
     </script>
 </body>
