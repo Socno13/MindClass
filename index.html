@@ -98,7 +98,7 @@
                         <span>Usa tu correo <strong class="text-white">@colegiomilagrosdedios.edu.pe</strong></span>
                     </div>
 
-                    <!-- BOTÓN PRINCIPAL: AUTENTICACIÓN REAL CON GOOGLE (REDIRECCIÓN) -->
+                    <!-- BOTÓN PRINCIPAL: AUTENTICACIÓN REAL CON GOOGLE -->
                     <button onclick="handleGoogleRealAuth()" type="button" class="w-full bg-red-600 hover:bg-red-500 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-lg shadow-red-600/20 flex items-center justify-between group">
                         <div class="flex items-center space-x-3">
                             <div class="w-7 h-7 bg-white rounded-lg flex items-center justify-center text-red-600 font-black text-sm shadow">
@@ -431,11 +431,11 @@
         </div>
     </div>
 
-    <!-- SCRIPT DE CONFIGURACIÓN Y AUTENTICACIÓN REAL FIREBASE (REDIRECCIÓN) -->
+    <!-- SCRIPT DE CONFIGURACIÓN Y AUTENTICACIÓN FIREBASE -->
     <script>
         // Configuración oficial de Firebase para MindClass
         const firebaseConfig = {
-            apiKey: "TU_API_KEY",
+            apiKey: "AIzaSyDjN7AUD5eUf_Dff0PZmccCBDLozqvY4KE",
             authDomain: "mindclass-13r11.firebaseapp.com",
             databaseURL: "https://mindclass-13r11-default-rtdb.firebaseio.com",
             projectId: "mindclass-13r11",
@@ -445,50 +445,16 @@
         };
 
         // Inicialización de Firebase
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const database = firebase.database();
-
-        // Configuración del Proveedor Google OAuth
         const provider = new firebase.auth.GoogleAuthProvider();
-        provider.setCustomParameters({
-            prompt: 'select_account'
-        });
 
         // Estado local del usuario
         let currentUser = JSON.parse(localStorage.getItem('mindclass_user')) || null;
 
         window.addEventListener('DOMContentLoaded', () => {
-            // Manejar el resultado cuando Google regresa a la página
-            firebase.auth().getRedirectResult()
-                .then((result) => {
-                    if (result.user) {
-                        const user = result.user;
-                        const email = user.email;
-
-                        if (!email.endsWith('@colegiomilagrosdedios.edu.pe')) {
-                            firebase.auth().signOut();
-                            alert("Acceso denegado: Debes iniciar sesión con tu correo institucional @colegiomilagrosdedios.edu.pe");
-                            return;
-                        }
-
-                        currentUser = {
-                            id: user.uid,
-                            name: user.displayName || 'Estudiante',
-                            email: email,
-                            photo: user.photoURL,
-                            grade: '4° Secundaria'
-                        };
-
-                        localStorage.setItem('mindclass_user', JSON.stringify(currentUser));
-                        document.getElementById('authModal').classList.add('hidden');
-                        updateUserUI();
-                        initFirebaseListeners();
-                    }
-                }).catch((error) => {
-                    console.error("Error en redirect:", error);
-                    alert("Error: " + error.message);
-                });
-
             if (currentUser) {
                 document.getElementById('authModal').classList.add('hidden');
                 updateUserUI();
@@ -496,9 +462,36 @@
             }
         });
 
-        // Autenticación por Redirección con Google OAuth (Evita bloqueos de Popups)
+        // Autenticación con Google PopUp con fallback automático
         function handleGoogleRealAuth() {
-            firebase.auth().signInWithRedirect(provider);
+            firebase.auth().signInWithPopup(provider)
+                .then((result) => {
+                    const user = result.user;
+                    const email = user.email || '';
+
+                    if (!email.endsWith('@colegiomilagrosdedios.edu.pe')) {
+                        firebase.auth().signOut();
+                        alert("Acceso denegado: Debes iniciar sesión con tu correo @colegiomilagrosdedios.edu.pe");
+                        return;
+                    }
+
+                    currentUser = {
+                        id: user.uid,
+                        name: user.displayName || 'Estudiante',
+                        email: email,
+                        photo: user.photoURL,
+                        grade: '4° Secundaria'
+                    };
+
+                    localStorage.setItem('mindclass_user', JSON.stringify(currentUser));
+                    document.getElementById('authModal').classList.add('hidden');
+                    updateUserUI();
+                    initFirebaseListeners();
+                })
+                .catch((error) => {
+                    console.error("Error en Popup:", error);
+                    alert("Aviso: " + error.message);
+                });
         }
 
         // Acceso Manual Formulario
