@@ -99,7 +99,7 @@
                     </div>
 
                     <!-- BOTÓN PRINCIPAL: AUTENTICACIÓN REAL CON GOOGLE -->
-                    <button onclick="handleGoogleRealAuth()" type="button" class="w-full bg-red-600 hover:bg-red-500 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-lg shadow-red-600/20 flex items-center justify-between group">
+                    <button id="googleBtn" type="button" class="w-full bg-red-600 hover:bg-red-500 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-lg shadow-red-600/20 flex items-center justify-between group cursor-pointer">
                         <div class="flex items-center space-x-3">
                             <div class="w-7 h-7 bg-white rounded-lg flex items-center justify-center text-red-600 font-black text-sm shadow">
                                 G
@@ -433,7 +433,6 @@
 
     <!-- SCRIPT DE CONFIGURACIÓN Y AUTENTICACIÓN FIREBASE -->
     <script>
-        // Configuración oficial de Firebase para MindClass obtenida directamente
         const firebaseConfig = {
             apiKey: "AIzaSyDjn7A1E1eUF_DNV0pCnzoCB1lozqvY4KE",
             authDomain: "mindclass-13r11.firebaseapp.com",
@@ -445,14 +444,12 @@
             measurementId: "G-YG47zHE6QN"
         };
 
-        // Inicialización de Firebase
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
         const database = firebase.database();
         const provider = new firebase.auth.GoogleAuthProvider();
 
-        // Estado local del usuario
         let currentUser = JSON.parse(localStorage.getItem('mindclass_user')) || null;
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -461,10 +458,17 @@
                 updateUserUI();
                 initFirebaseListeners();
             }
+
+            // Asignación directa del evento al botón para evitar que falle el onclick en HTML
+            const googleBtn = document.getElementById('googleBtn');
+            if (googleBtn) {
+                googleBtn.addEventListener('click', handleGoogleRealAuth);
+            }
         });
 
-        // Autenticación con Google PopUp
+        // Autenticación con Google PopUp con manejo detallado
         function handleGoogleRealAuth() {
+            console.log("Iniciando autenticación con Google...");
             firebase.auth().signInWithPopup(provider)
                 .then((result) => {
                     const user = result.user;
@@ -491,7 +495,7 @@
                 })
                 .catch((error) => {
                     console.error("Error detallado de autenticación:", error);
-                    alert("Error al intentar iniciar sesión:\n" + error.message);
+                    alert("Error Firebase (" + error.code + "): " + error.message);
                 });
         }
 
@@ -607,7 +611,7 @@
         function handleCreatePublication(e) {
             e.preventDefault();
             const subject = document.getElementById('pubSubject').value;
-            const title = document.getElementById('pubTitle').value;
+            const title = document.getElementById('pubTitle570').value || document.getElementById('pubTitle').value;
             const content = document.getElementById('pubContent').value;
 
             const newQRef = database.ref('aprendeJunto/questions').push();
