@@ -431,25 +431,26 @@
         </div>
     </div>
 
-    <!-- SCRIPT DE CONFIGURACIÓN Y AUTENTICACIÓN FIREBASE -->
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyDjn7XiUSm1f_DNVoPCnzoCROIozqwY4KF",
-            authDomain: "mindclass-13r11.firebaseapp.com",
-            databaseURL: "https://mindclass-13r11-default-rtdb.firebaseio.com",
-            projectId: "mindclass-13r11",
-            storageBucket: "mindclass-13r11.firebasestorage.app",
-            messagingSenderId: "86015013367",
-            appId: "1:86015013367:web:cd4f64fcr91b53fc3b0666",
-            measurementId: "G-YG47zHE6QN"
-        };
+<!-- SCRIPT DE CONFIGURACIÓN Y AUTENTICACIÓN FIREBASE -->
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDjn7XiUSm1f_DNVoPCnzoCROIozqwY4KF",
+        authDomain: "mindclass-13r11.firebaseapp.com",
+        databaseURL: "https://mindclass-13r11-default-rtdb.firebaseio.com",
+        projectId: "mindclass-13r11",
+        storageBucket: "mindclass-13r11.firebasestorage.app",
+        messagingSenderId: "86015013367",
+        appId: "1:86015013367:web:cd4f64fcr91b53fc3b0666",
+        measurementId: "G-YG47zHE6QN"
+    };
 
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const database = firebase.database();
-        const provider = new firebase.auth.GoogleAuthProvider();
-
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    
+    const database = firebase.database();
+    const provider = new firebase.auth.GoogleAuthProvider();
+</script>
         let currentUser = JSON.parse(localStorage.getItem('mindclass_user')) || null;
 
         window.addEventListener('DOMContentLoaded', () => {
