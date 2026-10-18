@@ -465,7 +465,7 @@
             }
         });
 
-        // Autenticación con Google PopUp con manejo detallado
+        // Autenticación con Google PopUp
         function handleGoogleRealAuth() {
             firebase.auth().signInWithPopup(provider)
                 .then((result) => {
@@ -492,8 +492,8 @@
                     initFirebaseListeners();
                 })
                 .catch((error) => {
-                    console.error("Error detallado de autenticación:", error);
-                    alert("Error Firebase (" + error.code + "): " + error.message);
+                    console.error("Error de autenticación:", error);
+                    alert("Error de Firebase:\n" + error.message);
                 });
         }
 
