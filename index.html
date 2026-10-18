@@ -433,15 +433,16 @@
 
     <!-- SCRIPT DE CONFIGURACIÓN Y AUTENTICACIÓN FIREBASE -->
     <script>
-        // Configuración oficial de Firebase para MindClass
+        // Configuración oficial de Firebase para MindClass obtenida directamente
         const firebaseConfig = {
-            apiKey: "AIzaSyDjN7AUD5eUf_Dff0PZmccCBDLozqvY4KE",
+            apiKey: "AIzaSyDjn7A1E1eUF_DNV0pCnzoCB1lozqvY4KE",
             authDomain: "mindclass-13r11.firebaseapp.com",
             databaseURL: "https://mindclass-13r11-default-rtdb.firebaseio.com",
             projectId: "mindclass-13r11",
-            storageBucket: "mindclass-13r11.appspot.com",
+            storageBucket: "mindclass-13r11.firebasestorage.app",
             messagingSenderId: "86015013367",
-            appId: "1:86015013367:web:4f44c91b53fc3b066"
+            appId: "1:86015013367:web:cd4f64fcr91b53fc3b0666",
+            measurementId: "G-YG47zHE6QN"
         };
 
         // Inicialización de Firebase
@@ -462,7 +463,7 @@
             }
         });
 
-        // Autenticación con Google PopUp con fallback automático
+        // Autenticación con Google PopUp
         function handleGoogleRealAuth() {
             firebase.auth().signInWithPopup(provider)
                 .then((result) => {
@@ -489,8 +490,8 @@
                     initFirebaseListeners();
                 })
                 .catch((error) => {
-                    console.error("Error en Popup:", error);
-                    alert("Aviso: " + error.message);
+                    console.error("Error detallado de autenticación:", error);
+                    alert("Error al intentar iniciar sesión:\n" + error.message);
                 });
         }
 
