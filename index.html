@@ -459,7 +459,6 @@
                 initFirebaseListeners();
             }
 
-            // Asignación directa del evento al botón para evitar que falle el onclick en HTML
             const googleBtn = document.getElementById('googleBtn');
             if (googleBtn) {
                 googleBtn.addEventListener('click', handleGoogleRealAuth);
@@ -468,7 +467,6 @@
 
         // Autenticación con Google PopUp con manejo detallado
         function handleGoogleRealAuth() {
-            console.log("Iniciando autenticación con Google...");
             firebase.auth().signInWithPopup(provider)
                 .then((result) => {
                     const user = result.user;
@@ -611,7 +609,7 @@
         function handleCreatePublication(e) {
             e.preventDefault();
             const subject = document.getElementById('pubSubject').value;
-            const title = document.getElementById('pubTitle570').value || document.getElementById('pubTitle').value;
+            const title = document.getElementById('pubTitle').value;
             const content = document.getElementById('pubContent').value;
 
             const newQRef = database.ref('aprendeJunto/questions').push();
