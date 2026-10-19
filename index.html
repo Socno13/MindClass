@@ -98,7 +98,7 @@
                         <span>Usa tu correo <strong class="text-white">@colegiomilagrosdedios.edu.pe</strong></span>
                     </div>
 
-                    <!-- BOTÓN PRINCIPAL: AUTENTICACIÓN REAL CON GOOGLE -->
+                    <!-- BOTÓN PRINCIPAL: AUTENTICACIÓN CON REDIRECCIÓN GOOGLE -->
                     <button id="googleBtn" type="button" class="w-full bg-red-600 hover:bg-red-500 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-lg shadow-red-600/20 flex items-center justify-between group cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
                         <div class="flex items-center space-x-3">
                             <div class="w-7 h-7 bg-white rounded-lg flex items-center justify-center text-red-600 font-black text-sm shadow">
@@ -431,7 +431,7 @@
         </div>
     </div>
 
-    <!-- SCRIPT DE CONFIGURACIÓN Y AUTENTICACIÓN FIREBASE COMPLETO -->
+    <!-- SCRIPT DE CONFIGURACIÓN Y AUTENTICACIÓN FIREBASE CON REDIRECCIÓN -->
     <script>
         // 1. Configuración de Firebase
         const firebaseConfig = {
@@ -459,12 +459,43 @@
         let currentUser = JSON.parse(localStorage.getItem('mindclass_user')) || null;
 
         window.addEventListener('DOMContentLoaded', () => {
-            if (currentUser) {
-                const modal = document.getElementById('authModal');
-                if (modal) modal.classList.add('hidden');
-                updateUserUI();
-                initFirebaseListeners();
-            }
+            // Captura el resultado de la redirección de Google
+            firebase.auth().getRedirectResult()
+                .then((result) => {
+                    if (result && result.user) {
+                        const user = result.user;
+                        const email = user.email || '';
+
+                        if (!email.endsWith('@colegiomilagrosdedios.edu.pe')) {
+                            firebase.auth().signOut();
+                            alert("Acceso denegado: Debes iniciar sesión con tu correo @colegiomilagrosdedios.edu.pe");
+                            return;
+                        }
+
+                        const currentGrade = currentUser && currentUser.grade ? currentUser.grade : "2° Secundaria";
+
+                        currentUser = {
+                            id: user.uid,
+                            name: user.displayName || 'Estudiante',
+                            email: email,
+                            photo: user.photoURL,
+                            grade: currentGrade
+                        };
+
+                        localStorage.setItem('mindclass_user', JSON.stringify(currentUser));
+                    }
+
+                    if (currentUser) {
+                        const modal = document.getElementById('authModal');
+                        if (modal) modal.classList.add('hidden');
+                        updateUserUI();
+                        initFirebaseListeners();
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error en la redirección:", error);
+                    alert("Error al iniciar sesión: " + error.message);
+                });
 
             const googleBtn = document.getElementById('googleBtn');
             if (googleBtn) {
@@ -472,48 +503,12 @@
             }
         });
 
-        // 2. Autenticación con Google
+        // 2. Autenticación con Google por Redirección
         function handleGoogleRealAuth() {
             const googleBtn = document.getElementById('googleBtn');
             if (googleBtn) googleBtn.disabled = true;
 
-            firebase.auth().signInWithPopup(provider)
-                .then((result) => {
-                    const user = result.user;
-                    const email = user.email || '';
-
-                    if (!email.endsWith('@colegiomilagrosdedios.edu.pe')) {
-                        firebase.auth().signOut();
-                        alert("Acceso denegado: Debes iniciar sesión con tu correo @colegiomilagrosdedios.edu.pe");
-                        if (googleBtn) googleBtn.disabled = false;
-                        return;
-                    }
-
-                    const currentGrade = currentUser && currentUser.grade ? currentUser.grade : "2° Secundaria";
-
-                    currentUser = {
-                        id: user.uid,
-                        name: user.displayName || 'Estudiante',
-                        email: email,
-                        photo: user.photoURL,
-                        grade: currentGrade
-                    };
-
-                    localStorage.setItem('mindclass_user', JSON.stringify(currentUser));
-                    
-                    const modal = document.getElementById('authModal');
-                    if (modal) modal.classList.add('hidden');
-                    
-                    updateUserUI();
-                    initFirebaseListeners();
-                })
-                .catch((error) => {
-                    if (googleBtn) googleBtn.disabled = false;
-                    if (error.code !== 'auth/cancelled-popup-request' && error.code !== 'auth/popup-closed-by-user') {
-                        console.error("Error de autenticación:", error);
-                        alert("Error al iniciar sesión: " + error.message);
-                    }
-                });
+            firebase.auth().signInWithRedirect(provider);
         }
 
         // 3. Autenticación Manual
@@ -706,3 +701,4 @@
     </script>
 </body>
 </html>
+
