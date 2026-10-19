@@ -472,7 +472,7 @@
             }
         });
 
-        // 2. Autenticación con Google (Asigna el grado seleccionado previamente o permite actualizarlo)
+        // 2. Autenticación con Google
         function handleGoogleRealAuth() {
             const googleBtn = document.getElementById('googleBtn');
             if (googleBtn) googleBtn.disabled = true;
@@ -489,7 +489,6 @@
                         return;
                     }
 
-                    // Permite elegir o recuperar el grado correcto
                     const currentGrade = currentUser && currentUser.grade ? currentUser.grade : "2° Secundaria";
 
                     currentUser = {
