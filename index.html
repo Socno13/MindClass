@@ -168,6 +168,42 @@
         </div>
     </div>
 
+    <!-- MODAL PARA ELEGIR GRADO Y CÓDIGO (POST-GOOGLE LOGIN) -->
+    <div id="gradeSetupModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-sidebarBg border border-borderBg rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-5">
+            <div class="text-center space-y-2">
+                <div class="w-12 h-12 bg-accentBlue/20 border border-accentBlue/40 text-accentBlue rounded-2xl flex items-center justify-center mx-auto text-xl font-bold">
+                    <i class="fa-solid fa-school"></i>
+                </div>
+                <h3 class="text-lg font-bold text-white">Configura tu Aula</h3>
+                <p class="text-xs text-slate-400">Selecciona tu grado académico e ingresa el código asignado por la institución para acceder a tu salón.</p>
+            </div>
+
+            <form onsubmit="handleGradeSetup(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Grado Académico</label>
+                    <select id="setupGrade" required class="w-full bg-darkBg border border-borderBg rounded-xl p-3 text-xs text-white focus:outline-none focus:border-accentBlue">
+                        <option value="1° Secundaria">1° Secundaria</option>
+                        <option value="2° Secundaria" selected>2° Secundaria</option>
+                        <option value="3° Secundaria">3° Secundaria</option>
+                        <option value="4° Secundaria">4° Secundaria</option>
+                        <option value="5° Secundaria">5° Secundaria</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Código del Grado</label>
+                    <input type="password" id="setupCode" placeholder="Ej. CMD-SEC" required class="w-full bg-darkBg border border-borderBg rounded-xl p-3 text-xs text-white focus:outline-none focus:border-accentBlue">
+                </div>
+
+                <button type="submit" class="w-full bg-accentBlue hover:bg-hoverBlue text-white font-semibold py-3 rounded-xl transition-all text-xs shadow-lg shadow-accentBlue/20 flex items-center justify-center gap-2">
+                    <span>Entrar a mi Salón</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- PUBLISH MODAL FOR APRENDEJUNTO -->
     <div id="publishModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-sidebarBg border border-borderBg rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-4">
@@ -413,7 +449,7 @@
                                 CANAL DE AULA
                             </div>
                             <h3 class="font-bold text-white text-base flex items-center gap-2">
-                                <i class="fa-solid fa-comments text-emerald-400"></i> Chat de Salón - <span id="chatRoomTitle" class="text-accentBlue">2° Secundaria</span>
+                                <i class="fa-solid fa-comments text-emerald-400"></i> Chat de Salón - <span id="chatRoomTitle" class="text-accentBlue">Tu Salón</span>
                             </h3>
                             <p class="text-xs text-slate-400">Mensajes en tiempo real exclusivos para los estudiantes de tu grado.</p>
                         </div>
@@ -495,26 +531,47 @@
             }
         }
 
+        function showGradeSetupModal() {
+            const modal = document.getElementById('gradeSetupModal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function hideGradeSetupModal() {
+            const modal = document.getElementById('gradeSetupModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             if (currentUser) {
                 hideAuthModal();
-                updateUserUI();
-                initFirebaseListeners();
+                if (!currentUser.grade) {
+                    showGradeSetupModal();
+                } else {
+                    updateUserUI();
+                    initFirebaseListeners();
+                }
             }
 
             firebase.auth().onAuthStateChanged((user) => {
                 if (user && user.email && user.email.endsWith('@colegiomilagrosdedios.edu.pe')) {
-                    currentUser = {
-                        id: user.uid,
-                        name: user.displayName || 'Estudiante',
-                        email: user.email,
-                        photo: user.photoURL,
-                        grade: currentUser?.grade || "2° Secundaria"
-                    };
-                    localStorage.setItem('mindclass_user', JSON.stringify(currentUser));
+                    if (!currentUser || currentUser.id !== user.uid) {
+                        currentUser = {
+                            id: user.uid,
+                            name: user.displayName || 'Estudiante',
+                            email: user.email,
+                            photo: user.photoURL,
+                            grade: null
+                        };
+                    }
                     hideAuthModal();
-                    updateUserUI();
-                    initFirebaseListeners();
+                    
+                    if (!currentUser.grade) {
+                        showGradeSetupModal();
+                    } else {
+                        localStorage.setItem('mindclass_user', JSON.stringify(currentUser));
+                        updateUserUI();
+                        initFirebaseListeners();
+                    }
                 }
             });
 
@@ -546,13 +603,11 @@
                         name: user.displayName || 'Estudiante',
                         email: email,
                         photo: user.photoURL,
-                        grade: "2° Secundaria"
+                        grade: null
                     };
 
-                    localStorage.setItem('mindclass_user', JSON.stringify(currentUser));
                     hideAuthModal();
-                    updateUserUI();
-                    initFirebaseListeners();
+                    showGradeSetupModal();
                 })
                 .catch((error) => {
                     console.error("Error en autenticación con Google:", error);
@@ -561,7 +616,27 @@
                 });
         }
 
-        // 3. Autenticación Manual
+        // 3. Confirmación del Grado e Ingreso a la Plataforma
+        function handleGradeSetup(e) {
+            e.preventDefault();
+            const grade = document.getElementById('setupGrade').value;
+            const code = document.getElementById('setupCode').value;
+
+            if (!code) {
+                alert("Por favor, ingresa el código del grado.");
+                return;
+            }
+
+            if (currentUser) {
+                currentUser.grade = grade;
+                localStorage.setItem('mindclass_user', JSON.stringify(currentUser));
+                hideGradeSetupModal();
+                updateUserUI();
+                initFirebaseListeners();
+            }
+        }
+
+        // 4. Autenticación Manual
         function handleManualLogin(e) {
             e.preventDefault();
             const name = document.getElementById('manualName').value;
@@ -586,7 +661,7 @@
             initFirebaseListeners();
         }
 
-        // 4. Actualización de Interfaz del Usuario
+        // 5. Actualización de Interfaz del Usuario
         function updateUserUI() {
             if (!currentUser) return;
 
@@ -594,7 +669,7 @@
             if (sidebarName) sidebarName.textContent = currentUser.name;
 
             const sidebarGrade = document.getElementById('sidebarUserGrade');
-            if (sidebarGrade) sidebarGrade.textContent = 'Grado: ' + (currentUser.grade || '2° Secundaria');
+            if (sidebarGrade) sidebarGrade.textContent = 'Grado: ' + (currentUser.grade || 'Sin configurar');
 
             const avatar = document.getElementById('userAvatar');
             if (avatar) {
@@ -607,7 +682,7 @@
             }
         }
 
-        // 5. Navegación Principal de la Barra Lateral
+        // 6. Navegación Principal de la Barra Lateral
         function navigate(sectionId) {
             document.querySelectorAll('.content-sec').forEach(sec => sec.classList.add('hidden'));
             const target = document.getElementById('sec-' + sectionId);
@@ -629,7 +704,7 @@
             }
         }
 
-        // 6. Navegación por Pestañas en AprendeJunto
+        // 7. Navegación por Pestañas en AprendeJunto
         function switchAprendeTab(tabId) {
             document.querySelectorAll('.aprende-sub-sec').forEach(sec => sec.classList.add('hidden'));
             const target = document.getElementById('sub-' + tabId);
@@ -647,7 +722,7 @@
             }
         }
 
-        // 7. Abrir y Cerrar Modal de Publicaciones
+        // 8. Abrir y Cerrar Modal de Publicaciones
         function togglePublishModal(show) {
             const modal = document.getElementById('publishModal');
             if (modal) {
@@ -656,7 +731,7 @@
             }
         }
 
-        // 8. Crear Publicación en Realtime Database
+        // 9. Crear Publicación en Realtime Database
         function handleCreatePublication(e) {
             e.preventDefault();
             const subject = document.getElementById('pubSubject').value;
@@ -690,7 +765,7 @@
                 });
         }
 
-        // 9. Carga de Datos en Tiempo Real
+        // 10. Carga de Datos en Tiempo Real
         function initFirebaseListeners() {
             database.ref('aprendeJunto/dudas').on('value', (snapshot) => {
                 const container = document.getElementById('qFeedContainer');
@@ -727,11 +802,11 @@
             });
         }
 
-        // 10. Lógica del Chat del Salón según Grado
+        // 11. Lógica del Chat del Salón según Grado
         function initChatSalonListener() {
-            if (!currentUser) return;
+            if (!currentUser || !currentUser.grade) return;
 
-            const rawGrade = currentUser.grade || "2° Secundaria";
+            const rawGrade = currentUser.grade;
             const gradeKey = rawGrade.replace(/[.#$/[\]]/g, "_");
 
             const roomTitle = document.getElementById('chatRoomTitle');
@@ -782,9 +857,9 @@
             const input = document.getElementById('chatInputMessage');
             const text = input ? input.value.trim() : '';
 
-            if (!text || !currentUser) return;
+            if (!text || !currentUser || !currentUser.grade) return;
 
-            const rawGrade = currentUser.grade || "2° Secundaria";
+            const rawGrade = currentUser.grade;
             const gradeKey = rawGrade.replace(/[.#$/[\]]/g, "_");
 
             const newMessage = {
@@ -805,14 +880,14 @@
                 });
         }
 
-        // 11. Dar Like a Publicación
+        // 12. Dar Like a Publicación
         function likePost(key, currentLikes) {
             database.ref('aprendeJunto/dudas/' + key).update({
                 likes: currentLikes + 1
             });
         }
 
-        // 12. Dar Like a Apuntes
+        // 13. Dar Like a Apuntes
         function likeApunte(btn) {
             const text = btn.innerText;
             const match = text.match(/\d+/);
@@ -822,7 +897,7 @@
             }
         }
 
-        // 13. Cerrar Sesión
+        // 14. Cerrar Sesión
         function logout() {
             localStorage.removeItem('mindclass_user');
             currentUser = null;
