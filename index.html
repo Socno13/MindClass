@@ -431,7 +431,7 @@
         </div>
     </div>
 
-    <!-- SCRIPT DE CONFIGURACIÓN Y AUTENTICACIÓN FIREBASE CON REDIRECCIÓN -->
+    <!-- SCRIPT DE CONFIGURACIÓN Y AUTENTICACIÓN FIREBASE -->
     <script>
         // 1. Configuración de Firebase
         const firebaseConfig = {
@@ -459,7 +459,15 @@
         let currentUser = JSON.parse(localStorage.getItem('mindclass_user')) || null;
 
         window.addEventListener('DOMContentLoaded', () => {
-            // Captura el resultado de la redirección de Google
+            // Verificar si hay usuario local previo
+            if (currentUser) {
+                const modal = document.getElementById('authModal');
+                if (modal) modal.classList.add('hidden');
+                updateUserUI();
+                initFirebaseListeners();
+            }
+
+            // Manejo de la redirección al volver de Google
             firebase.auth().getRedirectResult()
                 .then((result) => {
                     if (result && result.user) {
@@ -472,14 +480,12 @@
                             return;
                         }
 
-                        const currentGrade = currentUser && currentUser.grade ? currentUser.grade : "2° Secundaria";
-
                         currentUser = {
                             id: user.uid,
                             name: user.displayName || 'Estudiante',
                             email: email,
                             photo: user.photoURL,
-                            grade: currentGrade
+                            grade: "2° Secundaria"
                         };
 
                         localStorage.setItem('mindclass_user', JSON.stringify(currentUser));
@@ -494,8 +500,25 @@
                 })
                 .catch((error) => {
                     console.error("Error en la redirección:", error);
-                    alert("Error al iniciar sesión: " + error.message);
                 });
+
+            // Listener de estado global de autenticación Firebase
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user && user.email && user.email.endsWith('@colegiomilagrosdedios.edu.pe')) {
+                    currentUser = {
+                        id: user.uid,
+                        name: user.displayName || 'Estudiante',
+                        email: user.email,
+                        photo: user.photoURL,
+                        grade: currentUser?.grade || "2° Secundaria"
+                    };
+                    localStorage.setItem('mindclass_user', JSON.stringify(currentUser));
+                    const modal = document.getElementById('authModal');
+                    if (modal) modal.classList.add('hidden');
+                    updateUserUI();
+                    initFirebaseListeners();
+                }
+            });
 
             const googleBtn = document.getElementById('googleBtn');
             if (googleBtn) {
