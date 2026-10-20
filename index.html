@@ -49,7 +49,7 @@
 <body class="h-full flex overflow-hidden antialiased selection:bg-accentBlue selection:text-white">
 
     <!-- AUTHENTICATION LANDING / MODAL -->
-    <div id="authModal" class="fixed inset-0 bg-darkBg z-50 flex items-center justify-center">
+    <div id="authModal" class="fixed inset-0 bg-darkBg z-50 flex items-center justify-center" style="display: flex;">
         <div class="w-full h-full flex flex-col md:flex-row">
             
             <!-- COLUMNA IZQUIERDA: IMAGEN INSTITUCIONAL -->
@@ -458,16 +458,22 @@
 
         let currentUser = JSON.parse(localStorage.getItem('mindclass_user')) || null;
 
+        // Ocultamiento garantizado del modal de autenticación
+        function hideAuthModal() {
+            const modal = document.getElementById('authModal');
+            if (modal) {
+                modal.style.setProperty('display', 'none', 'important');
+                modal.classList.add('hidden');
+            }
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
-            // Verificar si hay usuario local previo
             if (currentUser) {
-                const modal = document.getElementById('authModal');
-                if (modal) modal.classList.add('hidden');
+                hideAuthModal();
                 updateUserUI();
                 initFirebaseListeners();
             }
 
-            // Escuchar el estado de autenticación en tiempo real
             firebase.auth().onAuthStateChanged((user) => {
                 if (user && user.email && user.email.endsWith('@colegiomilagrosdedios.edu.pe')) {
                     currentUser = {
@@ -478,8 +484,7 @@
                         grade: currentUser?.grade || "2° Secundaria"
                     };
                     localStorage.setItem('mindclass_user', JSON.stringify(currentUser));
-                    const modal = document.getElementById('authModal');
-                    if (modal) modal.classList.add('hidden');
+                    hideAuthModal();
                     updateUserUI();
                     initFirebaseListeners();
                 }
@@ -491,7 +496,7 @@
             }
         });
 
-        // 2. Autenticación con Google por Popup (Ventana Emergente)
+        // 2. Autenticación con Google por Popup
         function handleGoogleRealAuth() {
             const googleBtn = document.getElementById('googleBtn');
             if (googleBtn) googleBtn.disabled = true;
@@ -517,7 +522,7 @@
                     };
 
                     localStorage.setItem('mindclass_user', JSON.stringify(currentUser));
-                    document.getElementById('authModal').classList.add('hidden');
+                    hideAuthModal();
                     updateUserUI();
                     initFirebaseListeners();
                 })
@@ -548,7 +553,7 @@
             };
 
             localStorage.setItem('mindclass_user', JSON.stringify(currentUser));
-            document.getElementById('authModal').classList.add('hidden');
+            hideAuthModal();
             updateUserUI();
             initFirebaseListeners();
         }
