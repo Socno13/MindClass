@@ -44,6 +44,10 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: #0b1329; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #1b2640; border-radius: 9999px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #2563eb; }
+        /* Transición suave para el anillo del temporizador */
+        .timer-progress {
+            transition: stroke-dashoffset 1s linear;
+        }
     </style>
 </head>
 <body class="h-full flex overflow-hidden antialiased selection:bg-accentBlue selection:text-white">
@@ -52,7 +56,7 @@
     <div id="authModal" class="fixed inset-0 bg-darkBg z-50 flex items-center justify-center" style="display: flex;">
         <div class="w-full h-full flex flex-col md:flex-row">
             
-            <!-- COLUMNA IZQUIERDA: FONDO DE INICIO MEJORADO -->
+            <!-- COLUMNA IZQUIERDA: FONDO DE INICIO -->
             <div class="hidden md:flex md:w-1/2 lg:w-7/12 relative bg-cover bg-center items-end p-12 overflow-hidden shadow-2xl" style="background-image: linear-gradient(to top, rgba(8, 13, 25, 0.95), rgba(8, 13, 25, 0.4)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1400&auto=format&fit=crop');">
                 <div class="absolute inset-0 bg-accentBlue/10 backdrop-blur-[2px]"></div>
                 <div class="relative z-10 space-y-4">
@@ -68,11 +72,9 @@
                 </div>
             </div>
 
-            <!-- COLUMNA DERECHA: FORMULARIO DE INGRESO INSTITUCIONAL -->
+            <!-- COLUMNA DERECHA: FORMULARIO DE INGRESO -->
             <div class="w-full md:w-1/2 lg:w-5/12 bg-sidebarBg border-l border-borderBg p-8 lg:p-12 flex flex-col justify-between overflow-y-auto custom-scrollbar">
-                
                 <div class="space-y-6 max-w-md mx-auto w-full my-auto">
-                    <!-- LOGO INSTITUCIONAL -->
                     <div class="space-y-3">
                         <div class="flex items-center space-x-3">
                             <div class="w-12 h-12 bg-gradient-to-tr from-accentBlue to-lightBlue rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-xl shadow-accentBlue/30 border border-white/10">
@@ -83,7 +85,6 @@
                                 <p class="text-[11px] text-slate-400 font-medium">I.E.P. Milagros de Dios</p>
                             </div>
                         </div>
-
                         <div class="pt-2">
                             <h3 class="text-2xl font-extrabold text-white tracking-tight">Acceso institucional</h3>
                             <p class="text-xs text-slate-400 mt-1 leading-relaxed">
@@ -92,13 +93,11 @@
                         </div>
                     </div>
 
-                    <!-- INDICACIÓN DEL DOMINIO -->
                     <div class="bg-darkBg border border-borderBg rounded-xl p-3 flex items-center space-x-3 text-xs text-slate-300">
                         <i class="fa-regular fa-envelope text-accentBlue text-base"></i>
                         <span>Usa tu correo <strong class="text-white">@colegiomilagrosdedios.edu.pe</strong></span>
                     </div>
 
-                    <!-- BOTÓN PRINCIPAL: AUTENTICACIÓN CON POPUP DE GOOGLE -->
                     <button id="googleBtn" type="button" class="w-full bg-red-600 hover:bg-red-500 text-white font-semibold py-3 px-4 rounded-xl transition-all shadow-lg shadow-red-600/20 flex items-center justify-between group cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
                         <div class="flex items-center space-x-3">
                             <div class="w-7 h-7 bg-white rounded-lg flex items-center justify-center text-red-600 font-black text-sm shadow">
@@ -118,7 +117,6 @@
                         <div class="flex-grow border-t border-borderBg"></div>
                     </div>
 
-                    <!-- FORMULARIO SECUNDARIO DE INGRESO MANUAL -->
                     <form onsubmit="handleManualLogin(event)" class="space-y-3">
                         <div>
                             <label class="block text-[11px] font-medium text-slate-300 mb-1">Nombre Completo</label>
@@ -144,13 +142,11 @@
                                 <input type="password" id="manualCode" placeholder="CMD-SEC" required class="w-full bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
                             </div>
                         </div>
-
                         <button type="submit" class="w-full bg-accentBlue hover:bg-hoverBlue text-white font-semibold py-2.5 rounded-xl transition-colors text-xs mt-2 shadow-md shadow-accentBlue/20">
                             Ingresar a la Plataforma
                         </button>
                     </form>
                 </div>
-
                 <div class="pt-4 text-[10px] text-slate-600 text-center">
                     MindClass v3.6 • I.E.P. Milagros de Dios
                 </div>
@@ -158,7 +154,7 @@
         </div>
     </div>
 
-    <!-- MODAL PARA ELEGIR GRADO Y CÓDIGO (POST-GOOGLE LOGIN) -->
+    <!-- MODAL PARA ELEGIR GRADO -->
     <div id="gradeSetupModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-sidebarBg border border-borderBg rounded-2xl w-full max-w-md p-6 shadow-2xl space-y-5">
             <div class="text-center space-y-2">
@@ -166,9 +162,8 @@
                     <i class="fa-solid fa-school"></i>
                 </div>
                 <h3 class="text-lg font-bold text-white">Configura tu Aula</h3>
-                <p class="text-xs text-slate-400">Selecciona tu grado académico e ingresa el código asignado por la institución para acceder a tu salón.</p>
+                <p class="text-xs text-slate-400">Selecciona tu grado académico e ingresa el código asignado por la institución.</p>
             </div>
-
             <form onsubmit="handleGradeSetup(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-medium text-slate-300 mb-1">Grado Académico</label>
@@ -180,13 +175,11 @@
                         <option value="5° Secundaria">5° Secundaria</option>
                     </select>
                 </div>
-
                 <div>
                     <label class="block text-xs font-medium text-slate-300 mb-1">Código del Grado</label>
                     <input type="password" id="setupCode" placeholder="Ej. CMD-SEC" required class="w-full bg-darkBg border border-borderBg rounded-xl p-3 text-xs text-white focus:outline-none focus:border-accentBlue transition-colors">
                     <p id="setupCodeError" class="text-[11px] text-red-400 mt-1 hidden">Código incorrecto. Verifica el código asignado a tu salón.</p>
                 </div>
-
                 <button type="submit" class="w-full bg-accentBlue hover:bg-hoverBlue text-white font-semibold py-3 rounded-xl transition-all text-xs shadow-lg shadow-accentBlue/20 flex items-center justify-center gap-2">
                     <span>Entrar a mi Salón</span>
                     <i class="fa-solid fa-arrow-right text-xs"></i>
@@ -238,7 +231,7 @@
         <!-- LEFT SIDEBAR -->
         <aside class="w-64 bg-sidebarBg border-r border-borderBg flex flex-col justify-between flex-shrink-0">
             <div>
-                <!-- Branding Header con Logo Mejorado -->
+                <!-- Branding Header -->
                 <div class="p-4 border-b border-borderBg flex items-center space-x-3">
                     <div class="w-9 h-9 bg-gradient-to-tr from-accentBlue to-lightBlue rounded-xl flex items-center justify-center text-white font-black text-lg shadow-md shadow-accentBlue/30">
                         M
@@ -271,7 +264,6 @@
                         <i class="fa-solid fa-table-cells-large w-4 text-center"></i>
                         <span>Dashboard & Tareas</span>
                     </button>
-
                     <button onclick="navigate('chat-salon')" id="nav-chat-salon" class="nav-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:bg-darkBg hover:text-white transition-all">
                         <div class="flex items-center space-x-3">
                             <i class="fa-solid fa-comments w-4 text-center text-emerald-400"></i>
@@ -279,7 +271,6 @@
                         </div>
                         <span class="text-[9px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-500/20">Aula</span>
                     </button>
-
                     <button onclick="navigate('aprende-junto')" id="nav-aprende-junto" class="nav-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:bg-darkBg hover:text-white transition-all">
                         <div class="flex items-center space-x-3">
                             <i class="fa-solid fa-users-between-lines w-4 text-center"></i>
@@ -287,7 +278,6 @@
                         </div>
                         <span class="text-[9px] bg-sky-400/20 text-sky-300 font-bold px-1.5 py-0.5 rounded uppercase">PRO</span>
                     </button>
-
                     <button onclick="navigate('voz-escolar')" id="nav-voz-escolar" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:bg-darkBg hover:text-white transition-all">
                         <i class="fa-solid fa-check-to-slot w-4 text-center text-purple-400"></i>
                         <span>VozEscolar</span>
@@ -295,7 +285,6 @@
                 </nav>
             </div>
 
-            <!-- Footer Text -->
             <div class="p-4 border-t border-borderBg text-[10px] text-slate-500 text-center">
                 MindClass v3.6 • IEP Milagros de Dios
             </div>
@@ -304,15 +293,13 @@
         <!-- RIGHT CONTENT AREA -->
         <div class="flex-1 flex flex-col min-w-0 bg-darkBg">
 
-            <!-- TOP HEADER BAR CON CAMPANA DE NOTIFICACIONES FUNCIONAL -->
+            <!-- TOP HEADER BAR -->
             <header class="h-14 bg-sidebarBg border-b border-borderBg flex items-center justify-end px-6 space-x-4 relative">
                 <div class="relative">
                     <button onclick="toggleNotificationsPanel()" class="relative text-slate-400 hover:text-white text-sm p-2 rounded-xl hover:bg-darkBg transition-colors" title="Notificaciones">
                         <i class="fa-regular fa-bell"></i>
                         <span id="notifBadge" class="absolute top-1 right-1 w-2 h-2 bg-accentBlue rounded-full animate-ping"></span>
                     </button>
-
-                    <!-- Panel desplegable de Notificaciones -->
                     <div id="notificationsPanel" class="absolute right-0 mt-2 w-80 bg-cardBg border border-borderBg rounded-2xl shadow-2xl p-4 hidden z-40 space-y-3">
                         <div class="flex justify-between items-center border-b border-borderBg pb-2">
                             <h4 class="font-bold text-white text-xs flex items-center gap-2">
@@ -323,11 +310,7 @@
                         <div class="space-y-2 text-xs">
                             <div class="p-2.5 bg-darkBg rounded-xl border border-borderBg space-y-1">
                                 <p class="font-bold text-slate-200">¡Bienvenido a MindClass!</p>
-                                <p class="text-[11px] text-slate-400">Recuerda configurar tu grado y revisar tus tareas pendientes en el Dashboard.</p>
-                            </div>
-                            <div class="p-2.5 bg-darkBg rounded-xl border border-borderBg space-y-1">
-                                <p class="font-bold text-emerald-400">Chat de Salón Activo</p>
-                                <p class="text-[11px] text-slate-400">Ya puedes comunicarte en tiempo real con tus compañeros de aula.</p>
+                                <p class="text-[11px] text-slate-400">Configura tu grado y revisa tus tareas en el Dashboard.</p>
                             </div>
                         </div>
                     </div>
@@ -342,7 +325,7 @@
             <!-- MAIN DYNAMIC CONTAINER -->
             <main class="flex-1 overflow-y-auto custom-scrollbar p-6">
 
-                <!-- SECTION: DASHBOARD CON TAREAS Y TEMPORIZADOR POMODORO -->
+                <!-- SECTION: DASHBOARD CON TAREAS Y TEMPORIZADOR CIRCULAR -->
                 <section id="sec-dashboard" class="content-sec space-y-6">
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
@@ -350,14 +333,13 @@
                                 PANEL PERSONAL
                             </div>
                             <h2 class="text-2xl font-extrabold text-white tracking-tight">Dashboard, Tareas & Temporizador</h2>
-                            <p class="text-xs text-slate-400 mt-1">Organiza tus deberes con fecha límite y mejora tu concentración con el temporizador de estudio.</p>
+                            <p class="text-xs text-slate-400 mt-1">Organiza tus deberes y mantén el enfoque con el temporizador circular Pomodoro.</p>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <!-- COLUMNA IZQUIERDA: CREAR TAREA + TEMPORIZADOR -->
+                        <!-- COLUMNA IZQUIERDA: CREAR TAREA + TEMPORIZADOR CIRCULAR -->
                         <div class="space-y-6">
-                            <!-- FORMULARIO PARA CREAR TAREA -->
                             <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4">
                                 <h3 class="font-bold text-white text-sm flex items-center gap-2">
                                     <i class="fa-solid fa-plus-circle text-accentBlue"></i> Agregar Nueva Tarea
@@ -390,24 +372,36 @@
                                 </form>
                             </div>
 
-                            <!-- TEMPORIZADOR DE ESTUDIO (POMODORO) -->
-                            <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-3 text-center">
-                                <h3 class="font-bold text-white text-sm flex items-center justify-center gap-2">
-                                    <i class="fa-solid fa-stopwatch text-amber-400"></i> Temporizador Pomodoro
+                            <!-- TEMPORIZADOR CIRCULAR POMODORO -->
+                            <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4 text-center flex flex-col items-center">
+                                <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-stopwatch text-amber-400"></i> Temporizador Circular
                                 </h3>
-                                <p class="text-[11px] text-slate-400">25 minutos de estudio enfocado y 5 de descanso.</p>
-                                <div id="timerDisplay" class="text-3xl font-black text-accentBlue py-3 tracking-wider font-mono">
-                                    25:00
+                                <p class="text-[11px] text-slate-400">Enfoque de 25 min.</p>
+                                
+                                <!-- CONTENEDOR DEL CÍRCULO SVG -->
+                                <div class="relative w-36 h-36 flex items-center justify-center my-2">
+                                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                                        <!-- Círculo de fondo -->
+                                        <circle cx="50" cy="50" r="42" class="text-darkBg stroke-current" stroke-width="8" fill="transparent"></circle>
+                                        <!-- Círculo de progreso dinámico -->
+                                        <circle id="timerProgressCircle" cx="50" cy="50" r="42" class="text-accentBlue stroke-current timer-progress" stroke-width="8" stroke-dasharray="264" stroke-dashoffset="0" stroke-linecap="round" fill="transparent"></circle>
+                                    </svg>
+                                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                        <span id="timerDisplay" class="text-2xl font-black text-white tracking-wider font-mono">25:00</span>
+                                        <span id="timerStatusLabel" class="text-[9px] text-slate-400 uppercase tracking-widest font-bold">Listo</span>
+                                    </div>
                                 </div>
-                                <div class="flex justify-center gap-2 pt-1">
-                                    <button onclick="startTimer()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-1.5 rounded-xl text-xs font-semibold shadow">Iniciar</button>
-                                    <button onclick="pauseTimer()" class="bg-amber-600 hover:bg-amber-500 text-white px-4 py-1.5 rounded-xl text-xs font-semibold shadow">Pausar</button>
+
+                                <div class="flex justify-center gap-2 w-full pt-1">
+                                    <button onclick="startTimer()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow">Iniciar</button>
+                                    <button onclick="pauseTimer()" class="bg-amber-600 hover:bg-amber-500 text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow">Pausar</button>
                                     <button onclick="resetTimer()" class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded-xl text-xs font-semibold">Reiniciar</button>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- LISTA DE TAREAS Y RECORDATORIOS -->
+                        <!-- LISTA DE TAREAS -->
                         <div class="lg:col-span-2 bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4 h-fit">
                             <div class="flex justify-between items-center border-b border-borderBg pb-3">
                                 <h3 class="font-bold text-white text-sm flex items-center gap-2">
@@ -415,15 +409,12 @@
                                 </h3>
                                 <span id="taskCounter" class="text-[10px] bg-darkBg text-slate-400 px-2.5 py-1 rounded-lg border border-borderBg">0 tareas</span>
                             </div>
-
-                            <div id="tasksListContainer" class="space-y-3">
-                                <!-- Las tareas se inyectarán aquí -->
-                            </div>
+                            <div id="tasksListContainer" class="space-y-3"></div>
                         </div>
                     </div>
                 </section>
 
-                <!-- SECTION 1: APRENDEJUNTO (CON FLASHCARDS NUEVAS) -->
+                <!-- SECTION: APRENDEJUNTO & FLASHCARDS -->
                 <section id="sec-aprende-junto" class="content-sec hidden space-y-6">
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
@@ -431,9 +422,8 @@
                                 MÓDULO COLABORATIVO
                             </div>
                             <h2 class="text-2xl font-extrabold text-white tracking-tight">AprendeJunto & Flashcards</h2>
-                            <p class="text-xs text-slate-400 mt-1">Ayuda mutua, apuntes, debates y tarjetas de repaso rápido (Flashcards).</p>
+                            <p class="text-xs text-slate-400 mt-1">Ayuda mutua, apuntes y tarjetas de repaso rápido.</p>
                         </div>
-
                         <button onclick="togglePublishModal(true)" class="bg-accentBlue hover:bg-hoverBlue text-white px-4 py-2.5 rounded-xl font-semibold text-xs transition-colors shadow-lg shadow-accentBlue/20 flex items-center space-x-2 self-start md:self-auto">
                             <i class="fa-solid fa-plus"></i>
                             <span>Publicar en la Comunidad</span>
@@ -463,7 +453,6 @@
                         <div id="qFeedContainer" class="space-y-4"></div>
                     </div>
 
-                    <!-- NUEVA SUB-SECCIÓN: FLASHCARDS INTERACTIVAS -->
                     <div id="sub-flashcards" class="aprende-sub-sec space-y-4 hidden">
                         <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4">
                             <div class="flex justify-between items-center">
@@ -473,7 +462,6 @@
                                 </div>
                                 <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded font-bold">Repaso Ágil</span>
                             </div>
-
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                                 <div onclick="this.classList.toggle('bg-accentBlue/20')" class="bg-darkBg border border-borderBg rounded-xl p-5 cursor-pointer transition-all space-y-2 hover:border-accentBlue text-center">
                                     <span class="text-[10px] text-accentBlue font-bold uppercase">Álgebra • Pregunta 1</span>
@@ -503,7 +491,7 @@
                     </div>
                 </section>
 
-                <!-- SECTION 2: CHAT DE SALÓN -->
+                <!-- SECTION: CHAT DE SALÓN -->
                 <section id="sec-chat-salon" class="content-sec hidden space-y-4">
                     <div class="bg-cardBg border border-borderBg rounded-2xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-3">
                         <div>
@@ -521,14 +509,10 @@
                         </div>
                     </div>
 
-                    <!-- CONTENEDOR DEL CHAT -->
                     <div class="bg-cardBg border border-borderBg rounded-2xl flex flex-col h-[520px] overflow-hidden shadow-xl">
-                        <!-- ÁREA DE MENSAJES -->
                         <div id="chatMessagesContainer" class="flex-1 p-4 overflow-y-auto custom-scrollbar space-y-3 bg-darkBg/50">
                             <p class="text-xs text-slate-500 text-center py-8">Cargando conversación del salón...</p>
                         </div>
-
-                        <!-- FORMULARIO DE ENVÍO -->
                         <form onsubmit="handleSendChatMessage(event)" class="p-3 bg-sidebarBg border-t border-borderBg flex gap-2 items-center">
                             <input type="text" id="chatInputMessage" placeholder="Escribe un mensaje para tu salón..." required autocomplete="off" class="flex-1 bg-darkBg border border-borderBg rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-accentBlue">
                             <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2.5 rounded-xl font-semibold text-xs transition-colors flex items-center gap-2 shadow-md shadow-emerald-600/20">
@@ -539,7 +523,7 @@
                     </div>
                 </section>
 
-                <!-- SECTION 3: VOZ ESCOLAR (ACTIVA) -->
+                <!-- SECTION: VOZ ESCOLAR -->
                 <section id="sec-voz-escolar" class="content-sec hidden space-y-6">
                     <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4">
                         <div class="flex items-center gap-3 border-b border-borderBg pb-3">
@@ -551,11 +535,10 @@
                                 <p class="text-xs text-slate-400">Comparte tus sugerencias de mejoras para las actividades del colegio.</p>
                             </div>
                         </div>
-
                         <form onsubmit="handleVozEscolarSubmit(event)" class="space-y-3 max-w-xl">
                             <div>
                                 <label class="block text-xs font-medium text-slate-300 mb-1">Título de tu propuesta o sugerencia</label>
-                                <input type="text" id="vozTitle" placeholder="Ej. Propuesta para campeonatos deportivos inter-salones" required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                                <input type="text" id="vozTitle" placeholder="Ej. Propuesta para campeonatos deportivos" required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-purple-500">
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-slate-300 mb-1">Descripción detallada</label>
@@ -565,7 +548,6 @@
                                 Enviar Propuesta
                             </button>
                         </form>
-
                         <div class="pt-4 space-y-3">
                             <h4 class="font-bold text-white text-xs">Propuestas activas de la comunidad</h4>
                             <div id="vozFeedContainer" class="space-y-2">
@@ -920,9 +902,11 @@
             renderUserTasks();
         }
 
-        // TEMPORIZADOR POMODORO
+        // TEMPORIZADOR CIRCULAR POMODORO LÓGICA
         let timerInterval = null;
-        let timeLeft = 25 * 60;
+        const totalTime = 25 * 60;
+        let timeLeft = totalTime;
+        const circleCircumference = 264; // 2 * pi * r (r=42)
 
         function updateTimerDisplay() {
             const minutes = Math.floor(timeLeft / 60);
@@ -931,10 +915,24 @@
             if (display) {
                 display.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             }
+
+            // Calcular el progreso del círculo SVG
+            const circle = document.getElementById('timerProgressCircle');
+            if (circle) {
+                const progressOffset = circleCircumference - (timeLeft / totalTime) * circleCircumference;
+                circle.style.strokeDashoffset = progressOffset;
+            }
         }
 
         function startTimer() {
             if (timerInterval) return;
+            const statusLabel = document.getElementById('timerStatusLabel');
+            if (statusLabel) {
+                statusLabel.textContent = 'Enfoque';
+                statusLabel.classList.remove('text-slate-400');
+                statusLabel.classList.add('text-emerald-400');
+            }
+
             timerInterval = setInterval(() => {
                 if (timeLeft > 0) {
                     timeLeft--;
@@ -950,13 +948,25 @@
         function pauseTimer() {
             clearInterval(timerInterval);
             timerInterval = null;
+            const statusLabel = document.getElementById('timerStatusLabel');
+            if (statusLabel) {
+                statusLabel.textContent = 'Pausado';
+                statusLabel.classList.remove('text-emerald-400');
+                statusLabel.classList.add('text-amber-400');
+            }
         }
 
         function resetTimer() {
             clearInterval(timerInterval);
             timerInterval = null;
-            timeLeft = 25 * 60;
+            timeLeft = totalTime;
             updateTimerDisplay();
+            const statusLabel = document.getElementById('timerStatusLabel');
+            if (statusLabel) {
+                statusLabel.textContent = 'Listo';
+                statusLabel.classList.remove('text-emerald-400', 'text-amber-400');
+                statusLabel.classList.add('text-slate-400');
+            }
         }
 
         // VOZ ESCOLAR SUBMIT
@@ -965,7 +975,6 @@
             const title = document.getElementById('vozTitle').value;
             const desc = document.getElementById('vozDesc').value;
             const container = document.getElementById('vozFeedContainer');
-
             if (!container) return;
 
             const newItem = document.createElement('div');
@@ -979,7 +988,6 @@
                 <p class="text-[11px] text-slate-300">${desc}</p>
             `;
             container.prepend(newItem);
-
             document.getElementById('vozTitle').value = '';
             document.getElementById('vozDesc').value = '';
             alert("¡Propuesta enviada con éxito a VozEscolar!");
@@ -990,7 +998,6 @@
             const subject = document.getElementById('pubSubject').value;
             const title = document.getElementById('pubTitle').value;
             const content = document.getElementById('pubContent').value;
-
             if (!currentUser) return;
 
             const newPost = {
@@ -1003,19 +1010,17 @@
                 likes: 0
             };
 
-            database.ref('aprendeJunto/dudas').push(newPost)
-                .then(() => {
-                    togglePublishModal(false);
-                    document.getElementById('pubTitle').value = '';
-                    document.getElementById('pubContent').value = '';
-                });
+            database.ref('aprendeJunto/dudas').push(newPost).then(() => {
+                togglePublishModal(false);
+                document.getElementById('pubTitle').value = '';
+                document.getElementById('pubContent').value = '';
+            });
         }
 
         function initFirebaseListeners() {
             database.ref('aprendeJunto/dudas').on('value', (snapshot) => {
                 const container = document.getElementById('qFeedContainer');
                 if (!container) return;
-
                 container.innerHTML = '';
                 const data = snapshot.val();
 
@@ -1056,7 +1061,6 @@
             database.ref('chatSalones/' + gradeKey).on('value', (snapshot) => {
                 const container = document.getElementById('chatMessagesContainer');
                 if (!container) return;
-
                 container.innerHTML = '';
                 const data = snapshot.val();
 
@@ -1068,10 +1072,8 @@
                 Object.keys(data).forEach(key => {
                     const msg = data[key];
                     const isMe = currentUser && (msg.authorId === currentUser.id || msg.authorEmail === currentUser.email);
-
                     const msgDiv = document.createElement('div');
                     msgDiv.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'} space-y-1`;
-
                     msgDiv.innerHTML = `
                         <div class="flex items-center gap-2 text-[10px] text-slate-400">
                             <span class="font-bold ${isMe ? 'text-accentBlue' : 'text-emerald-400'}">${isMe ? 'Tú' : msg.author}</span>
@@ -1096,7 +1098,6 @@
             e.preventDefault();
             const input = document.getElementById('chatInputMessage');
             const text = input ? input.value.trim() : '';
-
             if (!text || !currentUser || !currentUser.grade) return;
 
             const gradeKey = currentUser.grade.replace(/[.#$/[\]]/g, "_");
