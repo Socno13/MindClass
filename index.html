@@ -141,7 +141,7 @@
                             </div>
                             <div>
                                 <label class="block text-[11px] font-medium text-slate-300 mb-1">Código Grado</label>
-                                <input type="password" id="manualCode" placeholder="CMD-SEC" required class="w-full bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
+                                <input type="password" id="manualCode" placeholder="CMD-2SEC" required class="w-full bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
                             </div>
                         </div>
 
@@ -176,7 +176,7 @@
                     <i class="fa-solid fa-school"></i>
                 </div>
                 <h3 class="text-lg font-bold text-white">Configura tu Aula</h3>
-                <p class="text-xs text-slate-400">Selecciona tu grado académico e ingresa el código asignado por la institución para acceder a tu salón.</p>
+                <p class="text-xs text-slate-400">Selecciona tu grado académico e ingresa el código exacto asignado para ese salón.</p>
             </div>
 
             <form onsubmit="handleGradeSetup(event)" class="space-y-4">
@@ -193,7 +193,7 @@
 
                 <div>
                     <label class="block text-xs font-medium text-slate-300 mb-1">Código del Grado</label>
-                    <input type="password" id="setupCode" placeholder="Ej. CMD-SEC" required class="w-full bg-darkBg border border-borderBg rounded-xl p-3 text-xs text-white focus:outline-none focus:border-accentBlue">
+                    <input type="password" id="setupCode" placeholder="Ej. CMD-2SEC" required class="w-full bg-darkBg border border-borderBg rounded-xl p-3 text-xs text-white focus:outline-none focus:border-accentBlue">
                 </div>
 
                 <button type="submit" class="w-full bg-accentBlue hover:bg-hoverBlue text-white font-semibold py-3 rounded-xl transition-all text-xs shadow-lg shadow-accentBlue/20 flex items-center justify-center gap-2">
@@ -575,6 +575,15 @@
             hd: "colegiomilagrosdedios.edu.pe"
         });
 
+        // Diccionario de códigos oficiales estrictos por grado
+        const GRADE_CODES = {
+            "1° Secundaria": "CMD-1SEC",
+            "2° Secundaria": "CMD-2SEC",
+            "3° Secundaria": "CMD-3SEC",
+            "4° Secundaria": "CMD-4SEC",
+            "5° Secundaria": "CMD-5SEC"
+        };
+
         let currentUser = JSON.parse(localStorage.getItem('mindclass_user')) || null;
 
         // Ocultamiento garantizado del modal de autenticación
@@ -673,14 +682,16 @@
                 });
         }
 
-        // 3. Confirmación del Grado e Ingreso a la Plataforma
+        // 3. Confirmación Segura del Grado y Validación de Código Estricto
         function handleGradeSetup(e) {
             e.preventDefault();
             const grade = document.getElementById('setupGrade').value;
-            const code = document.getElementById('setupCode').value;
+            const code = document.getElementById('setupCode').value.trim();
 
-            if (!code) {
-                alert("Por favor, ingresa el código del grado.");
+            // Validación estricta: comprobar si el código coincide con el grado seleccionado
+            const expectedCode = GRADE_CODES[grade];
+            if (code !== expectedCode) {
+                alert("❌ Código incorrecto para " + grade + ". Verifica el código asignado a tu salón.");
                 return;
             }
 
@@ -694,15 +705,23 @@
             }
         }
 
-        // 4. Autenticación Manual
+        // 4. Autenticación Manual con Validación de Código
         function handleManualLogin(e) {
             e.preventDefault();
             const name = document.getElementById('manualName').value;
             const email = document.getElementById('manualEmail').value;
             const grade = document.getElementById('manualGrade').value;
+            const code = document.getElementById('manualCode').value.trim();
 
             if (!email.endsWith('@colegiomilagrosdedios.edu.pe')) {
                 alert('Debes ingresar un correo que termine en @colegiomilagrosdedios.edu.pe');
+                return;
+            }
+
+            // Validación estricta para acceso manual
+            const expectedCode = GRADE_CODES[grade];
+            if (code !== expectedCode) {
+                alert("❌ Código incorrecto para " + grade + ". Verifica el código asignado a tu salón.");
                 return;
             }
 
