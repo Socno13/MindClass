@@ -52,18 +52,18 @@
     <div id="authModal" class="fixed inset-0 bg-darkBg z-50 flex items-center justify-center" style="display: flex;">
         <div class="w-full h-full flex flex-col md:flex-row">
             
-            <!-- COLUMNA IZQUIERDA: IMAGEN INSTITUCIONAL -->
-            <div class="hidden md:flex md:w-1/2 lg:w-7/12 relative bg-cover bg-center items-end p-12 overflow-hidden" style="background-image: url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop');">
-                <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-darkBg/60 to-transparent"></div>
-                <div class="relative z-10 space-y-3">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accentBlue/20 border border-accentBlue/40 text-lightBlue text-xs font-semibold backdrop-blur-md">
-                        <i class="fa-solid fa-graduation-cap"></i> Ecosistema Digital Escolar
+            <!-- COLUMNA IZQUIERDA: FONDO DE INICIO MEJORADO -->
+            <div class="hidden md:flex md:w-1/2 lg:w-7/12 relative bg-cover bg-center items-end p-12 overflow-hidden shadow-2xl" style="background-image: linear-gradient(to top, rgba(8, 13, 25, 0.95), rgba(8, 13, 25, 0.4)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1400&auto=format&fit=crop');">
+                <div class="absolute inset-0 bg-accentBlue/10 backdrop-blur-[2px]"></div>
+                <div class="relative z-10 space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-accentBlue/30 border border-accentBlue/50 text-lightBlue text-xs font-bold backdrop-blur-md shadow-lg">
+                        <i class="fa-solid fa-graduation-cap"></i> Ecosistema Digital Escolar Oficial
                     </div>
-                    <h1 class="text-4xl lg:text-5xl font-extrabold text-white leading-tight">
+                    <h1 class="text-4xl lg:text-6xl font-black text-white tracking-tight leading-none">
                         MindClass
                     </h1>
-                    <p class="text-slate-300 text-sm max-w-lg leading-relaxed">
-                        Conocimiento para comprender, herramientas para transformar. Plataforma colaborativa oficial para la comunidad de la I.E.P. Milagros de Dios.
+                    <p class="text-slate-200 text-sm lg:text-base max-w-lg leading-relaxed font-medium">
+                        Conocimiento para comprender, herramientas para transformar. Plataforma colaborativa para estudiantes de la I.E.P. Milagros de Dios.
                     </p>
                 </div>
             </div>
@@ -71,30 +71,30 @@
             <!-- COLUMNA DERECHA: FORMULARIO DE INGRESO INSTITUCIONAL -->
             <div class="w-full md:w-1/2 lg:w-5/12 bg-sidebarBg border-l border-borderBg p-8 lg:p-12 flex flex-col justify-between overflow-y-auto custom-scrollbar">
                 
-                <div class="space-y-8 max-w-md mx-auto w-full my-auto">
-                    <!-- LOGO Y TÍTULOS -->
+                <div class="space-y-6 max-w-md mx-auto w-full my-auto">
+                    <!-- LOGO INSTITUCIONAL -->
                     <div class="space-y-3">
                         <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-accentBlue rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-accentBlue/30">
+                            <div class="w-12 h-12 bg-gradient-to-tr from-accentBlue to-lightBlue rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-xl shadow-accentBlue/30 border border-white/10">
                                 M
                             </div>
                             <div>
-                                <h2 class="text-lg font-bold text-white leading-none">MindClass</h2>
-                                <p class="text-[10px] text-slate-400">I.E.P. Milagros de Dios</p>
+                                <h2 class="text-xl font-extrabold text-white leading-none">MindClass</h2>
+                                <p class="text-[11px] text-slate-400 font-medium">I.E.P. Milagros de Dios</p>
                             </div>
                         </div>
 
-                        <div class="pt-4">
-                            <h3 class="text-2xl font-extrabold text-white tracking-tight">Ingreso institucional</h3>
+                        <div class="pt-2">
+                            <h3 class="text-2xl font-extrabold text-white tracking-tight">Acceso institucional</h3>
                             <p class="text-xs text-slate-400 mt-1 leading-relaxed">
-                                Accede a tus clases, chat de salón, recursos colaborativos y actividades escolares.
+                                Ingresa con tu cuenta de Google para acceder al chat de salón, tareas y recursos.
                             </p>
                         </div>
                     </div>
 
                     <!-- INDICACIÓN DEL DOMINIO -->
                     <div class="bg-darkBg border border-borderBg rounded-xl p-3 flex items-center space-x-3 text-xs text-slate-300">
-                        <i class="fa-regular fa-envelope text-accentBlue text-sm"></i>
+                        <i class="fa-regular fa-envelope text-accentBlue text-base"></i>
                         <span>Usa tu correo <strong class="text-white">@colegiomilagrosdedios.edu.pe</strong></span>
                     </div>
 
@@ -145,24 +145,14 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="w-full bg-accentBlue hover:bg-hoverBlue text-white font-semibold py-2.5 rounded-xl transition-colors text-xs mt-2">
+                        <button type="submit" class="w-full bg-accentBlue hover:bg-hoverBlue text-white font-semibold py-2.5 rounded-xl transition-colors text-xs mt-2 shadow-md shadow-accentBlue/20">
                             Ingresar a la Plataforma
                         </button>
                     </form>
-
-                    <div id="authAlert" class="hidden p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-center space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-sm"></i>
-                        <span id="authAlertMsg">Error en la autenticación</span>
-                    </div>
-
-                    <!-- LEYENDA INFERIOR -->
-                    <p class="text-[10px] text-slate-500 text-center leading-relaxed">
-                        El acceso depende del rol y matrícula registrados. La plataforma no almacena contraseñas personales.
-                    </p>
                 </div>
 
-                <div class="pt-6 text-[10px] text-slate-600 text-center">
-                    MindClass v3.5 • I.E.P. Milagros de Dios
+                <div class="pt-4 text-[10px] text-slate-600 text-center">
+                    MindClass v3.6 • I.E.P. Milagros de Dios
                 </div>
             </div>
         </div>
@@ -248,9 +238,9 @@
         <!-- LEFT SIDEBAR -->
         <aside class="w-64 bg-sidebarBg border-r border-borderBg flex flex-col justify-between flex-shrink-0">
             <div>
-                <!-- Branding Header -->
+                <!-- Branding Header con Logo Mejorado -->
                 <div class="p-4 border-b border-borderBg flex items-center space-x-3">
-                    <div class="w-9 h-9 bg-accentBlue rounded-xl flex items-center justify-center text-white font-black text-lg shadow-md shadow-accentBlue/30">
+                    <div class="w-9 h-9 bg-gradient-to-tr from-accentBlue to-lightBlue rounded-xl flex items-center justify-center text-white font-black text-lg shadow-md shadow-accentBlue/30">
                         M
                     </div>
                     <div>
@@ -279,7 +269,7 @@
                 <nav class="px-3 space-y-1 mt-2">
                     <button onclick="navigate('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium bg-accentBlue text-white shadow-md shadow-accentBlue/20 transition-all">
                         <i class="fa-solid fa-table-cells-large w-4 text-center"></i>
-                        <span>Dashboard</span>
+                        <span>Dashboard & Tareas</span>
                     </button>
 
                     <button onclick="navigate('chat-salon')" id="nav-chat-salon" class="nav-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:bg-darkBg hover:text-white transition-all">
@@ -295,7 +285,7 @@
                             <i class="fa-solid fa-users-between-lines w-4 text-center"></i>
                             <span>AprendeJunto</span>
                         </div>
-                        <span class="text-[9px] bg-sky-400/20 text-sky-300 font-bold px-1.5 py-0.5 rounded uppercase">NUEVO</span>
+                        <span class="text-[9px] bg-sky-400/20 text-sky-300 font-bold px-1.5 py-0.5 rounded uppercase">PRO</span>
                     </button>
 
                     <button onclick="navigate('voz-escolar')" id="nav-voz-escolar" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:bg-darkBg hover:text-white transition-all">
@@ -307,19 +297,41 @@
 
             <!-- Footer Text -->
             <div class="p-4 border-t border-borderBg text-[10px] text-slate-500 text-center">
-                MindClass v3.5 • IEP Milagros de Dios
+                MindClass v3.6 • IEP Milagros de Dios
             </div>
         </aside>
 
         <!-- RIGHT CONTENT AREA -->
         <div class="flex-1 flex flex-col min-w-0 bg-darkBg">
 
-            <!-- TOP HEADER BAR -->
-            <header class="h-14 bg-sidebarBg border-b border-borderBg flex items-center justify-end px-6 space-x-4">
-                <button class="relative text-slate-400 hover:text-white text-sm" title="Notificaciones">
-                    <i class="fa-regular fa-bell"></i>
-                    <span class="absolute -top-1 -right-1 w-2 h-2 bg-accentBlue rounded-full"></span>
-                </button>
+            <!-- TOP HEADER BAR CON CAMPANA DE NOTIFICACIONES FUNCIONAL -->
+            <header class="h-14 bg-sidebarBg border-b border-borderBg flex items-center justify-end px-6 space-x-4 relative">
+                <div class="relative">
+                    <button onclick="toggleNotificationsPanel()" class="relative text-slate-400 hover:text-white text-sm p-2 rounded-xl hover:bg-darkBg transition-colors" title="Notificaciones">
+                        <i class="fa-regular fa-bell"></i>
+                        <span id="notifBadge" class="absolute top-1 right-1 w-2 h-2 bg-accentBlue rounded-full animate-ping"></span>
+                    </button>
+
+                    <!-- Panel desplegable de Notificaciones -->
+                    <div id="notificationsPanel" class="absolute right-0 mt-2 w-80 bg-cardBg border border-borderBg rounded-2xl shadow-2xl p-4 hidden z-40 space-y-3">
+                        <div class="flex justify-between items-center border-b border-borderBg pb-2">
+                            <h4 class="font-bold text-white text-xs flex items-center gap-2">
+                                <i class="fa-solid fa-bell text-accentBlue"></i> Avisos y Notificaciones
+                            </h4>
+                            <span class="text-[10px] text-slate-400">Reciente</span>
+                        </div>
+                        <div class="space-y-2 text-xs">
+                            <div class="p-2.5 bg-darkBg rounded-xl border border-borderBg space-y-1">
+                                <p class="font-bold text-slate-200">¡Bienvenido a MindClass!</p>
+                                <p class="text-[11px] text-slate-400">Recuerda configurar tu grado y revisar tus tareas pendientes en el Dashboard.</p>
+                            </div>
+                            <div class="p-2.5 bg-darkBg rounded-xl border border-borderBg space-y-1">
+                                <p class="font-bold text-emerald-400">Chat de Salón Activo</p>
+                                <p class="text-[11px] text-slate-400">Ya puedes comunicarte en tiempo real con tus compañeros de aula.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="flex items-center space-x-2 bg-darkBg border border-borderBg px-3 py-1 rounded-full">
                     <i class="fa-solid fa-user-graduate text-accentBlue text-xs"></i>
@@ -330,54 +342,73 @@
             <!-- MAIN DYNAMIC CONTAINER -->
             <main class="flex-1 overflow-y-auto custom-scrollbar p-6">
 
-                <!-- SECTION: DASHBOARD CON GESTOR DE TAREAS PERSONALES -->
+                <!-- SECTION: DASHBOARD CON TAREAS Y TEMPORIZADOR POMODORO -->
                 <section id="sec-dashboard" class="content-sec space-y-6">
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
                             <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-accentBlue/10 border border-accentBlue/30 text-accentBlue text-[10px] font-bold uppercase tracking-wider mb-2">
                                 PANEL PERSONAL
                             </div>
-                            <h2 class="text-2xl font-extrabold text-white tracking-tight">Dashboard & Tareas Pendientes</h2>
-                            <p class="text-xs text-slate-400 mt-1">Organiza tus deberes escolares, anota recordatorios y lleva el control de tus entregas.</p>
+                            <h2 class="text-2xl font-extrabold text-white tracking-tight">Dashboard, Tareas & Temporizador</h2>
+                            <p class="text-xs text-slate-400 mt-1">Organiza tus deberes con fecha límite y mejora tu concentración con el temporizador de estudio.</p>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <!-- FORMULARIO PARA CREAR TAREA -->
-                        <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4 h-fit">
-                            <h3 class="font-bold text-white text-sm flex items-center gap-2">
-                                <i class="fa-solid fa-plus-circle text-accentBlue"></i> Agregar Nueva Tarea
-                            </h3>
-                            <form onsubmit="handleCreateTask(event)" class="space-y-3">
-                                <div>
-                                    <label class="block text-xs font-medium text-slate-300 mb-1">Título de la Tarea</label>
-                                    <input type="text" id="taskTitle" placeholder="Ej. Resolver ejercicios de Álgebra pág 42" required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-accentBlue">
+                        <!-- COLUMNA IZQUIERDA: CREAR TAREA + TEMPORIZADOR -->
+                        <div class="space-y-6">
+                            <!-- FORMULARIO PARA CREAR TAREA -->
+                            <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4">
+                                <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-plus-circle text-accentBlue"></i> Agregar Nueva Tarea
+                                </h3>
+                                <form onsubmit="handleCreateTask(event)" class="space-y-3">
+                                    <div>
+                                        <label class="block text-xs font-medium text-slate-300 mb-1">Título de la Tarea</label>
+                                        <input type="text" id="taskTitle" placeholder="Ej. Resolver ejercicios de Álgebra" required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-accentBlue">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-slate-300 mb-1">Curso</label>
+                                        <select id="taskSubject" required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-accentBlue">
+                                            <option value="Álgebra">Álgebra</option>
+                                            <option value="Geometría">Geometría</option>
+                                            <option value="Física y CyT">Física y CyT</option>
+                                            <option value="Comunicación">Comunicación</option>
+                                            <option value="Inglés">Inglés</option>
+                                            <option value="Historia">Historia</option>
+                                            <option value="Otro">Otro</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-slate-300 mb-1">Fecha Límite</label>
+                                        <input type="date" id="taskDate" required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-accentBlue">
+                                    </div>
+                                    <button type="submit" class="w-full bg-accentBlue hover:bg-hoverBlue text-white font-semibold py-2.5 rounded-xl transition-colors text-xs shadow-md shadow-accentBlue/20 flex items-center justify-center gap-2">
+                                        <i class="fa-solid fa-bookmark"></i>
+                                        <span>Guardar Recordatorio</span>
+                                    </button>
+                                </form>
+                            </div>
+
+                            <!-- TEMPORIZADOR DE ESTUDIO (POMODORO) -->
+                            <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-3 text-center">
+                                <h3 class="font-bold text-white text-sm flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-stopwatch text-amber-400"></i> Temporizador Pomodoro
+                                </h3>
+                                <p class="text-[11px] text-slate-400">25 minutos de estudio enfocado y 5 de descanso.</p>
+                                <div id="timerDisplay" class="text-3xl font-black text-accentBlue py-3 tracking-wider font-mono">
+                                    25:00
                                 </div>
-                                <div>
-                                    <label class="block text-xs font-medium text-slate-300 mb-1">Curso</label>
-                                    <select id="taskSubject" required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-accentBlue">
-                                        <option value="Álgebra">Álgebra</option>
-                                        <option value="Geometría">Geometría</option>
-                                        <option value="Física y CyT">Física y CyT</option>
-                                        <option value="Comunicación">Comunicación</option>
-                                        <option value="Inglés">Inglés</option>
-                                        <option value="Historia">Historia</option>
-                                        <option value="Otro">Otro</option>
-                                    </select>
+                                <div class="flex justify-center gap-2 pt-1">
+                                    <button onclick="startTimer()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-1.5 rounded-xl text-xs font-semibold shadow">Iniciar</button>
+                                    <button onclick="pauseTimer()" class="bg-amber-600 hover:bg-amber-500 text-white px-4 py-1.5 rounded-xl text-xs font-semibold shadow">Pausar</button>
+                                    <button onclick="resetTimer()" class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded-xl text-xs font-semibold">Reiniciar</button>
                                 </div>
-                                <div>
-                                    <label class="block text-xs font-medium text-slate-300 mb-1">Fecha Límite</label>
-                                    <input type="date" id="taskDate" required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-accentBlue">
-                                </div>
-                                <button type="submit" class="w-full bg-accentBlue hover:bg-hoverBlue text-white font-semibold py-2.5 rounded-xl transition-colors text-xs shadow-md shadow-accentBlue/20 flex items-center justify-center gap-2">
-                                    <i class="fa-solid fa-bookmark"></i>
-                                    <span>Guardar Recordatorio</span>
-                                </button>
-                            </form>
+                            </div>
                         </div>
 
                         <!-- LISTA DE TAREAS Y RECORDATORIOS -->
-                        <div class="lg:col-span-2 bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4">
+                        <div class="lg:col-span-2 bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4 h-fit">
                             <div class="flex justify-between items-center border-b border-borderBg pb-3">
                                 <h3 class="font-bold text-white text-sm flex items-center gap-2">
                                     <i class="fa-solid fa-list-check text-emerald-400"></i> Mis Pendientes Escolares
@@ -392,15 +423,15 @@
                     </div>
                 </section>
 
-                <!-- SECTION 1: APRENDEJUNTO -->
+                <!-- SECTION 1: APRENDEJUNTO (CON FLASHCARDS NUEVAS) -->
                 <section id="sec-aprende-junto" class="content-sec hidden space-y-6">
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
                             <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-accentBlue/10 border border-accentBlue/30 text-accentBlue text-[10px] font-bold uppercase tracking-wider mb-2">
                                 MÓDULO COLABORATIVO
                             </div>
-                            <h2 class="text-2xl font-extrabold text-white tracking-tight">AprendeJunto</h2>
-                            <p class="text-xs text-slate-400 mt-1">Espacio de ayuda mutua, aclaración de dudas, recursos compartidos y reconocimientos.</p>
+                            <h2 class="text-2xl font-extrabold text-white tracking-tight">AprendeJunto & Flashcards</h2>
+                            <p class="text-xs text-slate-400 mt-1">Ayuda mutua, apuntes, debates y tarjetas de repaso rápido (Flashcards).</p>
                         </div>
 
                         <button onclick="togglePublishModal(true)" class="bg-accentBlue hover:bg-hoverBlue text-white px-4 py-2.5 rounded-xl font-semibold text-xs transition-colors shadow-lg shadow-accentBlue/20 flex items-center space-x-2 self-start md:self-auto">
@@ -414,17 +445,13 @@
                             <i class="fa-solid fa-comments"></i>
                             <span>1. Dudas & Explicaciones</span>
                         </button>
+                        <button onclick="switchAprendeTab('flashcards')" id="tab-flashcards" class="aprende-tab-btn px-4 py-2.5 rounded-t-xl font-semibold text-slate-400 hover:text-white flex items-center space-x-2 whitespace-nowrap">
+                            <i class="fa-solid fa-bolt"></i>
+                            <span>2. Flashcards de Repaso</span>
+                        </button>
                         <button onclick="switchAprendeTab('apuntes')" id="tab-apuntes" class="aprende-tab-btn px-4 py-2.5 rounded-t-xl font-semibold text-slate-400 hover:text-white flex items-center space-x-2 whitespace-nowrap">
                             <i class="fa-solid fa-book-open"></i>
-                            <span>2. Apuntes Colaborativos</span>
-                        </button>
-                        <button onclick="switchAprendeTab('debates')" id="tab-debates" class="aprende-tab-btn px-4 py-2.5 rounded-t-xl font-semibold text-slate-400 hover:text-white flex items-center space-x-2 whitespace-nowrap">
-                            <i class="fa-solid fa-brain"></i>
-                            <span>3. Debates & Métodos</span>
-                        </button>
-                        <button onclick="switchAprendeTab('reconocimientos')" id="tab-reconocimientos" class="aprende-tab-btn px-4 py-2.5 rounded-t-xl font-semibold text-slate-400 hover:text-white flex items-center space-x-2 whitespace-nowrap">
-                            <i class="fa-solid fa-trophy"></i>
-                            <span>4. Reconocimientos & Medallas</span>
+                            <span>3. Apuntes Compartidos</span>
                         </button>
                     </div>
 
@@ -436,68 +463,40 @@
                         <div id="qFeedContainer" class="space-y-4"></div>
                     </div>
 
+                    <!-- NUEVA SUB-SECCIÓN: FLASHCARDS INTERACTIVAS -->
+                    <div id="sub-flashcards" class="aprende-sub-sec space-y-4 hidden">
+                        <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-bold text-white text-sm">Tarjetas de Memoria Rápida (Flashcards)</h3>
+                                    <p class="text-xs text-slate-400">Haz clic en la tarjeta para ver la respuesta o fórmula correcta.</p>
+                                </div>
+                                <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded font-bold">Repaso Ágil</span>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                                <div onclick="this.classList.toggle('bg-accentBlue/20')" class="bg-darkBg border border-borderBg rounded-xl p-5 cursor-pointer transition-all space-y-2 hover:border-accentBlue text-center">
+                                    <span class="text-[10px] text-accentBlue font-bold uppercase">Álgebra • Pregunta 1</span>
+                                    <h4 class="text-xs font-bold text-white">¿Cuál es la fórmula de la diferencia de cuadrados?</h4>
+                                    <p class="text-xs text-slate-400 italic pt-2">(Clic para recordar: a² - b² = (a+b)(a-b))</p>
+                                </div>
+                                <div onclick="this.classList.toggle('bg-accentBlue/20')" class="bg-darkBg border border-borderBg rounded-xl p-5 cursor-pointer transition-all space-y-2 hover:border-accentBlue text-center">
+                                    <span class="text-[10px] text-purple-400 font-bold uppercase">Física • Pregunta 2</span>
+                                    <h4 class="text-xs font-bold text-white">¿Qué mide la aceleración en el MRUV?</h4>
+                                    <p class="text-xs text-slate-400 italic pt-2">(Clic para recordar: El cambio de velocidad por unidad de tiempo)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div id="sub-apuntes" class="aprende-sub-sec space-y-4 hidden">
                         <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-3">
                             <h3 class="font-bold text-white text-sm">Banco de Fichas y Resúmenes Compartidos</h3>
-                            <p class="text-xs text-slate-400">En esta sección los estudiantes suben esquemas y resúmenes para repasos grupales.</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
                                 <div class="bg-darkBg border border-borderBg rounded-xl p-3.5 space-y-2">
                                     <span class="text-[10px] bg-accentBlue/20 text-accentBlue px-2 py-0.5 rounded font-bold">Física • Sec</span>
                                     <h4 class="text-xs font-bold text-white">Resumen MRUV y Leyes de Newton</h4>
                                     <p class="text-[11px] text-slate-400">Esquema con fórmulas principales y guía de signos para despeje de aceleración.</p>
-                                    <div class="flex justify-between items-center text-[10px] text-slate-500 pt-2 border-t border-borderBg/50">
-                                        <span>Aportado por: Rodrigo S.</span>
-                                        <button onclick="likeApunte(this)" class="text-accentBlue hover:underline"><i class="fa-regular fa-thumbs-up mr-1"></i>Útil (8)</button>
-                                    </div>
-                                </div>
-                                <div class="bg-darkBg border border-borderBg rounded-xl p-3.5 space-y-2">
-                                    <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded font-bold">Comunicación • Todo el Colegio</span>
-                                    <h4 class="text-xs font-bold text-white">Ficha de conectores lógicos para ensayos</h4>
-                                    <p class="text-[11px] text-slate-400">Listado clasificado de conectores de causa, efecto y contraste para redacción.</p>
-                                    <div class="flex justify-between items-center text-[10px] text-slate-500 pt-2 border-t border-borderBg/50">
-                                        <span>Aportado por: Lucía M.</span>
-                                        <button onclick="likeApunte(this)" class="text-accentBlue hover:underline"><i class="fa-regular fa-thumbs-up mr-1"></i>Útil (14)</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="sub-debates" class="aprende-sub-sec space-y-4 hidden">
-                        <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-3">
-                            <h3 class="font-bold text-white text-sm">Comparación de Estrategias y Métodos</h3>
-                            <div class="bg-darkBg border border-borderBg rounded-xl p-4 space-y-2">
-                                <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-bold">Debate Matemático</span>
-                                <h4 class="text-xs font-bold text-white">¿Método de Igualación o Sustitución para sistemas 2x2?</h4>
-                                <p class="text-xs text-slate-300">¿Cuál método resulta más rápido y menos propenso a errores con fracciones?</p>
-                                <div class="pt-2 flex gap-2">
-                                    <button class="bg-accentBlue/20 text-accentBlue border border-accentBlue/30 text-xs px-3 py-1.5 rounded-lg hover:bg-accentBlue hover:text-white transition-all">Sustitución es más rápido</button>
-                                    <button class="bg-slate-800 text-slate-300 border border-borderBg text-xs px-3 py-1.5 rounded-lg hover:bg-slate-700 transition-all">Reducción es mejor</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="sub-reconocimientos" class="aprende-sub-sec space-y-4 hidden">
-                        <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4">
-                            <h3 class="font-bold text-white text-sm flex items-center gap-2">
-                                <i class="fa-solid fa-award text-amber-400"></i> Tabla de Reconocimientos Estudiantiles
-                            </h3>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                <div class="bg-darkBg border border-borderBg p-3.5 rounded-xl text-center space-y-1">
-                                    <i class="fa-solid fa-medal text-amber-400 text-2xl mb-1"></i>
-                                    <h4 class="text-xs font-bold text-white">Rodrigo Silverio</h4>
-                                    <p class="text-[10px] text-slate-400">Líder en explicaciones de Álgebra</p>
-                                </div>
-                                <div class="bg-darkBg border border-borderBg p-3.5 rounded-xl text-center space-y-1">
-                                    <i class="fa-solid fa-medal text-slate-300 text-2xl mb-1"></i>
-                                    <h4 class="text-xs font-bold text-white">Tifanny Lévano</h4>
-                                    <p class="text-[10px] text-slate-400">Colaboradora Destacada</p>
-                                </div>
-                                <div class="bg-darkBg border border-borderBg p-3.5 rounded-xl text-center space-y-1">
-                                    <i class="fa-solid fa-medal text-amber-600 text-2xl mb-1"></i>
-                                    <h4 class="text-xs font-bold text-white">Abigaíl Trejo</h4>
-                                    <p class="text-[10px] text-slate-400">Aportes en Geometría</p>
                                 </div>
                             </div>
                         </div>
@@ -540,10 +539,46 @@
                     </div>
                 </section>
 
-                <section id="sec-voz-escolar" class="content-sec hidden space-y-4">
-                    <div class="bg-cardBg border border-borderBg rounded-2xl p-5">
-                        <h3 class="font-bold text-white text-sm mb-2"><i class="fa-solid fa-check-to-slot text-purple-400 mr-2"></i>VozEscolar</h3>
-                        <p class="text-xs text-slate-400">Espacio para sugerencias, encuestas y participación escolar.</p>
+                <!-- SECTION 3: VOZ ESCOLAR (ACTIVA) -->
+                <section id="sec-voz-escolar" class="content-sec hidden space-y-6">
+                    <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4">
+                        <div class="flex items-center gap-3 border-b border-borderBg pb-3">
+                            <div class="w-10 h-10 bg-purple-500/20 text-purple-400 rounded-xl flex items-center justify-center font-bold text-lg">
+                                <i class="fa-solid fa-check-to-slot"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-white text-sm">VozEscolar - Buzón y Propuestas</h3>
+                                <p class="text-xs text-slate-400">Comparte tus sugerencias de mejoras para las actividades del colegio.</p>
+                            </div>
+                        </div>
+
+                        <form onsubmit="handleVozEscolarSubmit(event)" class="space-y-3 max-w-xl">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-1">Título de tu propuesta o sugerencia</label>
+                                <input type="text" id="vozTitle" placeholder="Ej. Propuesta para campeonatos deportivos inter-salones" required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-300 mb-1">Descripción detallada</label>
+                                <textarea id="vozDesc" rows="3" placeholder="Explica en qué consiste tu idea..." required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-purple-500 resize-none"></textarea>
+                            </div>
+                            <button type="submit" class="bg-purple-600 hover:bg-purple-500 text-white font-semibold px-5 py-2 rounded-xl text-xs transition-colors shadow-md shadow-purple-600/20">
+                                Enviar Propuesta
+                            </button>
+                        </form>
+
+                        <div class="pt-4 space-y-3">
+                            <h4 class="font-bold text-white text-xs">Propuestas activas de la comunidad</h4>
+                            <div id="vozFeedContainer" class="space-y-2">
+                                <div class="bg-darkBg border border-borderBg rounded-xl p-3.5 space-y-1">
+                                    <div class="flex justify-between items-center text-[10px] text-slate-400">
+                                        <span class="text-purple-400 font-bold">Ideación Estudiantil</span>
+                                        <span>Hace 1 día</span>
+                                    </div>
+                                    <h5 class="text-xs font-bold text-white">Implementar círculo de estudio de matemáticas los viernes</h5>
+                                    <p class="text-[11px] text-slate-300">Espacio para resolver dudas antes de los exámenes bimestrales.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
@@ -551,9 +586,8 @@
         </div>
     </div>
 
-    <!-- SCRIPT DE CONFIGURACIÓN Y AUTENTICACIÓN FIREBASE -->
+    <!-- SCRIPT DE CONFIGURACIÓN Y FUNCIONALIDADES -->
     <script>
-        // 1. Configuración de Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDjn7AUD5eUF_DHYoPCmzoC8DLozqwY4KE",
             authDomain: "mindclass-13r11.firebaseapp.com",
@@ -571,12 +605,8 @@
         
         const database = firebase.database();
         const provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({ hd: "colegiomilagrosdedios.edu.pe" });
 
-        provider.setCustomParameters({
-            hd: "colegiomilagrosdedios.edu.pe"
-        });
-
-        // Códigos válidos por grado
         const gradeCodes = {
             "1° Secundaria": "CMD-1SEC",
             "2° Secundaria": "CMD-2SEC",
@@ -587,7 +617,6 @@
 
         let currentUser = JSON.parse(localStorage.getItem('mindclass_user')) || null;
 
-        // Ocultamiento garantizado del modal de autenticación
         function hideAuthModal() {
             const modal = document.getElementById('authModal');
             if (modal) {
@@ -648,7 +677,6 @@
             }
         });
 
-        // 2. Autenticación con Google por Popup
         function handleGoogleRealAuth() {
             const googleBtn = document.getElementById('googleBtn');
             if (googleBtn) googleBtn.disabled = true;
@@ -656,34 +684,28 @@
             firebase.auth().signInWithPopup(provider)
                 .then((result) => {
                     const user = result.user;
-                    const email = user.email || '';
-
-                    if (!email.endsWith('@colegiomilagrosdedios.edu.pe')) {
+                    if (!user.email.endsWith('@colegiomilagrosdedios.edu.pe')) {
                         firebase.auth().signOut();
                         alert("Acceso denegado: Debes iniciar sesión con tu correo @colegiomilagrosdedios.edu.pe");
                         if (googleBtn) googleBtn.disabled = false;
                         return;
                     }
-
                     currentUser = {
                         id: user.uid,
                         name: user.displayName || 'Estudiante',
-                        email: email,
+                        email: user.email,
                         photo: user.photoURL,
                         grade: null
                     };
-
                     hideAuthModal();
                     showGradeSetupModal();
                 })
                 .catch((error) => {
-                    console.error("Error en autenticación con Google:", error);
                     alert("No se pudo iniciar sesión: " + error.message);
                     if (googleBtn) googleBtn.disabled = false;
                 });
         }
 
-        // 3. Confirmación del Grado y Validación de Código con Error Visual
         function handleGradeSetup(e) {
             e.preventDefault();
             const grade = document.getElementById('setupGrade').value;
@@ -714,7 +736,6 @@
             }
         }
 
-        // 4. Autenticación Manual
         function handleManualLogin(e) {
             e.preventDefault();
             const name = document.getElementById('manualName').value;
@@ -747,10 +768,8 @@
             renderUserTasks();
         }
 
-        // 5. Actualización de Interfaz del Usuario
         function updateUserUI() {
             if (!currentUser) return;
-
             const sidebarName = document.getElementById('sidebarUserName');
             if (sidebarName) sidebarName.textContent = currentUser.name;
 
@@ -762,13 +781,11 @@
                 if (currentUser.photo) {
                     avatar.innerHTML = `<img src="${currentUser.photo}" class="w-full h-full rounded-full object-cover">`;
                 } else {
-                    const initials = currentUser.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-                    avatar.textContent = initials || 'US';
+                    avatar.textContent = currentUser.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
                 }
             }
         }
 
-        // 6. Navegación Principal de la Barra Lateral
         function navigate(sectionId) {
             document.querySelectorAll('.content-sec').forEach(sec => sec.classList.add('hidden'));
             const target = document.getElementById('sec-' + sectionId);
@@ -790,7 +807,6 @@
             }
         }
 
-        // 7. Navegación por Pestañas en AprendeJunto
         function switchAprendeTab(tabId) {
             document.querySelectorAll('.aprende-sub-sec').forEach(sec => sec.classList.add('hidden'));
             const target = document.getElementById('sub-' + tabId);
@@ -808,7 +824,6 @@
             }
         }
 
-        // 8. Abrir y Cerrar Modal de Publicaciones
         function togglePublishModal(show) {
             const modal = document.getElementById('publishModal');
             if (modal) {
@@ -817,78 +832,12 @@
             }
         }
 
-        // 9. Crear Publicación en Realtime Database
-        function handleCreatePublication(e) {
-            e.preventDefault();
-            const subject = document.getElementById('pubSubject').value;
-            const title = document.getElementById('pubTitle').value;
-            const content = document.getElementById('pubContent').value;
-
-            if (!currentUser) {
-                alert("Debes iniciar sesión para publicar.");
-                return;
-            }
-
-            const newPost = {
-                subject: subject,
-                title: title,
-                content: content,
-                author: currentUser.name,
-                authorId: currentUser.id,
-                timestamp: firebase.database.ServerValue.TIMESTAMP,
-                likes: 0
-            };
-
-            database.ref('aprendeJunto/dudas').push(newPost)
-                .then(() => {
-                    togglePublishModal(false);
-                    document.getElementById('pubTitle').value = '';
-                    document.getElementById('pubContent').value = '';
-                })
-                .catch(err => {
-                    console.error("Error al publicar:", err);
-                    alert("Error al publicar: " + err.message);
-                });
+        function toggleNotificationsPanel() {
+            const panel = document.getElementById('notificationsPanel');
+            if (panel) panel.classList.toggle('hidden');
         }
 
-        // 10. Carga de Datos en Tiempo Real
-        function initFirebaseListeners() {
-            database.ref('aprendeJunto/dudas').on('value', (snapshot) => {
-                const container = document.getElementById('qFeedContainer');
-                if (!container) return;
-
-                container.innerHTML = '';
-                const data = snapshot.val();
-
-                if (!data) {
-                    container.innerHTML = '<p class="text-xs text-slate-500 text-center py-6">No hay publicaciones activas en este momento.</p>';
-                    return;
-                }
-
-                Object.keys(data).reverse().forEach(key => {
-                    const item = data[key];
-                    const card = document.createElement('div');
-                    card.className = "bg-cardBg border border-borderBg rounded-2xl p-5 space-y-3";
-                    card.innerHTML = `
-                        <div class="flex items-center justify-between">
-                            <span class="text-[10px] bg-accentBlue/20 text-accentBlue font-bold px-2.5 py-1 rounded-md border border-accentBlue/30">${item.subject}</span>
-                            <span class="text-[10px] text-slate-500">${new Date(item.timestamp || Date.now()).toLocaleDateString()}</span>
-                        </div>
-                        <h3 class="font-bold text-white text-sm">${item.title}</h3>
-                        <p class="text-xs text-slate-300 leading-relaxed">${item.content}</p>
-                        <div class="flex items-center justify-between pt-2 border-t border-borderBg text-xs text-slate-400">
-                            <span>Por: <strong class="text-slate-200">${item.author}</strong></span>
-                            <button onclick="likePost('${key}', ${item.likes || 0})" class="hover:text-accentBlue flex items-center gap-1">
-                                <i class="fa-regular fa-thumbs-up"></i> (${item.likes || 0})
-                            </button>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-            });
-        }
-
-        // --- GESTOR DE TAREAS PERSONALES (DASHBOARD) ---
+        // GESTOR DE TAREAS Y FECHA LÍMITE
         function handleCreateTask(e) {
             e.preventDefault();
             if (!currentUser) return;
@@ -941,7 +890,7 @@
                         <div class="min-w-0">
                             <span class="text-[10px] bg-accentBlue/20 text-accentBlue font-bold px-2 py-0.5 rounded">${task.subject}</span>
                             <h4 class="text-xs font-bold text-white truncate mt-1 ${task.completed ? 'line-through text-slate-500' : ''}">${task.title}</h4>
-                            <p class="text-[10px] text-slate-400 mt-0.5"><i class="fa-regular fa-calendar mr-1"></i>Fecha límite: ${task.date}</p>
+                            <p class="text-[10px] text-amber-400 mt-0.5"><i class="fa-regular fa-calendar mr-1"></i>Fecha límite: <strong>${task.date}</strong></p>
                         </div>
                     </div>
                     <button onclick="deleteTask('${task.id}')" class="text-slate-500 hover:text-red-400 text-xs p-1" title="Eliminar tarea">
@@ -971,15 +920,138 @@
             renderUserTasks();
         }
 
-        // 11. Lógica del Chat del Salón según Grado
+        // TEMPORIZADOR POMODORO
+        let timerInterval = null;
+        let timeLeft = 25 * 60;
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            const display = document.getElementById('timerDisplay');
+            if (display) {
+                display.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }
+
+        function startTimer() {
+            if (timerInterval) return;
+            timerInterval = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    updateTimerDisplay();
+                } else {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    alert("¡Tiempo de estudio cumplido! Tómate 5 minutos de descanso.");
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            timeLeft = 25 * 60;
+            updateTimerDisplay();
+        }
+
+        // VOZ ESCOLAR SUBMIT
+        function handleVozEscolarSubmit(e) {
+            e.preventDefault();
+            const title = document.getElementById('vozTitle').value;
+            const desc = document.getElementById('vozDesc').value;
+            const container = document.getElementById('vozFeedContainer');
+
+            if (!container) return;
+
+            const newItem = document.createElement('div');
+            newItem.className = "bg-darkBg border border-borderBg rounded-xl p-3.5 space-y-1";
+            newItem.innerHTML = `
+                <div class="flex justify-between items-center text-[10px] text-slate-400">
+                    <span class="text-purple-400 font-bold">${currentUser ? currentUser.name : 'Estudiante'}</span>
+                    <span>Justo ahora</span>
+                </div>
+                <h5 class="text-xs font-bold text-white">${title}</h5>
+                <p class="text-[11px] text-slate-300">${desc}</p>
+            `;
+            container.prepend(newItem);
+
+            document.getElementById('vozTitle').value = '';
+            document.getElementById('vozDesc').value = '';
+            alert("¡Propuesta enviada con éxito a VozEscolar!");
+        }
+
+        function handleCreatePublication(e) {
+            e.preventDefault();
+            const subject = document.getElementById('pubSubject').value;
+            const title = document.getElementById('pubTitle').value;
+            const content = document.getElementById('pubContent').value;
+
+            if (!currentUser) return;
+
+            const newPost = {
+                subject: subject,
+                title: title,
+                content: content,
+                author: currentUser.name,
+                authorId: currentUser.id,
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                likes: 0
+            };
+
+            database.ref('aprendeJunto/dudas').push(newPost)
+                .then(() => {
+                    togglePublishModal(false);
+                    document.getElementById('pubTitle').value = '';
+                    document.getElementById('pubContent').value = '';
+                });
+        }
+
+        function initFirebaseListeners() {
+            database.ref('aprendeJunto/dudas').on('value', (snapshot) => {
+                const container = document.getElementById('qFeedContainer');
+                if (!container) return;
+
+                container.innerHTML = '';
+                const data = snapshot.val();
+
+                if (!data) {
+                    container.innerHTML = '<p class="text-xs text-slate-500 text-center py-6">No hay publicaciones activas.</p>';
+                    return;
+                }
+
+                Object.keys(data).reverse().forEach(key => {
+                    const item = data[key];
+                    const card = document.createElement('div');
+                    card.className = "bg-cardBg border border-borderBg rounded-2xl p-5 space-y-3";
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] bg-accentBlue/20 text-accentBlue font-bold px-2.5 py-1 rounded-md border border-accentBlue/30">${item.subject}</span>
+                            <span class="text-[10px] text-slate-500">${new Date(item.timestamp || Date.now()).toLocaleDateString()}</span>
+                        </div>
+                        <h3 class="font-bold text-white text-sm">${item.title}</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">${item.content}</p>
+                        <div class="flex items-center justify-between pt-2 border-t border-borderBg text-xs text-slate-400">
+                            <span>Por: <strong class="text-slate-200">${item.author}</strong></span>
+                            <button onclick="likePost('${key}', ${item.likes || 0})" class="hover:text-accentBlue flex items-center gap-1">
+                                <i class="fa-regular fa-thumbs-up"></i> (${item.likes || 0})
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            });
+        }
+
         function initChatSalonListener() {
             if (!currentUser || !currentUser.grade) return;
-
-            const rawGrade = currentUser.grade;
-            const gradeKey = rawGrade.replace(/[.#$/[\]]/g, "_");
-
+            const gradeKey = currentUser.grade.replace(/[.#$/[\]]/g, "_");
             const roomTitle = document.getElementById('chatRoomTitle');
-            if (roomTitle) roomTitle.textContent = rawGrade;
+            if (roomTitle) roomTitle.textContent = currentUser.grade;
 
             database.ref('chatSalones/' + gradeKey).on('value', (snapshot) => {
                 const container = document.getElementById('chatMessagesContainer');
@@ -1016,7 +1088,6 @@
                     `;
                     container.appendChild(msgDiv);
                 });
-
                 container.scrollTop = container.scrollHeight;
             });
         }
@@ -1028,9 +1099,7 @@
 
             if (!text || !currentUser || !currentUser.grade) return;
 
-            const rawGrade = currentUser.grade;
-            const gradeKey = rawGrade.replace(/[.#$/[\]]/g, "_");
-
+            const gradeKey = currentUser.grade.replace(/[.#$/[\]]/g, "_");
             const newMessage = {
                 text: text,
                 author: currentUser.name,
@@ -1039,40 +1108,19 @@
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             };
 
-            database.ref('chatSalones/' + gradeKey).push(newMessage)
-                .then(() => {
-                    if (input) input.value = '';
-                })
-                .catch(err => {
-                    console.error("Error enviando mensaje al chat:", err);
-                    alert("No se pudo enviar el mensaje: " + err.message);
-                });
-        }
-
-        // 12. Dar Like a Publicación
-        function likePost(key, currentLikes) {
-            database.ref('aprendeJunto/dudas/' + key).update({
-                likes: currentLikes + 1
+            database.ref('chatSalones/' + gradeKey).push(newMessage).then(() => {
+                if (input) input.value = '';
             });
         }
 
-        // 13. Dar Like a Apuntes
-        function likeApunte(btn) {
-            const text = btn.innerText;
-            const match = text.match(/\d+/);
-            if (match) {
-                const count = parseInt(match[0]) + 1;
-                btn.innerHTML = `<i class="fa-regular fa-thumbs-up mr-1"></i>Útil (${count})`;
-            }
+        function likePost(key, currentLikes) {
+            database.ref('aprendeJunto/dudas/' + key).update({ likes: currentLikes + 1 });
         }
 
-        // 14. Cerrar Sesión
         function logout() {
             localStorage.removeItem('mindclass_user');
             currentUser = null;
-            firebase.auth().signOut().then(() => {
-                location.reload();
-            });
+            firebase.auth().signOut().then(() => { location.reload(); });
         }
     </script>
 </body>
