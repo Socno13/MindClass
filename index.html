@@ -276,7 +276,7 @@
 
                 <!-- Navigation Items -->
                 <nav class="px-3 space-y-1 mt-2">
-                    <button onclick="navigate('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:bg-darkBg hover:text-white transition-all">
+                    <button onclick="navigate('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium bg-accentBlue text-white shadow-md shadow-accentBlue/20 transition-all">
                         <i class="fa-solid fa-table-cells-large w-4 text-center"></i>
                         <span>Dashboard</span>
                     </button>
@@ -289,7 +289,7 @@
                         <span class="text-[9px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-500/20">Aula</span>
                     </button>
 
-                    <button onclick="navigate('aprende-junto')" id="nav-aprende-junto" class="nav-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium bg-accentBlue text-white transition-all shadow-md shadow-accentBlue/20">
+                    <button onclick="navigate('aprende-junto')" id="nav-aprende-junto" class="nav-btn w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:bg-darkBg hover:text-white transition-all">
                         <div class="flex items-center space-x-3">
                             <i class="fa-solid fa-users-between-lines w-4 text-center"></i>
                             <span>AprendeJunto</span>
@@ -329,8 +329,70 @@
             <!-- MAIN DYNAMIC CONTAINER -->
             <main class="flex-1 overflow-y-auto custom-scrollbar p-6">
 
+                <!-- SECTION: DASHBOARD CON GESTOR DE TAREAS PERSONALES -->
+                <section id="sec-dashboard" class="content-sec space-y-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div>
+                            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-accentBlue/10 border border-accentBlue/30 text-accentBlue text-[10px] font-bold uppercase tracking-wider mb-2">
+                                PANEL PERSONAL
+                            </div>
+                            <h2 class="text-2xl font-extrabold text-white tracking-tight">Dashboard & Tareas Pendientes</h2>
+                            <p class="text-xs text-slate-400 mt-1">Organiza tus deberes escolares, anota recordatorios y lleva el control de tus entregas.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- FORMULARIO PARA CREAR TAREA -->
+                        <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4 h-fit">
+                            <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-plus-circle text-accentBlue"></i> Agregar Nueva Tarea
+                            </h3>
+                            <form onsubmit="handleCreateTask(event)" class="space-y-3">
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-300 mb-1">Título de la Tarea</label>
+                                    <input type="text" id="taskTitle" placeholder="Ej. Resolver ejercicios de Álgebra pág 42" required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-accentBlue">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-300 mb-1">Curso</label>
+                                    <select id="taskSubject" required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-accentBlue">
+                                        <option value="Álgebra">Álgebra</option>
+                                        <option value="Geometría">Geometría</option>
+                                        <option value="Física y CyT">Física y CyT</option>
+                                        <option value="Comunicación">Comunicación</option>
+                                        <option value="Inglés">Inglés</option>
+                                        <option value="Historia">Historia</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-300 mb-1">Fecha Límite</label>
+                                    <input type="date" id="taskDate" required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-accentBlue">
+                                </div>
+                                <button type="submit" class="w-full bg-accentBlue hover:bg-hoverBlue text-white font-semibold py-2.5 rounded-xl transition-colors text-xs shadow-md shadow-accentBlue/20 flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-bookmark"></i>
+                                    <span>Guardar Recordatorio</span>
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- LISTA DE TAREAS Y RECORDATORIOS -->
+                        <div class="lg:col-span-2 bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4">
+                            <div class="flex justify-between items-center border-b border-borderBg pb-3">
+                                <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-list-check text-emerald-400"></i> Mis Pendientes Escolares
+                                </h3>
+                                <span id="taskCounter" class="text-[10px] bg-darkBg text-slate-400 px-2.5 py-1 rounded-lg border border-borderBg">0 tareas</span>
+                            </div>
+
+                            <div id="tasksListContainer" class="space-y-3">
+                                <!-- Las tareas se inyectarán aquí -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- SECTION 1: APRENDEJUNTO -->
-                <section id="sec-aprende-junto" class="content-sec space-y-6">
+                <section id="sec-aprende-junto" class="content-sec hidden space-y-6">
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
                             <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-accentBlue/10 border border-accentBlue/30 text-accentBlue text-[10px] font-bold uppercase tracking-wider mb-2">
@@ -477,13 +539,6 @@
                     </div>
                 </section>
 
-                <section id="sec-dashboard" class="content-sec hidden space-y-4">
-                    <div class="bg-cardBg border border-borderBg rounded-2xl p-5">
-                        <h3 class="font-bold text-white text-sm mb-2"><i class="fa-solid fa-table-cells-large text-accentBlue mr-2"></i>Panel General</h3>
-                        <p class="text-xs text-slate-400">Resumen de actividades recientes y avisos escolares.</p>
-                    </div>
-                </section>
-
                 <section id="sec-voz-escolar" class="content-sec hidden space-y-4">
                     <div class="bg-cardBg border border-borderBg rounded-2xl p-5">
                         <h3 class="font-bold text-white text-sm mb-2"><i class="fa-solid fa-check-to-slot text-purple-400 mr-2"></i>VozEscolar</h3>
@@ -549,6 +604,7 @@
                 } else {
                     updateUserUI();
                     initFirebaseListeners();
+                    renderUserTasks();
                 }
             }
 
@@ -571,6 +627,7 @@
                         localStorage.setItem('mindclass_user', JSON.stringify(currentUser));
                         updateUserUI();
                         initFirebaseListeners();
+                        renderUserTasks();
                     }
                 }
             });
@@ -633,6 +690,7 @@
                 hideGradeSetupModal();
                 updateUserUI();
                 initFirebaseListeners();
+                renderUserTasks();
             }
         }
 
@@ -659,6 +717,7 @@
             hideAuthModal();
             updateUserUI();
             initFirebaseListeners();
+            renderUserTasks();
         }
 
         // 5. Actualización de Interfaz del Usuario
@@ -800,6 +859,89 @@
                     container.appendChild(card);
                 });
             });
+        }
+
+        // --- GESTOR DE TAREAS PERSONALES (DASHBOARD) ---
+        function handleCreateTask(e) {
+            e.preventDefault();
+            if (!currentUser) return;
+
+            const title = document.getElementById('taskTitle').value;
+            const subject = document.getElementById('taskSubject').value;
+            const date = document.getElementById('taskDate').value;
+
+            const newTask = {
+                id: 'task_' + Date.now(),
+                title: title,
+                subject: subject,
+                date: date,
+                completed: false
+            };
+
+            let tasks = JSON.parse(localStorage.getItem('mindclass_tasks_' + currentUser.id)) || [];
+            tasks.push(newTask);
+            localStorage.setItem('mindclass_tasks_' + currentUser.id, JSON.stringify(tasks));
+
+            document.getElementById('taskTitle').value = '';
+            document.getElementById('taskDate').value = '';
+            renderUserTasks();
+        }
+
+        function renderUserTasks() {
+            if (!currentUser) return;
+
+            const container = document.getElementById('tasksListContainer');
+            const counter = document.getElementById('taskCounter');
+            if (!container) return;
+
+            const tasks = JSON.parse(localStorage.getItem('mindclass_tasks_' + currentUser.id)) || [];
+            if (counter) counter.textContent = tasks.length + (tasks.length === 1 ? ' tarea' : ' tareas');
+
+            container.innerHTML = '';
+
+            if (tasks.length === 0) {
+                container.innerHTML = '<p class="text-xs text-slate-500 text-center py-8">No tienes tareas pendientes agregadas. ¡Crea una a la izquierda!</p>';
+                return;
+            }
+
+            tasks.forEach((task) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = `bg-darkBg border border-borderBg rounded-xl p-3.5 flex items-center justify-between gap-3 transition-all ${task.completed ? 'opacity-60' : ''}`;
+                
+                itemDiv.innerHTML = `
+                    <div class="flex items-center space-x-3 min-w-0">
+                        <input type="checkbox" ${task.completed ? 'checked' : ''} onclick="toggleTaskComplete('${task.id}')" class="w-4 h-4 accent-accentBlue rounded cursor-pointer">
+                        <div class="min-w-0">
+                            <span class="text-[10px] bg-accentBlue/20 text-accentBlue font-bold px-2 py-0.5 rounded">${task.subject}</span>
+                            <h4 class="text-xs font-bold text-white truncate mt-1 ${task.completed ? 'line-through text-slate-500' : ''}">${task.title}</h4>
+                            <p class="text-[10px] text-slate-400 mt-0.5"><i class="fa-regular fa-calendar mr-1"></i>Fecha límite: ${task.date}</p>
+                        </div>
+                    </div>
+                    <button onclick="deleteTask('${task.id}')" class="text-slate-500 hover:text-red-400 text-xs p-1" title="Eliminar tarea">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                `;
+                container.appendChild(itemDiv);
+            });
+        }
+
+        function toggleTaskComplete(taskId) {
+            if (!currentUser) return;
+            let tasks = JSON.parse(localStorage.getItem('mindclass_tasks_' + currentUser.id)) || [];
+            tasks = tasks.map(t => {
+                if (t.id === taskId) t.completed = !t.completed;
+                return t;
+            });
+            localStorage.setItem('mindclass_tasks_' + currentUser.id, JSON.stringify(tasks));
+            renderUserTasks();
+        }
+
+        function deleteTask(taskId) {
+            if (!currentUser) return;
+            let tasks = JSON.parse(localStorage.getItem('mindclass_tasks_' + currentUser.id)) || [];
+            tasks = tasks.filter(t => t.id !== taskId);
+            localStorage.setItem('mindclass_tasks_' + currentUser.id, JSON.stringify(tasks));
+            renderUserTasks();
         }
 
         // 11. Lógica del Chat del Salón según Grado
