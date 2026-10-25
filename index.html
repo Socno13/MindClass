@@ -144,7 +144,7 @@
                     </form>
                 </div>
                 <div class="pt-4 text-[10px] text-slate-600 text-center">
-                    MindClass v3.8 • I.E.P. Milagros de Dios
+                    MindClass v3.9 • I.E.P. Milagros de Dios
                 </div>
             </div>
         </div>
@@ -283,7 +283,7 @@
             </div>
 
             <div class="p-4 border-t border-borderBg text-[10px] text-slate-500 text-center">
-                MindClass v3.8 • IEP Milagros de Dios
+                MindClass v3.9 • IEP Milagros de Dios
             </div>
         </aside>
 
@@ -503,7 +503,7 @@
                             </div>
                             <div>
                                 <h3 class="font-bold text-white text-sm">VozEscolar - Buzón, Propuestas y Votación</h3>
-                                <p class="text-xs text-slate-400">Comparte tus sugerencias y apoya las propuestas de tus compañeros votando (1 vez por cuenta).</p>
+                                <p class="text-xs text-slate-400">Comparte tus sugerencias y apoya las propuestas de tus compañeros votando (1 voto estricto por cuenta).</p>
                             </div>
                         </div>
 
@@ -564,6 +564,12 @@
         let currentUser = JSON.parse(localStorage.getItem('mindclass_user')) || null;
         let currentAprendeTab = 'dudas';
 
+        // Obtener un identificador estático e inmutable derivado del email del estudiante
+        function getUserUniqueKey() {
+            if (!currentUser || !currentUser.email) return null;
+            return currentUser.email.toLowerCase().replace(/[.#$/[\]]/g, "_");
+        }
+
         function hideAuthModal() {
             const modal = document.getElementById('authModal');
             if (modal) {
@@ -597,7 +603,7 @@
 
             firebase.auth().onAuthStateChanged((user) => {
                 if (user && user.email && user.email.endsWith('@colegiomilagrosdedios.edu.pe')) {
-                    if (!currentUser || currentUser.id !== user.uid) {
+                    if (!currentUser || currentUser.email !== user.email) {
                         currentUser = {
                             id: user.uid,
                             name: user.displayName || 'Estudiante',
@@ -705,7 +711,7 @@
             }
 
             currentUser = {
-                id: 'user_' + Date.now(),
+                id: 'user_' + email.replace(/[.#$/[\]]/g, "_"),
                 name: name,
                 email: email,
                 grade: grade
@@ -829,7 +835,8 @@
         // TAREAS Y FECHA LÍMITE
         function handleCreateTask(e) {
             e.preventDefault();
-            if (!currentUser) return;
+            const userKey = getUserUniqueKey();
+            if (!userKey) return;
 
             const title = document.getElementById('taskTitle').value;
             const subject = document.getElementById('taskSubject').value;
@@ -843,9 +850,9 @@
                 completed: false
             };
 
-            let tasks = JSON.parse(localStorage.getItem('mindclass_tasks_' + currentUser.id)) || [];
+            let tasks = JSON.parse(localStorage.getItem('mindclass_tasks_' + userKey)) || [];
             tasks.push(newTask);
-            localStorage.setItem('mindclass_tasks_' + currentUser.id, JSON.stringify(tasks));
+            localStorage.setItem('mindclass_tasks_' + userKey, JSON.stringify(tasks));
 
             document.getElementById('taskTitle').value = '';
             document.getElementById('taskDate').value = '';
@@ -853,12 +860,14 @@
         }
 
         function renderUserTasks() {
-            if (!currentUser) return;
+            const userKey = getUserUniqueKey();
+            if (!userKey) return;
+
             const container = document.getElementById('tasksListContainer');
             const counter = document.getElementById('taskCounter');
             if (!container) return;
 
-            const tasks = JSON.parse(localStorage.getItem('mindclass_tasks_' + currentUser.id)) || [];
+            const tasks = JSON.parse(localStorage.getItem('mindclass_tasks_' + userKey)) || [];
             if (counter) counter.textContent = tasks.length + (tasks.length === 1 ? ' tarea' : ' tareas');
             container.innerHTML = '';
 
@@ -888,21 +897,23 @@
         }
 
         function toggleTaskComplete(taskId) {
-            if (!currentUser) return;
-            let tasks = JSON.parse(localStorage.getItem('mindclass_tasks_' + currentUser.id)) || [];
+            const userKey = getUserUniqueKey();
+            if (!userKey) return;
+            let tasks = JSON.parse(localStorage.getItem('mindclass_tasks_' + userKey)) || [];
             tasks = tasks.map(t => {
                 if (t.id === taskId) t.completed = !t.completed;
                 return t;
             });
-            localStorage.setItem('mindclass_tasks_' + currentUser.id, JSON.stringify(tasks));
+            localStorage.setItem('mindclass_tasks_' + userKey, JSON.stringify(tasks));
             renderUserTasks();
         }
 
         function deleteTask(taskId) {
-            if (!currentUser) return;
-            let tasks = JSON.parse(localStorage.getItem('mindclass_tasks_' + currentUser.id)) || [];
+            const userKey = getUserUniqueKey();
+            if (!userKey) return;
+            let tasks = JSON.parse(localStorage.getItem('mindclass_tasks_' + userKey)) || [];
             tasks = tasks.filter(t => t.id !== taskId);
-            localStorage.setItem('mindclass_tasks_' + currentUser.id, JSON.stringify(tasks));
+            localStorage.setItem('mindclass_tasks_' + userKey, JSON.stringify(tasks));
             renderUserTasks();
         }
 
@@ -973,7 +984,8 @@
             const subject = document.getElementById('pubSubject').value;
             const title = document.getElementById('pubTitle').value;
             const content = document.getElementById('pubContent').value;
-            if (!currentUser) return;
+            const userKey = getUserUniqueKey();
+            if (!userKey) return;
 
             let targetNode = 'aprendeJunto/dudas';
             if (currentAprendeTab === 'flashcards') targetNode = 'aprendeJunto/flashcards';
@@ -984,7 +996,7 @@
                 title: title,
                 content: content,
                 author: currentUser.name,
-                authorId: currentUser.id,
+                authorEmail: currentUser.email,
                 timestamp: firebase.database.ServerValue.TIMESTAMP,
                 likes: 0,
                 voters: {}
@@ -997,8 +1009,10 @@
             });
         }
 
-        // CARGA DE DATOS Y RESTRICCIÓN DE 1 VOTO POR CUENTA EN FIREBASE
+        // CARGA DE DATOS Y RESTRICCIÓN STRICTA DE 1 VOTO POR CORREO INSTITUCIONAL
         function initFirebaseListeners() {
+            const userKey = getUserUniqueKey();
+
             // Dudas
             database.ref('aprendeJunto/dudas').on('value', (snapshot) => {
                 const container = document.getElementById('qFeedContainer');
@@ -1012,7 +1026,7 @@
                 Object.keys(data).reverse().forEach(key => {
                     const item = data[key];
                     const voters = item.voters || {};
-                    const hasVoted = currentUser && voters[currentUser.id];
+                    const hasVoted = userKey && voters[userKey];
 
                     const card = document.createElement('div');
                     card.className = "bg-cardBg border border-borderBg rounded-2xl p-5 space-y-3";
@@ -1096,7 +1110,7 @@
                 Object.keys(data).reverse().forEach(key => {
                     const item = data[key];
                     const voters = item.voters || {};
-                    const hasVoted = currentUser && voters[currentUser.id];
+                    const hasVoted = userKey && voters[userKey];
 
                     const card = document.createElement('div');
                     card.className = "bg-darkBg border border-borderBg rounded-xl p-3.5 space-y-2";
@@ -1116,9 +1130,11 @@
             });
         }
 
-        // Función estricta de 1 solo voto por cuenta (Dudas y Apuntes)
+        // Función estricta para bloquear múltiples votos por correo único
         function toggleLike(nodeType, key) {
-            if (!currentUser) return;
+            const userKey = getUserUniqueKey();
+            if (!userKey) return;
+
             const ref = database.ref(`aprendeJunto/${nodeType}/${key}`);
             
             ref.transaction(post => {
@@ -1126,13 +1142,11 @@
                     post.voters = post.voters || {};
                     post.likes = post.likes || 0;
 
-                    if (post.voters[currentUser.id]) {
-                        // Ya había votado: le quitamos el voto
-                        post.voters[currentUser.id] = null;
-                        post.likes -= 1;
+                    if (post.voters[userKey]) {
+                        delete post.voters[userKey];
+                        post.likes = Math.max(0, post.likes - 1);
                     } else {
-                        // No había votado: le sumamos su único voto
-                        post.voters[currentUser.id] = true;
+                        post.voters[userKey] = true;
                         post.likes += 1;
                     }
                 }
@@ -1140,18 +1154,19 @@
             });
         }
 
-        // VOZ ESCOLAR CON 1 VOTO POR CUENTA
+        // VOZ ESCOLAR CON CONTROL STRICTO DE VOTO ÚNICO POR CORREO
         function handleVozEscolarSubmit(e) {
             e.preventDefault();
             const title = document.getElementById('vozTitle').value;
             const desc = document.getElementById('vozDesc').value;
-            if (!currentUser) return;
+            const userKey = getUserUniqueKey();
+            if (!userKey) return;
 
             const newPropuesta = {
                 title: title,
                 description: desc,
                 author: currentUser.name,
-                authorId: currentUser.id,
+                authorEmail: currentUser.email,
                 votes: 0,
                 voters: {},
                 timestamp: firebase.database.ServerValue.TIMESTAMP
@@ -1164,6 +1179,8 @@
         }
 
         function initVozEscolarListener() {
+            const userKey = getUserUniqueKey();
+
             database.ref('vozEscolar').on('value', (snapshot) => {
                 const container = document.getElementById('vozFeedContainer');
                 if (!container) return;
@@ -1176,7 +1193,7 @@
                 Object.keys(data).reverse().forEach(key => {
                     const item = data[key];
                     const voters = item.voters || {};
-                    const hasVoted = currentUser && voters[currentUser.id];
+                    const hasVoted = userKey && voters[userKey];
 
                     const card = document.createElement('div');
                     card.className = "bg-darkBg border border-borderBg rounded-xl p-4 space-y-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3";
@@ -1191,7 +1208,7 @@
                             <p class="text-[11px] text-slate-300 leading-relaxed">${item.description}</p>
                         </div>
                         <div class="flex items-center gap-3 self-end sm:self-center flex-shrink-0">
-                            <button onclick="votePropuesta('${key}')" class="${hasVoted ? 'bg-purple-600 text-white border-purple-400' : 'bg-purple-600/20 text-purple-300 border-purple-500/40'} hover:bg-purple-600 hover:text-white border px-3 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5">
+                            <button onclick="votePropuesta('${key}')" class="${hasVoted ? 'bg-purple-600 text-white border-purple-400 font-bold' : 'bg-purple-600/20 text-purple-300 border-purple-500/40'} hover:bg-purple-600 hover:text-white border px-3 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5">
                                 <i class="fa-solid fa-thumbs-up"></i>
                                 <span>${hasVoted ? 'Votado' : 'Me parece bien'} (${item.votes || 0})</span>
                             </button>
@@ -1202,9 +1219,11 @@
             });
         }
 
-        // Función estricta de 1 solo voto por cuenta en VozEscolar
+        // Función estricta de 1 solo voto por correo en VozEscolar
         function votePropuesta(key) {
-            if (!currentUser) return;
+            const userKey = getUserUniqueKey();
+            if (!userKey) return;
+
             const ref = database.ref(`vozEscolar/${key}`);
 
             ref.transaction(prop => {
@@ -1212,13 +1231,11 @@
                     prop.voters = prop.voters || {};
                     prop.votes = prop.votes || 0;
 
-                    if (prop.voters[currentUser.id]) {
-                        // Si ya votó, retira su voto
-                        prop.voters[currentUser.id] = null;
-                        prop.votes -= 1;
+                    if (prop.voters[userKey]) {
+                        delete prop.voters[userKey];
+                        prop.votes = Math.max(0, prop.votes - 1);
                     } else {
-                        // Si no ha votado, registra su único voto
-                        prop.voters[currentUser.id] = true;
+                        prop.voters[userKey] = true;
                         prop.votes += 1;
                     }
                 }
@@ -1244,7 +1261,7 @@
                 }
                 Object.keys(data).forEach(key => {
                     const msg = data[key];
-                    const isMe = currentUser && (msg.authorId === currentUser.id || msg.authorEmail === currentUser.email);
+                    const isMe = currentUser && (msg.authorEmail === currentUser.email);
                     const msgDiv = document.createElement('div');
                     msgDiv.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'} space-y-1`;
                     msgDiv.innerHTML = `
@@ -1277,7 +1294,6 @@
             const newMessage = {
                 text: text,
                 author: currentUser.name,
-                authorId: currentUser.id,
                 authorEmail: currentUser.email || '',
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             };
