@@ -44,7 +44,6 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: #0b1329; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #1b2640; border-radius: 9999px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #2563eb; }
-        /* Transición suave para el anillo del temporizador */
         .timer-progress {
             transition: stroke-dashoffset 1s linear;
         }
@@ -55,8 +54,6 @@
     <!-- AUTHENTICATION LANDING / MODAL -->
     <div id="authModal" class="fixed inset-0 bg-darkBg z-50 flex items-center justify-center" style="display: flex;">
         <div class="w-full h-full flex flex-col md:flex-row">
-            
-            <!-- COLUMNA IZQUIERDA: FONDO DE INICIO -->
             <div class="hidden md:flex md:w-1/2 lg:w-7/12 relative bg-cover bg-center items-end p-12 overflow-hidden shadow-2xl" style="background-image: linear-gradient(to top, rgba(8, 13, 25, 0.95), rgba(8, 13, 25, 0.4)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1400&auto=format&fit=crop');">
                 <div class="absolute inset-0 bg-accentBlue/10 backdrop-blur-[2px]"></div>
                 <div class="relative z-10 space-y-4">
@@ -72,7 +69,6 @@
                 </div>
             </div>
 
-            <!-- COLUMNA DERECHA: FORMULARIO DE INGRESO -->
             <div class="w-full md:w-1/2 lg:w-5/12 bg-sidebarBg border-l border-borderBg p-8 lg:p-12 flex flex-col justify-between overflow-y-auto custom-scrollbar">
                 <div class="space-y-6 max-w-md mx-auto w-full my-auto">
                     <div class="space-y-3">
@@ -148,7 +144,7 @@
                     </form>
                 </div>
                 <div class="pt-4 text-[10px] text-slate-600 text-center">
-                    MindClass v3.6 • I.E.P. Milagros de Dios
+                    MindClass v3.7 • I.E.P. Milagros de Dios
                 </div>
             </div>
         </div>
@@ -188,16 +184,16 @@
         </div>
     </div>
 
-    <!-- PUBLISH MODAL FOR APRENDEJUNTO -->
+    <!-- PUBLISH MODAL DINÁMICO (ADAPTABLE A CADA PESTAÑA) -->
     <div id="publishModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-sidebarBg border border-borderBg rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-4">
             <div class="flex justify-between items-center border-b border-borderBg pb-3">
-                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                <h3 id="modalTitle" class="text-base font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-pen-to-square text-accentBlue"></i> Publicar en AprendeJunto
                 </h3>
                 <button onclick="togglePublishModal(false)" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <form onsubmit="handleCreatePublication(event)" class="space-y-3">
+            <form onsubmit="handleUniversalPublish(event)" class="space-y-3">
                 <div>
                     <label class="block text-xs font-medium text-slate-300 mb-1">Curso / Materia</label>
                     <select id="pubSubject" required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-accentBlue">
@@ -207,14 +203,15 @@
                         <option value="Comunicación">Comunicación</option>
                         <option value="Inglés">Inglés</option>
                         <option value="Historia">Historia</option>
+                        <option value="Otro">Otro</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Título de la Duda o Recurso</label>
+                    <label id="labelPubTitle" class="block text-xs font-medium text-slate-300 mb-1">Título de la Duda o Recurso</label>
                     <input type="text" id="pubTitle" placeholder="Ej. ¿Por qué el resultado de esta ecuación es negativo?" required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-accentBlue">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-300 mb-1">Detalle / Procedimiento</label>
+                    <label id="labelPubContent" class="block text-xs font-medium text-slate-300 mb-1">Detalle / Procedimiento</label>
                     <textarea id="pubContent" rows="4" placeholder="Explica detalladamente tu consulta o escribe tu resumen..." required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-accentBlue resize-none"></textarea>
                 </div>
                 <div class="flex justify-end space-x-2 pt-2">
@@ -286,7 +283,7 @@
             </div>
 
             <div class="p-4 border-t border-borderBg text-[10px] text-slate-500 text-center">
-                MindClass v3.6 • IEP Milagros de Dios
+                MindClass v3.7 • IEP Milagros de Dios
             </div>
         </aside>
 
@@ -325,7 +322,7 @@
             <!-- MAIN DYNAMIC CONTAINER -->
             <main class="flex-1 overflow-y-auto custom-scrollbar p-6">
 
-                <!-- SECTION: DASHBOARD CON TAREAS Y TEMPORIZADOR CIRCULAR -->
+                <!-- SECTION: DASHBOARD -->
                 <section id="sec-dashboard" class="content-sec space-y-6">
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
@@ -338,7 +335,6 @@
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        <!-- COLUMNA IZQUIERDA: CREAR TAREA + TEMPORIZADOR CIRCULAR -->
                         <div class="space-y-6">
                             <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4">
                                 <h3 class="font-bold text-white text-sm flex items-center gap-2">
@@ -372,19 +368,15 @@
                                 </form>
                             </div>
 
-                            <!-- TEMPORIZADOR CIRCULAR POMODORO -->
+                            <!-- TEMPORIZADOR CIRCULAR -->
                             <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4 text-center flex flex-col items-center">
                                 <h3 class="font-bold text-white text-sm flex items-center gap-2">
                                     <i class="fa-solid fa-stopwatch text-amber-400"></i> Temporizador Circular
                                 </h3>
                                 <p class="text-[11px] text-slate-400">Enfoque de 25 min.</p>
-                                
-                                <!-- CONTENEDOR DEL CÍRCULO SVG -->
                                 <div class="relative w-36 h-36 flex items-center justify-center my-2">
                                     <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                                        <!-- Círculo de fondo -->
                                         <circle cx="50" cy="50" r="42" class="text-darkBg stroke-current" stroke-width="8" fill="transparent"></circle>
-                                        <!-- Círculo de progreso dinámico -->
                                         <circle id="timerProgressCircle" cx="50" cy="50" r="42" class="text-accentBlue stroke-current timer-progress" stroke-width="8" stroke-dasharray="264" stroke-dashoffset="0" stroke-linecap="round" fill="transparent"></circle>
                                     </svg>
                                     <div class="absolute inset-0 flex flex-col items-center justify-center">
@@ -392,7 +384,6 @@
                                         <span id="timerStatusLabel" class="text-[9px] text-slate-400 uppercase tracking-widest font-bold">Listo</span>
                                     </div>
                                 </div>
-
                                 <div class="flex justify-center gap-2 w-full pt-1">
                                     <button onclick="startTimer()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow">Iniciar</button>
                                     <button onclick="pauseTimer()" class="bg-amber-600 hover:bg-amber-500 text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow">Pausar</button>
@@ -401,7 +392,6 @@
                             </div>
                         </div>
 
-                        <!-- LISTA DE TAREAS -->
                         <div class="lg:col-span-2 bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4 h-fit">
                             <div class="flex justify-between items-center border-b border-borderBg pb-3">
                                 <h3 class="font-bold text-white text-sm flex items-center gap-2">
@@ -424,9 +414,9 @@
                             <h2 class="text-2xl font-extrabold text-white tracking-tight">AprendeJunto & Flashcards</h2>
                             <p class="text-xs text-slate-400 mt-1">Ayuda mutua, apuntes y tarjetas de repaso rápido.</p>
                         </div>
-                        <button onclick="togglePublishModal(true)" class="bg-accentBlue hover:bg-hoverBlue text-white px-4 py-2.5 rounded-xl font-semibold text-xs transition-colors shadow-lg shadow-accentBlue/20 flex items-center space-x-2 self-start md:self-auto">
+                        <button onclick="openPublishModal()" class="bg-accentBlue hover:bg-hoverBlue text-white px-4 py-2.5 rounded-xl font-semibold text-xs transition-colors shadow-lg shadow-accentBlue/20 flex items-center space-x-2 self-start md:self-auto">
                             <i class="fa-solid fa-plus"></i>
-                            <span>Publicar en la Comunidad</span>
+                            <span id="publishBtnText">Publicar en la Comunidad</span>
                         </button>
                     </div>
 
@@ -454,38 +444,23 @@
                     </div>
 
                     <div id="sub-flashcards" class="aprende-sub-sec space-y-4 hidden">
-                        <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4">
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <h3 class="font-bold text-white text-sm">Tarjetas de Memoria Rápida (Flashcards)</h3>
-                                    <p class="text-xs text-slate-400">Haz clic en la tarjeta para ver la respuesta o fórmula correcta.</p>
-                                </div>
-                                <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded font-bold">Repaso Ágil</span>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h3 class="font-bold text-white text-sm">Tarjetas de Memoria Rápida (Flashcards)</h3>
+                                <p class="text-xs text-slate-400">Haz clic en cualquier tarjeta para voltearla y ver la respuesta.</p>
                             </div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-                                <div onclick="this.classList.toggle('bg-accentBlue/20')" class="bg-darkBg border border-borderBg rounded-xl p-5 cursor-pointer transition-all space-y-2 hover:border-accentBlue text-center">
-                                    <span class="text-[10px] text-accentBlue font-bold uppercase">Álgebra • Pregunta 1</span>
-                                    <h4 class="text-xs font-bold text-white">¿Cuál es la fórmula de la diferencia de cuadrados?</h4>
-                                    <p class="text-xs text-slate-400 italic pt-2">(Clic para recordar: a² - b² = (a+b)(a-b))</p>
-                                </div>
-                                <div onclick="this.classList.toggle('bg-accentBlue/20')" class="bg-darkBg border border-borderBg rounded-xl p-5 cursor-pointer transition-all space-y-2 hover:border-accentBlue text-center">
-                                    <span class="text-[10px] text-purple-400 font-bold uppercase">Física • Pregunta 2</span>
-                                    <h4 class="text-xs font-bold text-white">¿Qué mide la aceleración en el MRUV?</h4>
-                                    <p class="text-xs text-slate-400 italic pt-2">(Clic para recordar: El cambio de velocidad por unidad de tiempo)</p>
-                                </div>
-                            </div>
+                            <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded font-bold">Repaso Interactivo</span>
+                        </div>
+                        <div id="flashcardsFeedContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                            <!-- Flashcards dinámicas -->
                         </div>
                     </div>
 
                     <div id="sub-apuntes" class="aprende-sub-sec space-y-4 hidden">
                         <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-3">
                             <h3 class="font-bold text-white text-sm">Banco de Fichas y Resúmenes Compartidos</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
-                                <div class="bg-darkBg border border-borderBg rounded-xl p-3.5 space-y-2">
-                                    <span class="text-[10px] bg-accentBlue/20 text-accentBlue px-2 py-0.5 rounded font-bold">Física • Sec</span>
-                                    <h4 class="text-xs font-bold text-white">Resumen MRUV y Leyes de Newton</h4>
-                                    <p class="text-[11px] text-slate-400">Esquema con fórmulas principales y guía de signos para despeje de aceleración.</p>
-                                </div>
+                            <div id="apuntesFeedContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+                                <!-- Apuntes dinámicos -->
                             </div>
                         </div>
                     </div>
@@ -531,10 +506,11 @@
                                 <i class="fa-solid fa-check-to-slot"></i>
                             </div>
                             <div>
-                                <h3 class="font-bold text-white text-sm">VozEscolar - Buzón y Propuestas</h3>
-                                <p class="text-xs text-slate-400">Comparte tus sugerencias de mejoras para las actividades del colegio.</p>
+                                <h3 class="font-bold text-white text-sm">VozEscolar - Buzón, Propuestas y Votación</h3>
+                                <p class="text-xs text-slate-400">Comparte tus sugerencias y apoya las propuestas de tus compañeros votando.</p>
                             </div>
                         </div>
+
                         <form onsubmit="handleVozEscolarSubmit(event)" class="space-y-3 max-w-xl">
                             <div>
                                 <label class="block text-xs font-medium text-slate-300 mb-1">Título de tu propuesta o sugerencia</label>
@@ -545,21 +521,13 @@
                                 <textarea id="vozDesc" rows="3" placeholder="Explica en qué consiste tu idea..." required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-purple-500 resize-none"></textarea>
                             </div>
                             <button type="submit" class="bg-purple-600 hover:bg-purple-500 text-white font-semibold px-5 py-2 rounded-xl text-xs transition-colors shadow-md shadow-purple-600/20">
-                                Enviar Propuesta
+                                Publicar Propuesta
                             </button>
                         </form>
+
                         <div class="pt-4 space-y-3">
-                            <h4 class="font-bold text-white text-xs">Propuestas activas de la comunidad</h4>
-                            <div id="vozFeedContainer" class="space-y-2">
-                                <div class="bg-darkBg border border-borderBg rounded-xl p-3.5 space-y-1">
-                                    <div class="flex justify-between items-center text-[10px] text-slate-400">
-                                        <span class="text-purple-400 font-bold">Ideación Estudiantil</span>
-                                        <span>Hace 1 día</span>
-                                    </div>
-                                    <h5 class="text-xs font-bold text-white">Implementar círculo de estudio de matemáticas los viernes</h5>
-                                    <p class="text-[11px] text-slate-300">Espacio para resolver dudas antes de los exámenes bimestrales.</p>
-                                </div>
-                            </div>
+                            <h4 class="font-bold text-white text-xs">Propuestas activas y Votación en vivo</h4>
+                            <div id="vozFeedContainer" class="space-y-3"></div>
                         </div>
                     </div>
                 </section>
@@ -598,6 +566,7 @@
         };
 
         let currentUser = JSON.parse(localStorage.getItem('mindclass_user')) || null;
+        let currentAprendeTab = 'dudas';
 
         function hideAuthModal() {
             const modal = document.getElementById('authModal');
@@ -626,6 +595,7 @@
                     updateUserUI();
                     initFirebaseListeners();
                     renderUserTasks();
+                    initVozEscolarListener();
                 }
             }
 
@@ -649,6 +619,7 @@
                         updateUserUI();
                         initFirebaseListeners();
                         renderUserTasks();
+                        initVozEscolarListener();
                     }
                 }
             });
@@ -715,6 +686,7 @@
                 updateUserUI();
                 initFirebaseListeners();
                 renderUserTasks();
+                initVozEscolarListener();
             }
         }
 
@@ -748,6 +720,7 @@
             updateUserUI();
             initFirebaseListeners();
             renderUserTasks();
+            initVozEscolarListener();
         }
 
         function updateUserUI() {
@@ -784,12 +757,12 @@
                 activeNav.classList.add('bg-accentBlue', 'text-white', 'shadow-md');
             }
 
-            if (sectionId === 'chat-salon') {
-                initChatSalonListener();
-            }
+            if (sectionId === 'chat-salon') initChatSalonListener();
+            if (sectionId === 'voz-escolar') initVozEscolarListener();
         }
 
         function switchAprendeTab(tabId) {
+            currentAprendeTab = tabId;
             document.querySelectorAll('.aprende-sub-sec').forEach(sec => sec.classList.add('hidden'));
             const target = document.getElementById('sub-' + tabId);
             if (target) target.classList.remove('hidden');
@@ -804,6 +777,44 @@
                 activeTab.classList.remove('text-slate-400');
                 activeTab.classList.add('bg-accentBlue', 'text-white');
             }
+
+            const btnText = document.getElementById('publishBtnText');
+            if (btnText) {
+                if (tabId === 'dudas') btnText.textContent = 'Publicar Duda';
+                else if (tabId === 'flashcards') btnText.textContent = 'Crear Flashcard';
+                else if (tabId === 'apuntes') btnText.textContent = 'Compartir Apunte';
+            }
+        }
+
+        function openPublishModal() {
+            const modal = document.getElementById('publishModal');
+            const titleEl = document.getElementById('modalTitle');
+            const labelTitle = document.getElementById('labelPubTitle');
+            const labelContent = document.getElementById('labelPubContent');
+            const inputTitle = document.getElementById('pubTitle');
+            const inputContent = document.getElementById('pubContent');
+
+            if (currentAprendeTab === 'flashcards') {
+                titleEl.innerHTML = `<i class="fa-solid fa-bolt text-accentBlue"></i> Crear Nueva Flashcard`;
+                labelTitle.textContent = "Pregunta o Término";
+                inputTitle.placeholder = "Ej. ¿Cuál es la fórmula del área del círculo?";
+                labelContent.textContent = "Respuesta / Fórmula Correcta";
+                inputContent.placeholder = "Ej. A = π · r²";
+            } else if (currentAprendeTab === 'apuntes') {
+                titleEl.innerHTML = `<i class="fa-solid fa-book-open text-accentBlue"></i> Compartir Apunte o Resumen`;
+                labelTitle.textContent = "Título del Resumen o Ficha";
+                inputTitle.placeholder = "Ej. Resumen de Revolución Francesa";
+                labelContent.textContent = "Descripción o Enlace del Recurso";
+                inputContent.placeholder = "Escribe los puntos clave o pega un enlace...";
+            } else {
+                titleEl.innerHTML = `<i class="fa-solid fa-pen-to-square text-accentBlue"></i> Publicar en Dudas & Explicaciones`;
+                labelTitle.textContent = "Título de la Duda";
+                inputTitle.placeholder = "Ej. ¿Por qué el resultado es negativo?";
+                labelContent.textContent = "Detalle / Procedimiento";
+                inputContent.placeholder = "Explica detalladamente tu consulta...";
+            }
+
+            if (modal) modal.classList.remove('hidden');
         }
 
         function togglePublishModal(show) {
@@ -847,14 +858,12 @@
 
         function renderUserTasks() {
             if (!currentUser) return;
-
             const container = document.getElementById('tasksListContainer');
             const counter = document.getElementById('taskCounter');
             if (!container) return;
 
             const tasks = JSON.parse(localStorage.getItem('mindclass_tasks_' + currentUser.id)) || [];
             if (counter) counter.textContent = tasks.length + (tasks.length === 1 ? ' tarea' : ' tareas');
-
             container.innerHTML = '';
 
             if (tasks.length === 0) {
@@ -865,7 +874,6 @@
             tasks.forEach((task) => {
                 const itemDiv = document.createElement('div');
                 itemDiv.className = `bg-darkBg border border-borderBg rounded-xl p-3.5 flex items-center justify-between gap-3 transition-all ${task.completed ? 'opacity-60' : ''}`;
-                
                 itemDiv.innerHTML = `
                     <div class="flex items-center space-x-3 min-w-0">
                         <input type="checkbox" ${task.completed ? 'checked' : ''} onclick="toggleTaskComplete('${task.id}')" class="w-4 h-4 accent-accentBlue rounded cursor-pointer">
@@ -902,11 +910,11 @@
             renderUserTasks();
         }
 
-        // TEMPORIZADOR CIRCULAR POMODORO LÓGICA
+        // TEMPORIZADOR CIRCULAR
         let timerInterval = null;
         const totalTime = 25 * 60;
         let timeLeft = totalTime;
-        const circleCircumference = 264; // 2 * pi * r (r=42)
+        const circleCircumference = 264;
 
         function updateTimerDisplay() {
             const minutes = Math.floor(timeLeft / 60);
@@ -915,8 +923,6 @@
             if (display) {
                 display.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             }
-
-            // Calcular el progreso del círculo SVG
             const circle = document.getElementById('timerProgressCircle');
             if (circle) {
                 const progressOffset = circleCircumference - (timeLeft / totalTime) * circleCircumference;
@@ -929,10 +935,8 @@
             const statusLabel = document.getElementById('timerStatusLabel');
             if (statusLabel) {
                 statusLabel.textContent = 'Enfoque';
-                statusLabel.classList.remove('text-slate-400');
-                statusLabel.classList.add('text-emerald-400');
+                statusLabel.className = 'text-[9px] text-emerald-400 uppercase tracking-widest font-bold';
             }
-
             timerInterval = setInterval(() => {
                 if (timeLeft > 0) {
                     timeLeft--;
@@ -951,8 +955,7 @@
             const statusLabel = document.getElementById('timerStatusLabel');
             if (statusLabel) {
                 statusLabel.textContent = 'Pausado';
-                statusLabel.classList.remove('text-emerald-400');
-                statusLabel.classList.add('text-amber-400');
+                statusLabel.className = 'text-[9px] text-amber-400 uppercase tracking-widest font-bold';
             }
         }
 
@@ -964,43 +967,23 @@
             const statusLabel = document.getElementById('timerStatusLabel');
             if (statusLabel) {
                 statusLabel.textContent = 'Listo';
-                statusLabel.classList.remove('text-emerald-400', 'text-amber-400');
-                statusLabel.classList.add('text-slate-400');
+                statusLabel.className = 'text-[9px] text-slate-400 uppercase tracking-widest font-bold';
             }
         }
 
-        // VOZ ESCOLAR SUBMIT
-        function handleVozEscolarSubmit(e) {
-            e.preventDefault();
-            const title = document.getElementById('vozTitle').value;
-            const desc = document.getElementById('vozDesc').value;
-            const container = document.getElementById('vozFeedContainer');
-            if (!container) return;
-
-            const newItem = document.createElement('div');
-            newItem.className = "bg-darkBg border border-borderBg rounded-xl p-3.5 space-y-1";
-            newItem.innerHTML = `
-                <div class="flex justify-between items-center text-[10px] text-slate-400">
-                    <span class="text-purple-400 font-bold">${currentUser ? currentUser.name : 'Estudiante'}</span>
-                    <span>Justo ahora</span>
-                </div>
-                <h5 class="text-xs font-bold text-white">${title}</h5>
-                <p class="text-[11px] text-slate-300">${desc}</p>
-            `;
-            container.prepend(newItem);
-            document.getElementById('vozTitle').value = '';
-            document.getElementById('vozDesc').value = '';
-            alert("¡Propuesta enviada con éxito a VozEscolar!");
-        }
-
-        function handleCreatePublication(e) {
+        // PUBLICACIÓN UNIVERSAL (DEPENDIENDO DE LA PESTAÑA ACTIVA)
+        function handleUniversalPublish(e) {
             e.preventDefault();
             const subject = document.getElementById('pubSubject').value;
             const title = document.getElementById('pubTitle').value;
             const content = document.getElementById('pubContent').value;
             if (!currentUser) return;
 
-            const newPost = {
+            let targetNode = 'aprendeJunto/dudas';
+            if (currentAprendeTab === 'flashcards') targetNode = 'aprendeJunto/flashcards';
+            if (currentAprendeTab === 'apuntes') targetNode = 'aprendeJunto/apuntes';
+
+            const newItem = {
                 subject: subject,
                 title: title,
                 content: content,
@@ -1010,25 +993,25 @@
                 likes: 0
             };
 
-            database.ref('aprendeJunto/dudas').push(newPost).then(() => {
+            database.ref(targetNode).push(newItem).then(() => {
                 togglePublishModal(false);
                 document.getElementById('pubTitle').value = '';
                 document.getElementById('pubContent').value = '';
             });
         }
 
+        // CARGA DE DATOS DESDE FIREBASE
         function initFirebaseListeners() {
+            // Dudas
             database.ref('aprendeJunto/dudas').on('value', (snapshot) => {
                 const container = document.getElementById('qFeedContainer');
                 if (!container) return;
                 container.innerHTML = '';
                 const data = snapshot.val();
-
                 if (!data) {
-                    container.innerHTML = '<p class="text-xs text-slate-500 text-center py-6">No hay publicaciones activas.</p>';
+                    container.innerHTML = '<p class="text-xs text-slate-500 text-center py-6">No hay publicaciones activas en Dudas.</p>';
                     return;
                 }
-
                 Object.keys(data).reverse().forEach(key => {
                     const item = data[key];
                     const card = document.createElement('div');
@@ -1042,8 +1025,87 @@
                         <p class="text-xs text-slate-300 leading-relaxed">${item.content}</p>
                         <div class="flex items-center justify-between pt-2 border-t border-borderBg text-xs text-slate-400">
                             <span>Por: <strong class="text-slate-200">${item.author}</strong></span>
-                            <button onclick="likePost('${key}', ${item.likes || 0})" class="hover:text-accentBlue flex items-center gap-1">
+                            <button onclick="likeItem('dudas', '${key}', ${item.likes || 0})" class="hover:text-accentBlue flex items-center gap-1">
                                 <i class="fa-regular fa-thumbs-up"></i> (${item.likes || 0})
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            });
+
+            // Flashcards Interactivas (Volteables)
+            database.ref('aprendeJunto/flashcards').on('value', (snapshot) => {
+                const container = document.getElementById('flashcardsFeedContainer');
+                if (!container) return;
+                container.innerHTML = '';
+                const data = snapshot.val();
+                
+                // Flashcards predeterminadas si no hay en la base de datos
+                const defaultCards = {
+                    fc1: { subject: "Álgebra", title: "¿Cuál es la fórmula de la diferencia de cuadrados?", content: "a² - b² = (a + b) (a - b)" },
+                    fc2: { subject: "Física", title: "¿Qué mide la aceleración en el MRUV?", content: "El cambio de velocidad por cada unidad de tiempo." }
+                };
+                
+                const cardsToRender = data ? { ...defaultCards, ...data } : defaultCards;
+
+                Object.keys(cardsToRender).forEach(key => {
+                    const item = cardsToRender[key];
+                    const cardDiv = document.createElement('div');
+                    cardDiv.className = "bg-darkBg border border-borderBg rounded-xl p-5 cursor-pointer transition-all space-y-2 hover:border-accentBlue text-center select-none";
+                    
+                    let isFlipped = false;
+                    cardDiv.innerHTML = `
+                        <span class="text-[10px] text-accentBlue font-bold uppercase">${item.subject} • Flashcard</span>
+                        <h4 class="text-xs font-bold text-white card-text">${item.title}</h4>
+                        <p class="text-[11px] text-slate-400 italic pt-1">(Haz clic para ver la respuesta)</p>
+                    `;
+
+                    cardDiv.addEventListener('click', () => {
+                        isFlipped = !isFlipped;
+                        if (isFlipped) {
+                            cardDiv.className = "bg-accentBlue/20 border border-accentBlue rounded-xl p-5 cursor-pointer transition-all space-y-2 text-center select-none";
+                            cardDiv.innerHTML = `
+                                <span class="text-[10px] text-sky-300 font-bold uppercase">${item.subject} • Respuesta</span>
+                                <h4 class="text-xs font-bold text-white">${item.content}</h4>
+                                <p class="text-[11px] text-sky-200/70 italic pt-1">(Haz clic para volver a la pregunta)</p>
+                            `;
+                        } else {
+                            cardDiv.className = "bg-darkBg border border-borderBg rounded-xl p-5 cursor-pointer transition-all space-y-2 hover:border-accentBlue text-center select-none";
+                            cardDiv.innerHTML = `
+                                <span class="text-[10px] text-accentBlue font-bold uppercase">${item.subject} • Flashcard</span>
+                                <h4 class="text-xs font-bold text-white">${item.title}</h4>
+                                <p class="text-[11px] text-slate-400 italic pt-1">(Haz clic para ver la respuesta)</p>
+                            `;
+                        }
+                    });
+
+                    container.appendChild(cardDiv);
+                });
+            });
+
+            // Apuntes Compartidos
+            database.ref('aprendeJunto/apuntes').on('value', (snapshot) => {
+                const container = document.getElementById('apuntesFeedContainer');
+                if (!container) return;
+                container.innerHTML = '';
+                const data = snapshot.val();
+                if (!data) {
+                    container.innerHTML = '<p class="text-xs text-slate-500 text-center py-6 col-span-2">Aún no hay apuntes compartidos. ¡Sé el primero en subir uno!</p>';
+                    return;
+                }
+                Object.keys(data).reverse().forEach(key => {
+                    const item = data[key];
+                    const card = document.createElement('div');
+                    card.className = "bg-darkBg border border-borderBg rounded-xl p-3.5 space-y-2";
+                    card.innerHTML = `
+                        <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded font-bold">${item.subject}</span>
+                        <h4 class="text-xs font-bold text-white">${item.title}</h4>
+                        <p class="text-[11px] text-slate-300">${item.content}</p>
+                        <div class="flex justify-between items-center text-[10px] text-slate-500 pt-2 border-t border-borderBg/50">
+                            <span>Aportado por: ${item.author}</span>
+                            <button onclick="likeItem('apuntes', '${key}', ${item.likes || 0})" class="text-accentBlue hover:underline">
+                                <i class="fa-regular fa-thumbs-up mr-1"></i>Útil (${item.likes || 0})
                             </button>
                         </div>
                     `;
@@ -1052,6 +1114,73 @@
             });
         }
 
+        function likeItem(nodeType, key, currentLikes) {
+            database.ref(`aprendeJunto/${nodeType}/${key}`).update({ likes: currentLikes + 1 });
+        }
+
+        // VOZ ESCOLAR
+        function handleVozEscolarSubmit(e) {
+            e.preventDefault();
+            const title = document.getElementById('vozTitle').value;
+            const desc = document.getElementById('vozDesc').value;
+            if (!currentUser) return;
+
+            const newPropuesta = {
+                title: title,
+                description: desc,
+                author: currentUser.name,
+                authorId: currentUser.id,
+                votes: 0,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            };
+
+            database.ref('vozEscolar').push(newPropuesta).then(() => {
+                document.getElementById('vozTitle').value = '';
+                document.getElementById('vozDesc').value = '';
+            });
+        }
+
+        function initVozEscolarListener() {
+            database.ref('vozEscolar').on('value', (snapshot) => {
+                const container = document.getElementById('vozFeedContainer');
+                if (!container) return;
+                container.innerHTML = '';
+                const data = snapshot.val();
+                if (!data) {
+                    container.innerHTML = '<p class="text-xs text-slate-500 text-center py-4">No hay propuestas activas en este momento.</p>';
+                    return;
+                }
+                Object.keys(data).reverse().forEach(key => {
+                    const item = data[key];
+                    const card = document.createElement('div');
+                    card.className = "bg-darkBg border border-borderBg rounded-xl p-4 space-y-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3";
+                    card.innerHTML = `
+                        <div class="space-y-1 min-w-0">
+                            <div class="flex items-center gap-2 text-[10px] text-slate-400">
+                                <span class="text-purple-400 font-bold">${item.author}</span>
+                                <span>•</span>
+                                <span>${new Date(item.timestamp || Date.now()).toLocaleDateString()}</span>
+                            </div>
+                            <h5 class="text-xs font-bold text-white">${item.title}</h5>
+                            <p class="text-[11px] text-slate-300 leading-relaxed">${item.description}</p>
+                        </div>
+                        <div class="flex items-center gap-3 self-end sm:self-center flex-shrink-0">
+                            <button onclick="votePropuesta('${key}', ${item.votes || 0})" class="bg-purple-600/20 hover:bg-purple-600 border border-purple-500/40 text-purple-300 hover:text-white px-3 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5">
+                                <i class="fa-solid fa-thumbs-up"></i>
+                                <span>Me parece bien (${item.votes || 0})</span>
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            });
+        }
+
+        function votePropuesta(key, currentVotes) {
+            database.ref('vozEscolar/' + key).update({ votes: currentVotes + 1 });
+        }
+
+        // CHAT DE SALÓN
         function initChatSalonListener() {
             if (!currentUser || !currentUser.grade) return;
             const gradeKey = currentUser.grade.replace(/[.#$/[\]]/g, "_");
@@ -1063,12 +1192,10 @@
                 if (!container) return;
                 container.innerHTML = '';
                 const data = snapshot.val();
-
                 if (!data) {
                     container.innerHTML = '<p class="text-xs text-slate-500 text-center py-8">Aún no hay mensajes en este salón. ¡Sé el primero en escribir!</p>';
                     return;
                 }
-
                 Object.keys(data).forEach(key => {
                     const msg = data[key];
                     const isMe = currentUser && (msg.authorId === currentUser.id || msg.authorEmail === currentUser.email);
@@ -1112,10 +1239,6 @@
             database.ref('chatSalones/' + gradeKey).push(newMessage).then(() => {
                 if (input) input.value = '';
             });
-        }
-
-        function likePost(key, currentLikes) {
-            database.ref('aprendeJunto/dudas/' + key).update({ likes: currentLikes + 1 });
         }
 
         function logout() {
