@@ -2,15 +2,21 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MindClass - Portal Estudiantil</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MindClass - I.E.P. Milagros de Dios</title>
+
+<!-- Fonts & Tailwind -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<!-- Firebase SDKs -->
+
+<!-- Firebase Compatibility SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
 <script>
   tailwind.config = {
     theme: {
@@ -19,7 +25,8 @@
           brandBg: '#e6e5fc',
           cardBg: '#1e1c36',
           borderBg: '#2f2c52',
-          accentBlue: '#4f64f2',
+          accentBlue: '#3b82f6',
+          brandBlue: '#4f64f2',
           darkBg: '#131126',
           sidebarBg: '#181630',
           pinkAccent: '#ff2d5f'
@@ -28,32 +35,458 @@
     }
   }
 </script>
+
 <style>
-html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;overflow-x:hidden}
+:root {
+  --bg: #e6e5fc;
+  --ink: #2a2a2d;
+  --pink: #ff2d5f;
+  --blue: #3b82f6;
+  --violet: #8e90f2;
+  --soft: #c9c7f5;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Landing Page Visuals */
+.top-landing { position: relative; z-index: 5; padding: 1.5rem 4vw 0; }
+.hero {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 3vw;
+  align-items: center;
+  padding: 1rem 4vw 4rem;
+  min-height: calc(100vh - 90px);
+}
+
+@media (max-width: 960px) {
+  .hero { grid-template-columns: 1fr; padding-bottom: 3rem; }
+}
+
+h1 {
+  position: relative;
+  font-size: clamp(2.8rem, 6.5vw, 6rem);
+  line-height: 0.98;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.slash {
+  position: absolute;
+  left: -0.12em;
+  top: 0.02em;
+  width: 0.6em;
+  height: 0.17em;
+  background: var(--pink);
+  border-radius: 0.09em;
+  transform: rotate(40deg);
+  mix-blend-mode: multiply;
+  opacity: 0.92;
+}
+
+.hl { position: relative; z-index: 0; display: inline-block; }
+.hl::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0.08em -0.1em -0.04em 0.02em;
+  background: var(--soft);
+  border-radius: 0.18em;
+  transform: translate(0.08em, 0.1em);
+}
+
+.sub { margin: 1.4rem 0 1.8rem; font-weight: 600; max-width: 34rem; color: #4a4a52; font-size: 1.1rem; }
+.note { margin-top: 1.2rem; font-size: 0.85rem; font-weight: 600; color: #5a596e; }
+
+.gbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-width: min(100%, 21rem);
+  padding: 0.85rem 1.4rem;
+  border: 0;
+  border-radius: 16px;
+  cursor: pointer;
+  font: 700 0.98rem 'Outfit', sans-serif;
+  text-align: left;
+  color: #fff;
+  background: linear-gradient(135deg, #ff2d5f, #e0334f);
+  outline: 2px dashed var(--pink);
+  outline-offset: 5px;
+  box-shadow: 0 10px 25px rgba(255, 45, 95, 0.35);
+  transition: all 0.25s ease;
+}
+
+.gbtn:hover {
+  transform: translateY(-3px) rotate(-1deg);
+  box-shadow: 0 15px 30px rgba(255, 45, 95, 0.45);
+}
+
+.gt {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #fff;
+  display: grid;
+  place-items: center;
+}
+.gt i { font-style: normal; font-weight: 900; font-size: 1.3rem; color: #4285f4; }
+
+/* Right Stage & Image Carousel */
+.stage-container {
+  position: relative;
+  height: clamp(400px, 68vh, 580px);
+  border-radius: 36px;
+  background: linear-gradient(160deg, #c6cdff, #e9e6ff 60%, #f4f2ff);
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(79, 100, 242, 0.18);
+  border: 4px solid #ffffff;
+}
+
+.carousel-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out, transform 0.8s ease;
+  transform: scale(1.04);
+}
+
+.carousel-slide.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slide-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(19, 17, 38, 0.85) 0%, rgba(19, 17, 38, 0.1) 60%);
+}
+
+.slide-caption {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  right: 24px;
+  color: white;
+  z-index: 10;
+}
+
+/* Modal Styling */
+.ov {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(19, 17, 38, 0.65);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.ov.on { opacity: 1; pointer-events: auto; }
+
+.card {
+  position: relative;
+  width: min(100%, 27rem);
+  background: #fff;
+  border-radius: 28px;
+  padding: 2rem;
+  box-shadow: 0 30px 80px rgba(30, 28, 54, 0.4);
+  transform: translateY(16px) scale(0.98);
+  transition: transform 0.25s ease;
+}
+
+.ov.on .card { transform: translateY(0) scale(1); }
+
+.x-btn {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  border: 0;
+  background: var(--bg);
+  color: #2a2a2d;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.x-btn:hover { background: #d0cefa; }
+
+.stp { display: none; text-align: center; }
+.stp.on { display: block; }
+
+.spin-loader {
+  width: 46px;
+  height: 46px;
+  margin: 1.5rem auto;
+  border: 4px solid var(--soft);
+  border-top-color: var(--pink);
+  border-radius: 50%;
+  animation: sp 0.9s linear infinite;
+}
+@keyframes sp { to { transform: rotate(360deg); } }
+
 .custom-scrollbar::-webkit-scrollbar { width: 6px; }
 .custom-scrollbar::-webkit-scrollbar-track { background: #131126; }
 .custom-scrollbar::-webkit-scrollbar-thumb { background: #2f2c52; border-radius: 4px; }
 </style>
 </head>
-<body class="bg-brandBg text-slate-800 antialiased">
+<body class="antialiased text-slate-800">
 
-  <!-- ================= WEB COMPONENT DE LA LANDING PAGE DE TU COMPAÑERA ================= -->
-  <mindclass-landing id="landingComponent"></mindclass-landing>
+  <!-- ================= LOGO SVG REUTILIZABLE (PLANTILLA IDÉNTICA A LA IMAGEN) ================= -->
+  <svg class="hidden">
+    <defs>
+      <g id="mindclass-logo-graphic">
+        <!-- Fondo suave blanco con bordes redondeados tipo app-icon -->
+        <rect width="200" height="200" rx="44" fill="#ffffff"/>
+        
+        <!-- Destellos / Estrellas del lado izquierdo -->
+        <!-- Destello 1 (Arriba izq - estrella de 4 puntas) -->
+        <path d="M 62 50 C 62 55 60 57 55 57 C 60 57 62 59 62 64 C 62 59 64 57 69 57 C 64 57 62 55 62 50 Z" fill="#3b82f6"/>
+        <!-- Píldoras / Destellos pequeños izq -->
+        <rect x="46" y="84" width="14" height="6" rx="3" fill="#3b82f6" transform="rotate(-18 46 84)"/>
+        <rect x="52" y="68" width="14" height="6" rx="3" fill="#3b82f6" transform="rotate(-48 52 68)"/>
+        <rect x="64" y="58" width="14" height="6" rx="3" fill="#3b82f6" transform="rotate(-70 64 58)"/>
 
-  <!-- ================= VISTA: APLICACIÓN INTERNA / DASHBOARD ================= -->
+        <!-- Destellos / Estrellas del lado derecho -->
+        <!-- Destello 2 (Arriba der - estrella de 4 puntas) -->
+        <path d="M 152 64 C 152 70 149 73 143 73 C 149 73 152 76 152 82 C 152 76 155 73 161 73 C 155 73 152 70 152 64 Z" fill="#3b82f6"/>
+        <!-- Píldoras / Destellos pequeños der -->
+        <rect x="156" y="78" width="14" height="6" rx="3" fill="#3b82f6" transform="rotate(-20 156 78)"/>
+        <rect x="152" y="94" width="14" height="6" rx="3" fill="#3b82f6" transform="rotate(35 152 94)"/>
+        <rect x="158" y="110" width="14" height="6" rx="3" fill="#3b82f6" transform="rotate(15 158 110)"/>
+
+        <!-- La 'M' Central Azul Vibrante con la base cóncava suave -->
+        <path d="M 38 130 
+                 C 38 115, 52 72, 70 72 
+                 C 84 72, 94 92, 100 100 
+                 C 106 92, 116 72, 130 72 
+                 C 148 72, 162 115, 162 130 
+                 C 140 136, 120 136, 100 120 
+                 C 80 136, 60 136, 38 130 Z" 
+              fill="#3b82f6"/>
+      </g>
+    </defs>
+  </svg>
+
+  <!-- ================= VISTA 1: LANDING PAGE (PÁGINA PRINCIPAL) ================= -->
+  <div id="landingView" class="relative">
+    <!-- Elementos decorativos del fondo -->
+    <i class="absolute right-[12%] top-[-60px] w-[180px] h-[130px] rounded-full bg-blue-400/20 rotate-[-20deg] pointer-events-none blur-xl"></i>
+    <i class="absolute right-[-40px] top-[-20px] w-[150px] h-[150px] rounded-full bg-indigo-400/20 pointer-events-none blur-lg"></i>
+    
+    <header class="top-landing flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <svg class="w-12 h-12 shadow-lg rounded-2xl"><use href="#mindclass-logo-graphic"/></svg>
+        <div>
+          <span class="font-black text-2xl tracking-tight text-slate-800">MindClass</span>
+          <span class="block text-[10px] font-bold text-blue-600 uppercase tracking-wider">I.E.P. Milagros de Dios</span>
+        </div>
+      </div>
+      <div class="hidden sm:flex items-center gap-2 bg-white/80 backdrop-blur border border-blue-200 px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-700 shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span>Secundaria Activa</span>
+      </div>
+    </header>
+
+    <main class="hero">
+      <!-- Columna Izquierda: Mensaje y Acción -->
+      <section class="space-y-2">
+        <h1><span class="slash"></span>¡Hola!<br>Somos <span class="hl">MindClass</span></h1>
+        
+        <p class="sub">Tu espacio interactivo para aprender, repasar y organizarte a tu ritmo con clases, flashcards y colaboración escolar.</p>
+        
+        <div class="pt-2">
+          <button onclick="openAuthModal()" class="gbtn group">
+            <span class="gt"><i>G</i></span>
+            <span class="gx">
+              <b>Continuar con Google</b>
+              <small>Acceso Institucional Seguro</small>
+            </span>
+            <i class="fa-solid fa-arrow-right ml-auto text-sm group-hover:translate-x-1 transition-transform"></i>
+          </button>
+          
+          <p class="note flex items-center gap-2">
+            <i class="fa-solid fa-shield-halved text-blue-600"></i>
+            <span>Usa tu correo institucional <b>@colegiomilagrosdedios.edu.pe</b></span>
+          </p>
+        </div>
+      </section>
+
+      <!-- Columna Derecha: Carrusel Interactivo de Imágenes Reales para el Equipo -->
+      <section class="relative">
+        <div class="stage-container relative">
+          
+          <!-- Slide 1 -->
+          <div class="carousel-slide active" id="slide-0">
+            <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80" alt="Estudiantes en Clase Digital">
+            <div class="slide-overlay"></div>
+            <div class="slide-caption">
+              <span class="bg-blue-600/90 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Aula Virtual</span>
+              <h3 class="text-xl font-bold mt-1">Aprende de forma colaborativa</h3>
+              <p class="text-xs text-slate-200 mt-0.5">Espacio adaptado para los alumnos de la I.E.P. Milagros de Dios.</p>
+            </div>
+          </div>
+
+          <!-- Slide 2 -->
+          <div class="carousel-slide" id="slide-1">
+            <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=1200&q=80" alt="Pomodoro y Tareas">
+            <div class="slide-overlay"></div>
+            <div class="slide-caption">
+              <span class="bg-pink-500/90 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Técnicas de Enfoque</span>
+              <h3 class="text-xl font-bold mt-1">Gestiona tu tiempo de estudio</h3>
+              <p class="text-xs text-slate-200 mt-0.5">Temporizador Pomodoro y lista interactiva de tareas.</p>
+            </div>
+          </div>
+
+          <!-- Slide 3 -->
+          <div class="carousel-slide" id="slide-2">
+            <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80" alt="Estudio en Grupo">
+            <div class="slide-overlay"></div>
+            <div class="slide-caption">
+              <span class="bg-purple-600/90 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">VozEscolar & Dudas</span>
+              <h3 class="text-xl font-bold mt-1">Comparte tus propuestas y apuntes</h3>
+              <p class="text-xs text-slate-200 mt-0.5">Participación directa y votación transparente por salón.</p>
+            </div>
+          </div>
+
+          <!-- Slide 4 -->
+          <div class="carousel-slide" id="slide-3">
+            <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80" alt="Clase de Ciencias">
+            <div class="slide-overlay"></div>
+            <div class="slide-caption">
+              <span class="bg-emerald-600/90 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Flashcards Interactivas</span>
+              <h3 class="text-xl font-bold mt-1">Refuerza tus conocimientos</h3>
+              <p class="text-xs text-slate-200 mt-0.5">Tarjetas dinámicas para repasar fórmulas y conceptos.</p>
+            </div>
+          </div>
+
+          <!-- Controles del Carrusel -->
+          <button onclick="prevSlide()" class="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/70 hover:bg-white text-slate-800 flex items-center justify-center shadow-lg backdrop-blur transition-all">
+            <i class="fa-solid fa-chevron-left text-sm"></i>
+          </button>
+          <button onclick="nextSlide()" class="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/70 hover:bg-white text-slate-800 flex items-center justify-center shadow-lg backdrop-blur transition-all">
+            <i class="fa-solid fa-chevron-right text-sm"></i>
+          </button>
+
+          <!-- Puntos Indicadores -->
+          <div class="absolute top-4 right-4 z-20 flex gap-1.5 bg-black/40 backdrop-blur px-3 py-1.5 rounded-full">
+            <button onclick="goToSlide(0)" class="w-2.5 h-2.5 rounded-full bg-white transition-all dot-indicator active" id="dot-0"></button>
+            <button onclick="goToSlide(1)" class="w-2.5 h-2.5 rounded-full bg-white/40 transition-all dot-indicator" id="dot-1"></button>
+            <button onclick="goToSlide(2)" class="w-2.5 h-2.5 rounded-full bg-white/40 transition-all dot-indicator" id="dot-2"></button>
+            <button onclick="goToSlide(3)" class="w-2.5 h-2.5 rounded-full bg-white/40 transition-all dot-indicator" id="dot-3"></button>
+          </div>
+
+          <!-- Mini Tarjeta de Información flotante sobre la imagen -->
+          <div class="absolute top-4 left-4 z-20 bg-white/90 backdrop-blur border border-white p-2.5 rounded-2xl shadow-lg flex items-center gap-3">
+            <svg class="w-8 h-8"><use href="#mindclass-logo-graphic"/></svg>
+            <div>
+              <p class="text-[10px] font-bold text-slate-500 uppercase">MindClass App</p>
+              <p class="text-xs font-bold text-blue-600">Comunidad Digital</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Modal de Autenticación / Selección de Aula -->
+    <div class="ov" id="authOverlay" role="dialog">
+      <div class="card">
+        <button onclick="closeAuthModal()" class="x-btn" aria-label="Cerrar">×</button>
+        
+        <div class="flex items-center gap-3 mb-5 border-b pb-3">
+          <svg class="w-11 h-11"><use href="#mindclass-logo-graphic"/></svg>
+          <div>
+            <b class="text-base text-slate-800 block">MindClass Portal</b>
+            <small class="text-xs text-slate-500 font-medium">I.E.P. Milagros de Dios</small>
+          </div>
+        </div>
+
+        <!-- Paso 1: Loader Simulando Conexión Google -->
+        <div class="stp on" id="s-load">
+          <h2 class="text-lg font-extrabold text-slate-800">Conectando con Google…</h2>
+          <p class="text-xs text-slate-500 mt-1">Verificando cuenta institucional institucional.</p>
+          <div class="spin-loader"></div>
+        </div>
+
+        <!-- Paso 2: Selección de Grado y Código de Aula -->
+        <form class="stp" id="s-aula" onsubmit="handleAulaSubmit(event)" novalidate>
+          <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-2 text-xl">
+            <i class="fa-solid fa-school"></i>
+          </div>
+          <h2 class="text-lg font-extrabold text-slate-800">Configura tu Aula</h2>
+          <p class="text-xs text-slate-500 mb-4">Selecciona tu grado académico e ingresa la clave asignada.</p>
+
+          <div class="text-left space-y-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1" for="grSelect">Grado Académico</label>
+              <select id="grSelect" required class="w-full p-2.5 bg-slate-50 border-2 border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-blue-500">
+                <option value="" disabled selected>Selecciona tu grado…</option>
+                <option value="1° Secundaria">1° Secundaria</option>
+                <option value="2° Secundaria">2° Secundaria</option>
+                <option value="3° Secundaria">3° Secundaria</option>
+                <option value="4° Secundaria">4° Secundaria</option>
+                <option value="5° Secundaria">5° Secundaria</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1" for="codeAuthInput">Código de Verificación de Aula</label>
+              <input id="codeAuthInput" type="password" placeholder="Ej. CMD-1S" autocomplete="off" required class="w-full p-2.5 bg-slate-50 border-2 border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:border-blue-500 uppercase">
+              <p class="text-[10px] text-slate-400 mt-1">Claves del colegio: CMD-1S a CMD-5S</p>
+            </div>
+
+            <div id="authErrorMsg" class="text-xs font-bold text-red-500 min-h-[1.2rem]"></div>
+
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-xs shadow-lg shadow-blue-500/30 transition-all">
+              Ingresar al Dashboard
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= VISTA 2: DASHBOARD Y APLICACIÓN INTERNA ================= -->
   <div id="appDashboard" class="hidden min-h-screen bg-darkBg text-slate-100 flex flex-col">
     <!-- Barra Superior -->
     <header class="bg-sidebarBg border-b border-borderBg px-6 py-3 flex items-center justify-between sticky top-0 z-40">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-accentBlue rounded-xl flex items-center justify-center text-white font-black text-lg">MC</div>
+        <svg class="w-9 h-9"><use href="#mindclass-logo-graphic"/></svg>
         <div>
-          <h2 class="font-bold text-white text-sm">MindClass</h2>
-          <p class="text-[10px] text-slate-400">Portal Estudiantil • Milagros de Dios</p>
+          <h2 class="font-bold text-white text-sm tracking-wide">MindClass</h2>
+          <p class="text-[10px] text-slate-400">Plataforma Educativa • Milagros de Dios</p>
         </div>
       </div>
       <div class="flex items-center gap-4">
         <div class="flex items-center gap-3 bg-darkBg border border-borderBg px-3 py-1.5 rounded-xl">
-          <div id="userAvatar" class="w-7 h-7 bg-accentBlue/20 text-accentBlue rounded-full flex items-center justify-center font-bold text-xs">U</div>
+          <div id="userAvatar" class="w-8 h-8 bg-blue-500/20 text-blue-400 rounded-full flex items-center justify-center font-bold text-xs border border-blue-500/40">U</div>
           <div class="text-left hidden sm:block">
             <p id="sidebarUserName" class="text-xs font-bold text-white leading-tight">Estudiante</p>
             <p id="sidebarUserGrade" class="text-[10px] text-slate-400 leading-tight">Grado</p>
@@ -68,55 +501,57 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
     <div class="flex-1 flex flex-col md:flex-row">
       <!-- Navegación Lateral -->
       <aside class="w-full md:w-64 bg-sidebarBg border-r border-borderBg p-4 flex md:flex-col justify-between gap-4">
-        <nav class="flex md:flex-col gap-1 w-full overflow-x-auto">
-          <button onclick="navigate('dashboard')" id="nav-dashboard" class="nav-btn w-full text-left px-4 py-3 rounded-xl font-bold text-xs text-white bg-accentBlue flex items-center gap-3 transition-colors shadow-md">
-            <i class="fa-solid fa-house w-4"></i><span>Inicio & Tareas</span>
+        <nav class="flex md:flex-col gap-1.5 w-full overflow-x-auto">
+          <button onclick="navigate('dashboard')" id="nav-dashboard" class="nav-btn w-full text-left px-4 py-3 rounded-xl font-bold text-xs text-white bg-blue-600 flex items-center gap-3 transition-colors shadow-md">
+            <i class="fa-solid fa-house w-4 text-center"></i><span>Inicio & Tareas</span>
           </button>
           <button onclick="navigate('aprende')" id="nav-aprende" class="nav-btn w-full text-left px-4 py-3 rounded-xl font-bold text-xs text-slate-400 hover:text-white hover:bg-cardBg flex items-center gap-3 transition-colors">
-            <i class="fa-solid fa-graduation-cap w-4"></i><span>Aprende Junto</span>
+            <i class="fa-solid fa-graduation-cap w-4 text-center"></i><span>Aprende Junto</span>
           </button>
           <button onclick="navigate('chat-salon')" id="nav-chat-salon" class="nav-btn w-full text-left px-4 py-3 rounded-xl font-bold text-xs text-slate-400 hover:text-white hover:bg-cardBg flex items-center gap-3 transition-colors">
-            <i class="fa-solid fa-comments w-4"></i><span>Chat de Salón</span>
+            <i class="fa-solid fa-comments w-4 text-center"></i><span>Chat de Salón</span>
           </button>
           <button onclick="navigate('voz-escolar')" id="nav-voz-escolar" class="nav-btn w-full text-left px-4 py-3 rounded-xl font-bold text-xs text-slate-400 hover:text-white hover:bg-cardBg flex items-center gap-3 transition-colors">
-            <i class="fa-solid fa-bullhorn w-4"></i><span>VozEscolar</span>
+            <i class="fa-solid fa-bullhorn w-4 text-center"></i><span>VozEscolar</span>
           </button>
         </nav>
-        <div class="hidden md:block bg-darkBg/60 border border-borderBg p-3 rounded-xl text-center space-y-1">
-          <p class="text-[10px] text-slate-400 font-medium">Soporte Académico</p>
-          <p class="text-[11px] font-bold text-accentBlue">I.E.P. Milagros de Dios</p>
+
+        <div class="hidden md:block bg-darkBg/60 border border-borderBg p-3.5 rounded-2xl text-center space-y-1">
+          <p class="text-[10px] text-slate-400 font-medium">I.E.P. Milagros de Dios</p>
+          <p class="text-[11px] font-bold text-blue-400">Soporte Académico Digital</p>
         </div>
       </aside>
 
       <!-- Contenido Principal -->
       <main class="flex-1 p-4 md:p-8 overflow-y-auto custom-scrollbar">
         
-        <!-- SECTION: DASHBOARD -->
+        <!-- SECTION 1: DASHBOARD DE INICIO & TAREAS -->
         <section id="sec-dashboard" class="content-sec space-y-6">
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Gestor de Tareas -->
             <div class="lg:col-span-2 bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4 shadow-xl">
               <div class="flex items-center justify-between">
                 <div>
-                  <h3 class="font-bold text-white text-sm">Mis Tareas y Fechas Límite</h3>
-                  <p class="text-xs text-slate-400">Organiza tus asignaciones y entregas pendientes.</p>
+                  <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-emerald-400"></i> Mis Tareas Personales
+                  </h3>
+                  <p class="text-xs text-slate-400">Organiza tus asignaciones con fecha límite.</p>
                 </div>
-                <span id="taskCounter" class="text-xs bg-accentBlue/20 text-accentBlue px-2.5 py-1 rounded-lg font-bold">0 tareas</span>
+                <span id="taskCounter" class="text-xs bg-blue-500/20 text-blue-400 px-2.5 py-1 rounded-lg font-bold border border-blue-500/30">0 pendientes</span>
               </div>
               
               <form onsubmit="handleCreateTask(event)" class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <input type="text" id="taskTitle" placeholder="Título de la tarea..." required class="bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
-                <select id="taskSubject" class="bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accentBlue">
+                <input type="text" id="taskTitle" placeholder="Nombre de la tarea..." required class="bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+                <select id="taskSubject" class="bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
                   <option value="Matemática">Matemática</option>
                   <option value="Comunicación">Comunicación</option>
                   <option value="Ciencia y Tecnología">Ciencia y Tecnología</option>
                   <option value="Historia">Historia</option>
                   <option value="Inglés">Inglés</option>
-                  <option value="Otro">Otro</option>
                 </select>
                 <div class="flex gap-2">
-                  <input type="date" id="taskDate" required class="bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-accentBlue flex-1">
-                  <button type="submit" class="bg-accentBlue hover:bg-accentBlue/80 text-white px-4 py-2 rounded-xl text-xs font-bold transition-colors">Agregar</button>
+                  <input type="date" id="taskDate" required class="bg-darkBg border border-borderBg rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 flex-1">
+                  <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition-colors">Agregar</button>
                 </div>
               </form>
 
@@ -128,18 +563,18 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
             <!-- Temporizador Pomodoro -->
             <div class="bg-cardBg border border-borderBg rounded-2xl p-5 flex flex-col items-center justify-between shadow-xl text-center">
               <div>
-                <h3 class="font-bold text-white text-sm">Temporizador de Enfoque</h3>
+                <h3 class="font-bold text-white text-sm">Temporizador Pomodoro</h3>
                 <p id="timerStatusLabel" class="text-[9px] text-slate-400 uppercase tracking-widest font-bold mt-0.5">Listo para iniciar</p>
               </div>
               
               <div class="relative w-40 h-40 flex items-center justify-center my-4">
                 <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
                   <circle cx="50" cy="50" r="42" stroke="#2f2c52" stroke-width="6" fill="none"></circle>
-                  <circle id="timerProgressCircle" cx="50" cy="50" r="42" stroke="#4f64f2" stroke-width="6" fill="none" stroke-dasharray="264" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000"></circle>
+                  <circle id="timerProgressCircle" cx="50" cy="50" r="42" stroke="#3b82f6" stroke-width="6" fill="none" stroke-dasharray="264" stroke-dashoffset="0" stroke-linecap="round" class="transition-all duration-1000"></circle>
                 </svg>
                 <div class="absolute flex flex-col items-center">
                   <span id="timerDisplay" class="text-2xl font-black text-white tracking-wider">25:00</span>
-                  <span class="text-[10px] text-slate-400 font-medium">Pomodoro</span>
+                  <span class="text-[10px] text-slate-400 font-medium">Bloque de Enfoque</span>
                 </div>
               </div>
 
@@ -152,77 +587,67 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
           </div>
         </section>
 
-        <!-- SECTION: APRENDE JUNTO -->
+        <!-- SECTION 2: APRENDE JUNTO -->
         <section id="sec-aprende" class="content-sec hidden space-y-6">
           <div class="bg-cardBg border border-borderBg rounded-2xl p-5 flex flex-col md:flex-row items-center justify-between gap-4">
             <div>
-              <div class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-accentBlue/10 border border-accentBlue/30 text-accentBlue text-[10px] font-bold uppercase tracking-wider mb-1">
-                Colaborativo
+              <div class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[10px] font-bold uppercase tracking-wider mb-1">
+                Colaboración Escolar
               </div>
-              <h3 class="font-bold text-white text-base">Aprende Junto - Banco Escolar</h3>
-              <p class="text-xs text-slate-400">Consulta dudas, repasa con tarjetas o comparte tus apuntes con todo el colegio.</p>
+              <h3 class="font-bold text-white text-base">Aprende Junto - Banco de Estudio</h3>
+              <p class="text-xs text-slate-400">Consulta dudas, repasa con flashcards interactivas y comparte apuntes.</p>
             </div>
-            <button onclick="openPublishModal()" class="bg-accentBlue hover:bg-accentBlue/80 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-colors shadow-lg shadow-accentBlue/20 flex items-center gap-2">
-              <i class="fa-solid fa-plus"></i><span id="publishBtnText">Publicar Duda</span>
+            <button onclick="openPublishModal()" class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-colors shadow-lg shadow-blue-500/20 flex items-center gap-2">
+              <i class="fa-solid fa-plus"></i><span id="publishBtnText">Publicar Recurso</span>
             </button>
           </div>
 
-          <!-- Pestañas de Aprendizaje -->
+          <!-- Pestañas -->
           <div class="flex border-b border-borderBg gap-2">
-            <button onclick="switchAprendeTab('dudas')" id="tab-dudas" class="aprende-tab-btn px-4 py-2.5 text-xs font-bold border-b-2 border-accentBlue text-white transition-colors">Dudas & Explicaciones</button>
-            <button onclick="switchAprendeTab('flashcards')" id="tab-flashcards" class="aprende-tab-btn px-4 py-2.5 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-white transition-colors">Flashcards Rápidas</button>
+            <button onclick="switchAprendeTab('dudas')" id="tab-dudas" class="aprende-tab-btn px-4 py-2.5 text-xs font-bold border-b-2 border-blue-500 text-white transition-colors">Dudas & Explicaciones</button>
+            <button onclick="switchAprendeTab('flashcards')" id="tab-flashcards" class="aprende-tab-btn px-4 py-2.5 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-white transition-colors">Flashcards Interactivas</button>
             <button onclick="switchAprendeTab('apuntes')" id="tab-apuntes" class="aprende-tab-btn px-4 py-2.5 text-xs font-bold border-b-2 border-transparent text-slate-400 hover:text-white transition-colors">Apuntes Compartidos</button>
           </div>
 
-          <!-- Contenido de Dudas -->
+          <!-- Subsección Dudas -->
           <div id="sub-dudas" class="aprende-sub-sec space-y-4">
             <div id="qFeedContainer" class="space-y-3">
-              <p class="text-xs text-slate-500 text-center py-8">Cargando publicaciones...</p>
+              <p class="text-xs text-slate-500 text-center py-8">Cargando consultas de la comunidad...</p>
             </div>
           </div>
 
-          <!-- Contenido de Flashcards -->
+          <!-- Subsección Flashcards -->
           <div id="sub-flashcards" class="aprende-sub-sec space-y-4 hidden">
-            <div class="flex justify-between items-center bg-cardBg border border-borderBg p-4 rounded-xl">
-              <div>
-                <h4 class="font-bold text-white text-xs">Tarjetas de Memoria Rápida (Flashcards)</h4>
-                <p class="text-[11px] text-slate-400">Haz clic en cualquier tarjeta para voltearla y ver la respuesta correcta.</p>
-              </div>
-              <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded font-bold border border-amber-500/30">Repaso Activo</span>
-            </div>
             <div id="flashcardsFeedContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
           </div>
 
-          <!-- Contenido de Apuntes -->
+          <!-- Subsección Apuntes -->
           <div id="sub-apuntes" class="aprende-sub-sec space-y-4 hidden">
             <div id="apuntesFeedContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
           </div>
         </section>
 
-        <!-- SECTION: CHAT DE SALÓN -->
+        <!-- SECTION 3: CHAT DE SALÓN -->
         <section id="sec-chat-salon" class="content-sec hidden space-y-4">
           <div class="bg-cardBg border border-borderBg rounded-2xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-3">
             <div>
-              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold uppercase tracking-wider mb-1">
-                CANAL DE AULA
-              </div>
               <h3 class="font-bold text-white text-base flex items-center gap-2">
-                <i class="fa-solid fa-comments text-emerald-400"></i> Chat de Salón - <span id="chatRoomTitle" class="text-accentBlue">Tu Grado</span>
+                <i class="fa-solid fa-comments text-emerald-400"></i> Chat de Salón - <span id="chatRoomTitle" class="text-blue-400">Tu Grado</span>
               </h3>
               <p class="text-xs text-slate-400">Mensajes en tiempo real exclusivos para los estudiantes de tu grado.</p>
             </div>
             <div class="bg-darkBg border border-borderBg px-3 py-1.5 rounded-xl text-xs text-slate-300 flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>Conectado en vivo</span>
+              <span>Conectado</span>
             </div>
           </div>
 
-          <div class="bg-cardBg border border-borderBg rounded-2xl flex flex-col h-[520px] overflow-hidden shadow-xl">
+          <div class="bg-cardBg border border-borderBg rounded-2xl flex flex-col h-[500px] overflow-hidden shadow-xl">
             <div id="chatMessagesContainer" class="flex-1 p-4 overflow-y-auto custom-scrollbar space-y-3 bg-darkBg/50">
-              <p class="text-xs text-slate-500 text-center py-8">Cargando conversación del salón...</p>
+              <p class="text-xs text-slate-500 text-center py-8">Cargando mensajes del salón...</p>
             </div>
             <form onsubmit="handleSendChatMessage(event)" class="p-3 bg-sidebarBg border-t border-borderBg flex gap-2 items-center">
-              <input type="text" id="chatInputMessage" placeholder="Escribe un mensaje para tu salón..." required autocomplete="off" class="flex-1 bg-darkBg border border-borderBg rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-accentBlue">
+              <input type="text" id="chatInputMessage" placeholder="Escribe un mensaje..." required autocomplete="off" class="flex-1 bg-darkBg border border-borderBg rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-blue-500">
               <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2.5 rounded-xl font-semibold text-xs transition-colors flex items-center gap-2 shadow-md">
                 <span>Enviar</span>
                 <i class="fa-solid fa-paper-plane text-xs"></i>
@@ -231,7 +656,7 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
           </div>
         </section>
 
-        <!-- SECTION: VOZ ESCOLAR -->
+        <!-- SECTION 4: VOZ ESCOLAR -->
         <section id="sec-voz-escolar" class="content-sec hidden space-y-6">
           <div class="bg-cardBg border border-borderBg rounded-2xl p-5 space-y-4">
             <div class="flex items-center gap-3 border-b border-borderBg pb-3">
@@ -239,19 +664,19 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
                 <i class="fa-solid fa-check-to-slot"></i>
               </div>
               <div>
-                <h3 class="font-bold text-white text-sm">VozEscolar - Buzón, Propuestas y Votación</h3>
-                <p class="text-xs text-slate-400">Comparte tus sugerencias y apoya las propuestas de tus compañeros votando (1 voto estricto por cuenta).</p>
+                <h3 class="font-bold text-white text-sm">VozEscolar - Propuestas y Votaciones</h3>
+                <p class="text-xs text-slate-400">Sugiere iniciativas para el colegio. Límite de 1 voto por estudiante.</p>
               </div>
             </div>
 
             <form onsubmit="handleVozEscolarSubmit(event)" class="space-y-3 max-w-xl">
               <div>
-                <label class="block text-xs font-medium text-slate-300 mb-1">Título de tu propuesta o sugerencia</label>
-                <input type="text" id="vozTitle" placeholder="Ej. Propuesta para campeonatos deportivos" required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                <label class="block text-xs font-medium text-slate-300 mb-1">Título de la propuesta</label>
+                <input type="text" id="vozTitle" placeholder="Ej. Implementación de talleres de robótica..." required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-purple-500">
               </div>
               <div>
-                <label class="block text-xs font-medium text-slate-300 mb-1">Descripción detallada</label>
-                <textarea id="vozDesc" rows="3" placeholder="Explica en qué consiste tu idea..." required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-purple-500 resize-none"></textarea>
+                <label class="block text-xs font-medium text-slate-300 mb-1">Fundamento / Descripción</label>
+                <textarea id="vozDesc" rows="3" placeholder="Explica cómo beneficiaría a los estudiantes..." required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-purple-500 resize-none"></textarea>
               </div>
               <button type="submit" class="bg-purple-600 hover:bg-purple-500 text-white font-semibold px-5 py-2 rounded-xl text-xs transition-colors shadow-md shadow-purple-600/20">
                 Publicar Propuesta
@@ -259,7 +684,7 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
             </form>
 
             <div class="pt-4 space-y-3">
-              <h4 class="font-bold text-white text-xs">Propuestas activas y Votación en vivo</h4>
+              <h4 class="font-bold text-white text-xs">Propuestas Estudiantiles</h4>
               <div id="vozFeedContainer" class="space-y-3"></div>
             </div>
           </div>
@@ -269,255 +694,41 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
     </div>
   </div>
 
-  <!-- Modal Universal de Publicación para Aprende -->
+  <!-- Modal Universal de Publicación para "Aprende Junto" -->
   <div id="publishModal" class="fixed inset-0 z-50 hidden grid place-items-center bg-black/60 backdrop-blur-sm p-4">
     <div class="bg-cardBg border border-borderBg rounded-2xl p-6 w-full max-w-lg space-y-4 shadow-2xl relative">
       <button onclick="togglePublishModal(false)" class="absolute top-4 right-4 text-slate-400 hover:text-white text-base"><i class="fa-solid fa-xmark"></i></button>
-      <h3 id="modalTitle" class="font-bold text-white text-base flex items-center gap-2">Publicar Contenido</h3>
+      <h3 id="modalTitle" class="font-bold text-white text-base flex items-center gap-2">Publicar Recurso</h3>
       <form onsubmit="handleUniversalPublish(event)" class="space-y-3">
         <div>
-          <label class="block text-xs font-medium text-slate-300 mb-1">Materia o Categoría</label>
-          <select id="pubSubject" required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-accentBlue">
+          <label class="block text-xs font-medium text-slate-300 mb-1">Materia</label>
+          <select id="pubSubject" required class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-blue-500">
             <option value="Matemática">Matemática</option>
             <option value="Comunicación">Comunicación</option>
             <option value="Ciencia y Tecnología">Ciencia y Tecnología</option>
             <option value="Historia">Historia</option>
             <option value="Inglés">Inglés</option>
-            <option value="Otro">Otro</option>
           </select>
         </div>
         <div>
           <label id="labelPubTitle" class="block text-xs font-medium text-slate-300 mb-1">Título</label>
-          <input type="text" id="pubTitle" required placeholder="Escribe un título descriptivo..." class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-accentBlue">
+          <input type="text" id="pubTitle" required placeholder="Título explicativo..." class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-blue-500">
         </div>
         <div>
           <label id="labelPubContent" class="block text-xs font-medium text-slate-300 mb-1">Contenido / Respuesta</label>
-          <textarea id="pubContent" rows="4" required placeholder="Escribe el detalle..." class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-accentBlue resize-none"></textarea>
+          <textarea id="pubContent" rows="4" required placeholder="Escribe aquí los detalles..." class="w-full bg-darkBg border border-borderBg rounded-xl p-2.5 text-xs text-white focus:outline-none focus:border-blue-500 resize-none"></textarea>
         </div>
         <div class="flex justify-end gap-2 pt-2">
           <button type="button" onclick="togglePublishModal(false)" class="bg-darkBg border border-borderBg hover:bg-borderBg text-slate-300 px-4 py-2 rounded-xl text-xs font-semibold">Cancelar</button>
-          <button type="submit" class="bg-accentBlue hover:bg-accentBlue/85 text-white px-5 py-2 rounded-xl text-xs font-bold">Publicar Ahora</button>
+          <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded-xl text-xs font-bold">Publicar Ahora</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- SCRIPT DEL WEB COMPONENT DE LA COMPAÑERA Y LÓGICA DE FIREBASE -->
+  <!-- SCRIPT INTEGRADO Y LÓGICA DE APLICACIÓN -->
   <script>
-    /* ===== Definición del Web Component de la Landing Page ===== */
-    class MindClassLanding extends HTMLElement {
-      connectedCallback() {
-        const RUTA = '/img';
-        const INTERVALO = 7000;
-        const COLEGIO = 'I.E.P. Milagros de Dios';
-        const CORREO = '@colegiomilagrosdedios.edu.pe';
-        const CODIGOS = {'1° Secundaria':'CMD-1S','2° Secundaria':'CMD-2S','3° Secundaria':'CMD-3S','4° Secundaria':'CMD-4S','5° Secundaria':'CMD-5S'};
-
-        const g=(n,e,f=n)=>({n,e,s:`${RUTA}/${f}.gif`});
-        const V=[
-        ['panqueque','🥞',1077,976,'#000',[44.197,49.078,59.146,48.566],1.671,[25.998,46.107,13.928,16.393],['M392 604q6-8 12 0t12-6t10 4',2.2]],
-        ['croissant','🥐',1077,976,'#000',[44.197,48.77,59.146,48.566],1.671,[25.998,46.107,13.928,16.393],['M392 604q6-8 12 0t12-6t10 4',2.2]],
-        ['cupcake','🧁',1109,960,'#000',[42.471,46.146,61.136,45.521],1.623,[25.699,48.958,10.821,13.75]],
-        ['cereza','🍒',1109,960,'#3a3a3c',[44.815,53.125,57.169,52.812],2.164,[34.716,66.667,9.468,10.938],['M474 742q6-7 11 0t11-5t9 3',2.2]],
-        ['aguacate','🥑',768,1364,'#111',[46.875,51.613,52.865,51.906],1.823,[31.25,50.22,8.464,8.431],['M292 796q4-5 8 0t8-4t6 3',1.6]]];
-        
-        const vivo=([n,e,W,H,c,o,r,m,z])=>({n,e,j:`${RUTA}/${n}.jpg`,h:`<div class="aw" style="aspect-ratio:${W}/${H};width:min(100cqw,calc(100cqh*${W}/${H}))"><img src="${RUTA}/${n}.jpg" alt="${n}">`+(z?`<svg viewBox="0 0 ${W} ${H}"><path class="al" stroke-width="${z[1]}" d="${z[0]}"/></svg>`:'')+[0,2].map(k=>`<i class="ae" style="background:${c};left:${o[k]}%;top:${o[k+1]}%;width:${r}%"></i>`).join('')+`<img class="as" style="left:${m[0]}%;top:${m[1]}%;width:${m[2]}%;height:${m[3]}%" src="${RUTA}/${n}_mano.png" alt="">`+`</div>`});
-        const A=[g('pastel','🍰'),vivo(V[0]),g('arándano','🫐','arandano'),vivo(V[1]),g('lima','🍋'),vivo(V[2]),g('uvas','🍇'),vivo(V[3]),g('fresa','🍓'),vivo(V[4])];
-
-        const ST='<svg viewBox="0 0 100 100" fill="currentColor" stroke="currentColor" stroke-width="10" stroke-linejoin="round"><polygon points="50,10 61,38 91,38 67,56 76,87 50,69 24,87 33,56 9,38 39,38"/></svg>';
-        
-        const CSS=`
-        :host{display:block;position:relative;overflow:hidden;min-height:100vh;background:#e6e5fc;color:#2a2a2d;font:500 16px/1.4 'Outfit',system-ui,sans-serif;text-align:left;--pink:#ff2d5f;--blue:#4f64f2;--violet:#8e90f2;--soft:#c9c7f5}
-        *{box-sizing:border-box;margin:0;padding:0}
-        [hidden]{display:none!important}
-        .top{position:relative;z-index:5;padding:1.6rem 4vw 0}
-        .corner{display:block;width:56px;height:56px;border-radius:16px;box-shadow:0 8px 20px rgba(79,100,242,.22)}
-        .hero{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:3vw;align-items:center;padding:1rem 4vw 4rem;min-height:calc(100vh - 82px)}
-        h1{position:relative;font-size:clamp(3rem,7.2vw,6.6rem);line-height:.98;font-weight:800;letter-spacing:-.02em}
-        .slash{position:absolute;left:-.12em;top:.02em;width:.6em;height:.17em;background:var(--pink);border-radius:.09em;transform:rotate(40deg);mix-blend-mode:multiply;opacity:.92}
-        .hl{position:relative;z-index:0;display:inline-block}
-        .hl::before{content:"";position:absolute;z-index:-1;inset:.08em -.1em -.04em .02em;background:var(--soft);border-radius:.18em;transform:translate(.08em,.1em)}
-        .sub{margin:1.6rem 0 1.8rem;font-weight:600;max-width:34rem}
-        .note{margin-top:1.3rem;font-size:.82rem;font-weight:600}
-        .gbtn{display:inline-flex;align-items:center;gap:.9rem;min-width:min(100%,21rem);padding:.8rem 1.2rem;border:0;border-radius:14px;cursor:pointer;font:700 .95rem 'Outfit',sans-serif;text-align:left;color:#fff;background:linear-gradient(135deg,#ff2d5f,#e0334f);outline:2px dashed var(--pink);outline-offset:5px;transition:transform .2s}
-        .gbtn:hover{transform:translateY(-3px) rotate(-1deg)}
-        .gbtn svg{width:18px;height:18px;margin-left:auto}
-        .gt{width:36px;height:36px;border-radius:10px;background:#fff;display:grid;place-items:center}.gt i{font-style:normal;font-weight:800;font-size:1.2rem;color:#4285f4}
-        .gx b{display:block;font-size:.98rem}.gx small{font-size:.72rem;font-weight:500;opacity:.9}
-        .right{position:relative}
-        .stage{position:relative;height:clamp(380px,72vh,640px);border-radius:40px;background:linear-gradient(160deg,#c6cdff,#e9e6ff 60%,#f4f2ff);overflow:hidden}
-        .slide,.slot{position:absolute;inset:14px;opacity:0;transition:opacity .9s;mix-blend-mode:multiply;filter:brightness(1.1)}
-        .slide{width:calc(100% - 28px);height:calc(100% - 28px);object-fit:contain}
-        .slot{display:flex;align-items:center;justify-content:center;container-type:size}
-        .on{opacity:1}.slot:not(.on) *{animation-play-state:paused!important}
-        .aw{position:relative;transform-origin:50% 100%;animation:abr 3.2s ease-in-out infinite}
-        .aw img,.aw svg{position:absolute;inset:0;width:100%;height:100%}
-        .aw .as{inset:auto;animation:awr .55s ease-in-out infinite}
-        .ae{position:absolute;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);animation:alook 7s ease-in-out infinite,abl 4.5s infinite}
-        .al{stroke:#555;fill:none;stroke-linecap:round;stroke-dasharray:60;animation:adr 2.4s linear infinite}
-        @keyframes abr{50%{transform:scaleY(1.012)}}
-        @keyframes alook{0%,12%{margin:0}22%,40%{margin:.6% -.9%}50%,62%{margin:1.1% .2%}72%,85%{margin:-.2% 1%}100%{margin:0}}
-        @keyframes abl{0%,93%,100%{transform:translate(-50%,-50%)}96%{transform:translate(-50%,-50%) scaleY(.1)}}
-        @keyframes awr{0%,100%{transform:none}25%{transform:translate(1.2%,-1%)}50%{transform:translate(-.4%,.5%)}75%{transform:translate(1.4%,-.2%)}}
-        @keyframes adr{0%{stroke-dashoffset:60;opacity:1}70%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
-        .tag{position:absolute;z-index:3;left:18px;top:16px;background:rgba(255,255,255,.85);padding:.35rem .85rem;border-radius:999px;font-size:.75rem;font-weight:700}
-        .tag:empty{display:none}
-        .dots{display:flex;justify-content:center;gap:.5rem;margin-top:1rem}
-        .dots button{width:10px;height:10px;border:0;border-radius:99px;background:var(--soft);cursor:pointer;transition:all .3s}
-        .dots .on{width:28px;background:var(--pink)}
-        .star{position:absolute;z-index:3;pointer-events:none;animation:bob 5s ease-in-out infinite}
-        .star svg{display:block;width:100%;height:auto}
-        .s1{width:74px;left:-34px;top:8%;color:var(--blue)}.s2{width:34px;left:6%;top:30%;color:var(--violet);animation-delay:-1s}
-        .s3{width:92px;right:-22px;bottom:-24px;color:var(--pink);animation-delay:-2s}.s4{width:70px;left:9%;bottom:-8px;color:var(--violet);animation-delay:-3s}
-        .s5{width:30px;left:3%;bottom:14%;color:var(--pink);animation-delay:-4s}
-        @keyframes bob{50%{transform:translateY(-10px) rotate(8deg)}}
-        .sq{position:absolute;z-index:1;width:28px;height:150px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='28'%3E%3Cpath d='M7 0q-6 7 0 14t0 14' fill='none' stroke='%23b9b7ee' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E")}
-        .blob{position:absolute;z-index:1;border-radius:50%;background:var(--blue)}
-        .pencil{position:absolute;z-index:3;left:44%;top:19%;width:46px;color:var(--blue);transform:rotate(25deg)}
-        .ov{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:1rem;background:rgba(32,30,60,.5);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .25s}
-        .ov.on{opacity:1;pointer-events:auto}
-        .card{position:relative;width:min(100%,26rem);background:#fff;border-radius:28px;padding:1.8rem;box-shadow:0 30px 80px rgba(60,60,160,.35);transform:translateY(14px) scale(.98);transition:transform .25s}
-        .ov.on .card{transform:none}
-        .x{position:absolute;right:14px;top:12px;border:0;background:#e6e5fc;color:#2a2a2d;width:34px;height:34px;border-radius:50%;font-size:1.1rem;cursor:pointer}
-        .brand{display:flex;gap:.7rem;align-items:center;margin-bottom:1.3rem}
-        .logo{width:46px;height:46px;border-radius:12px}
-        .brand b{display:block}.brand small{font-size:.72rem;color:#6d6b8a}
-        .stp{display:none;text-align:center}.stp.on{display:block}
-        .stp h2{font-size:1.5rem;font-weight:800;margin:.6rem 0 .4rem}.stp p{font-size:.88rem;color:#5d5b7a;line-height:1.45}
-        .ico{width:56px;height:56px;margin:0 auto;border-radius:16px;background:#e8edff;color:#2f5ce8;display:grid;place-items:center}.ico svg{width:28px;height:28px}
-        .lbl{display:block;text-align:left;font-weight:700;font-size:.85rem;margin:1rem 0 .4rem}
-        select,input{width:100%;padding:.8rem 1rem;border:2px solid #e3e1f7;border-radius:12px;font:inherit;color:#2a2a2d;background:#faf9ff}
-        select:focus,input:focus{outline:0;border-color:var(--blue)}
-        input.bad{border-color:#e0334f}
-        .err{color:#e0334f;font-size:.8rem;text-align:left;min-height:1.3rem;margin-top:.4rem;font-weight:600}
-        .go{width:100%;margin-top:.5rem;padding:.9rem;border:0;border-radius:12px;background:#2f5ce8;color:#fff;font:700 .95rem 'Outfit',sans-serif;cursor:pointer}
-        .spin{width:44px;height:44px;margin:1.2rem auto;border:4px solid var(--soft);border-top-color:var(--pink);border-radius:50%;animation:sp 1s linear infinite}
-        @keyframes sp{to{transform:rotate(360deg)}}
-        .shake{animation:sh .35s}@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-        `;
-
-        this.attachShadow({mode:'open'}).innerHTML=`<style>${CSS}</style>
-        <i class="blob" style="right:14%;top:-70px;width:150px;height:110px;transform:rotate(-20deg)"></i>
-        <i class="blob" style="right:-50px;top:-35px;width:130px;height:130px"></i>
-        <i class="sq" style="left:2%;top:110px"></i><i class="sq" style="left:1.5%;bottom:60px"></i><i class="sq" style="left:49%;bottom:40px"></i>
-        <header class="top"><img class="corner" src="${RUTA}/logo.png" alt="MindClass"></header>
-        <main class="hero">
-        <section>
-        <h1><span class="slash"></span>¡Hola!<br>Somos <span class="hl">MindClass</span></h1>
-        <svg class="pencil" viewBox="0 0 40 90" fill="currentColor"><path d="M12 0h16a4 4 0 0 1 4 4v8H8V4a4 4 0 0 1 4-4zM8 17h24v46H8zM8 68h24L20 90z"/></svg>
-        <p class="sub">Tu espacio para aprender y practicar a tu ritmo, con clases cortas, claras y sin estrés.</p>
-        <button class="gbtn" id="goG" type="button"><span class="gt"><i>G</i></span><span class="gx"><b>continuar con google</b><small>acceso institucional seguro</small></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-        <p class="note">✉ usa tu correo <b>${CORREO}</b></p>
-        </section>
-        <section class="right">
-        <div class="stage"><span class="tag" id="tag"></span>
-        ${A.map((o,i)=>o.j?`<div class="slot${i===0?' on':''}" data-i="${i}">${o.h}</div>`:`<img class="slide${i===0?' on':''}" src="${o.s}" alt="${o.n}" data-i="${i}">`).join('')}
-        </div>
-        <div class="dots">${A.map((_,i)=>`<button${i===0?' class="on"':''} data-i="${i}"></button>`).join('')}</div>
-        <i class="star s1">${ST}</i><i class="star s2">${ST}</i><i class="star s3">${ST}</i>
-        </section>
-        <i class="star s4">${ST}</i><i class="star s5">${ST}</i>
-        </main>
-        <div class="ov" id="ov" role="dialog" aria-modal="true" aria-label="Acceso institucional"><div class="card">
-        <button class="x" id="cl" type="button" aria-label="Cerrar">×</button>
-        <div class="brand"><img class="logo" src="${RUTA}/logo.png" alt="MindClass"><div><b>MindClass</b><small>${COLEGIO}</small></div></div>
-        <div class="stp on" id="s-load"><h2>Conectando con Google…</h2><p>Accediendo con tu cuenta institucional.</p><div class="spin"></div></div>
-        <form class="stp" id="s-aula" novalidate><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6"/></svg></div>
-        <h2>Configura tu Aula</h2><p>Selecciona tu grado e ingresa el código de acceso.</p>
-        <label class="lbl" for="gr">Grado Académico</label>
-        <select id="gr" required><option value="" disabled selected>Selecciona tu grado…</option>${Object.keys(CODIGOS).map(k=>`<option value="${k}">${k}</option>`).join('')}</select>
-        <label class="lbl" for="co">Código de Aula</label>
-        <input id="co" type="password" placeholder="Ej. CMD-2S" autocomplete="off" required>
-        <div class="err" id="er"></div>
-        <button class="go" type="submit">Ingresar a MindClass</button>
-        </form>
-        </div></div>`;
-
-        const s=this.shadowRoot,
-              els=[...s.querySelectorAll('.slide, .slot')],
-              dots=[...s.querySelectorAll('.dots button')],
-              tag=s.getElementById('tag'),
-              ov=s.getElementById('ov'),
-              go=s.getElementById('goG'),
-              cl=s.getElementById('cl'),
-              sLoad=s.getElementById('s-load'),
-              sAula=s.getElementById('s-aula'),
-              gr=s.getElementById('gr'),
-              co=s.getElementById('co'),
-              er=s.getElementById('er');
-
-        let c=0,t=null;
-        const set=(i)=>{els[c].classList.remove('on');dots[c].classList.remove('on');c=i;els[c].classList.add('on');dots[c].classList.add('on');tag.textContent=A[c].e||''};
-        const run=()=>{t=setInterval(()=>set((c+1)%A.length),INTERVALO)};
-        set(0);run();
-        
-        s.querySelector('.stage').onmouseenter=()=>clearInterval(t);
-        s.querySelector('.stage').onmouseleave=run;
-        dots.forEach((b,i)=>b.onclick=()=>{set(i);clearInterval(t);run()});
-
-        go.onclick=()=>{
-          ov.classList.add('on');
-          sLoad.classList.add('on');
-          sAula.classList.remove('on');
-          
-          firebase.auth().signInWithPopup(provider)
-            .then((result) => {
-              const user = result.user;
-              if (!user.email.endsWith(CORREO)) {
-                firebase.auth().signOut();
-                ov.classList.remove('on');
-                alert("Acceso denegado: Debes iniciar sesión con tu correo institucional " + CORREO);
-                return;
-              }
-              window.currentUser = {
-                id: user.uid,
-                name: user.displayName || 'Estudiante',
-                email: user.email,
-                photo: user.photoURL,
-                grade: null
-              };
-              setTimeout(()=>{ sLoad.classList.remove('on'); sAula.classList.add('on'); }, 800);
-            })
-            .catch(() => {
-              setTimeout(()=>{ sLoad.classList.remove('on'); sAula.classList.add('on'); }, 800);
-            });
-        };
-
-        cl.onclick=()=>ov.classList.remove('on');
-
-        sAula.onsubmit=(e)=>{
-          e.preventDefault();
-          if(!gr.value||co.value.trim().toUpperCase()!==CODIGOS[gr.value]){
-            co.classList.add('bad');
-            er.textContent='Código de aula incorrecto para el grado seleccionado.';
-            co.parentElement.classList.add('shake');
-            setTimeout(()=>co.parentElement.classList.remove('shake'),350);
-            return;
-          }
-          er.textContent='';
-          ov.classList.remove('on');
-          
-          if(!window.currentUser) {
-            window.currentUser = {
-              id: 'user_' + Date.now(),
-              name: 'Estudiante Milagros de Dios',
-              email: 'estudiante' + CORREO,
-              photo: null,
-              grade: gr.value
-            };
-          } else {
-            window.currentUser.grade = gr.value;
-          }
-
-          localStorage.setItem('mindclass_user', JSON.stringify(window.currentUser));
-          document.getElementById('landingView').remove();
-          enterDashboard();
-        };
-      }
-    }
-    customElements.define('mindclass-landing', MindClassLanding);
-
-    /* ===== Configuración de Firebase y App ===== */
+    /* ===== Configuración de Firebase RTDB (Modo Seguro) ===== */
     const firebaseConfig = {
       apiKey: "AIzaSyDjn7AUD5eUF_DHYoPCmzoC8DLozqwY4KE",
       authDomain: "mindclass-13r11.firebaseapp.com",
@@ -525,8 +736,7 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
       projectId: "mindclass-13r11",
       storageBucket: "mindclass-13r11.firebasestorage.app",
       messagingSenderId: "86015013267",
-      appId: "1:86015013267:web:cd4f64fdc91b536fb3b866",
-      measurementId: "G-YGW2VHE6QN"
+      appId: "1:86015013267:web:cd4f64fdc91b536fb3b866"
     };
 
     if (!firebase.apps.length) {
@@ -534,10 +744,89 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
     }
     
     const database = firebase.database();
-    const provider = new firebase.auth.GoogleAuthProvider();
+    const VALID_GRADE_CODES = {
+      "1° Secundaria": "CMD-1S",
+      "2° Secundaria": "CMD-2S",
+      "3° Secundaria": "CMD-3S",
+      "4° Secundaria": "CMD-4S",
+      "5° Secundaria": "CMD-5S"
+    };
 
     let currentUser = JSON.parse(localStorage.getItem('mindclass_user')) || null;
     let currentAprendeTab = 'dudas';
+    let currentSlide = 0;
+    let slideTimer = null;
+
+    /* ===== Funciones del Carrusel de Imágenes ===== */
+    function showSlide(index) {
+      const slides = document.querySelectorAll('.carousel-slide');
+      const dots = document.querySelectorAll('.dot-indicator');
+      if (!slides.length) return;
+
+      slides.forEach(s => s.classList.remove('active'));
+      dots.forEach(d => {
+        d.classList.remove('active', 'bg-white');
+        d.classList.add('bg-white/40');
+      });
+
+      currentSlide = (index + slides.length) % slides.length;
+      slides[currentSlide].classList.add('active');
+      dots[currentSlide].classList.add('active', 'bg-white');
+      dots[currentSlide].classList.remove('bg-white/40');
+    }
+
+    function nextSlide() { showSlide(currentSlide + 1); }
+    function prevSlide() { showSlide(currentSlide - 1); }
+    function goToSlide(i) { showSlide(i); resetCarouselAutoPlay(); }
+
+    function resetCarouselAutoPlay() {
+      clearInterval(slideTimer);
+      slideTimer = setInterval(nextSlide, 5000);
+    }
+
+    /* ===== Funciones de Autenticación ===== */
+    function openAuthModal() {
+      const modal = document.getElementById('authOverlay');
+      const sLoad = document.getElementById('s-load');
+      const sAula = document.getElementById('s-aula');
+      
+      modal.classList.add('on');
+      sLoad.classList.add('on');
+      sAula.classList.remove('on');
+
+      setTimeout(() => {
+        sLoad.classList.remove('on');
+        sAula.classList.add('on');
+      }, 1200);
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authOverlay').classList.remove('on');
+    }
+
+    function handleAulaSubmit(e) {
+      e.preventDefault();
+      const gr = document.getElementById('grSelect').value;
+      const code = document.getElementById('codeAuthInput').value.trim().toUpperCase();
+      const errEl = document.getElementById('authErrorMsg');
+
+      if (!gr || VALID_GRADE_CODES[gr] !== code) {
+        errEl.textContent = 'Código de aula incorrecto para ' + (gr || 'el grado seleccionado') + '.';
+        return;
+      }
+
+      errEl.textContent = '';
+      currentUser = {
+        id: 'usr_' + Date.now(),
+        name: 'Estudiante Milagros de Dios',
+        email: 'alumno@colegiomilagrosdedios.edu.pe',
+        grade: gr
+      };
+
+      localStorage.setItem('mindclass_user', JSON.stringify(currentUser));
+      closeAuthModal();
+      enterDashboard();
+    }
 
     function getUserUniqueKey() {
       if (!currentUser || !currentUser.email) return null;
@@ -545,13 +834,14 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+      resetCarouselAutoPlay();
       if (currentUser && currentUser.grade) {
-        document.getElementById('landingView').remove();
         enterDashboard();
       }
     });
 
     function enterDashboard() {
+      document.getElementById('landingView').classList.add('hidden');
       document.getElementById('appDashboard').classList.remove('hidden');
       updateUserUI();
       initFirebaseListeners();
@@ -561,36 +851,24 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
 
     function updateUserUI() {
       if (!currentUser) return;
-      const sidebarName = document.getElementById('sidebarUserName');
-      if (sidebarName) sidebarName.textContent = currentUser.name;
-
-      const sidebarGrade = document.getElementById('sidebarUserGrade');
-      if (sidebarGrade) sidebarGrade.textContent = 'Grado: ' + currentUser.grade;
-
-      const avatar = document.getElementById('userAvatar');
-      if (avatar) {
-        if (currentUser.photo) {
-          avatar.innerHTML = `<img src="${currentUser.photo}" class="w-full h-full rounded-full object-cover">`;
-        } else {
-          avatar.textContent = currentUser.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-        }
-      }
+      document.getElementById('sidebarUserName').textContent = currentUser.name;
+      document.getElementById('sidebarUserGrade').textContent = 'Grado: ' + currentUser.grade;
+      document.getElementById('userAvatar').textContent = currentUser.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
     }
 
     function navigate(sectionId) {
       document.querySelectorAll('.content-sec').forEach(sec => sec.classList.add('hidden'));
-      const target = document.getElementById('sec-' + sectionId);
-      if (target) target.classList.remove('hidden');
+      document.getElementById('sec-' + sectionId).classList.remove('hidden');
 
       document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.remove('bg-accentBlue', 'text-white', 'shadow-md');
+        btn.classList.remove('bg-blue-600', 'text-white', 'shadow-md');
         btn.classList.add('text-slate-400');
       });
 
       const activeNav = document.getElementById('nav-' + sectionId);
       if (activeNav) {
         activeNav.classList.remove('text-slate-400');
-        activeNav.classList.add('bg-accentBlue', 'text-white', 'shadow-md');
+        activeNav.classList.add('bg-blue-600', 'text-white', 'shadow-md');
       }
 
       if (sectionId === 'chat-salon') initChatSalonListener();
@@ -600,68 +878,29 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
     function switchAprendeTab(tabId) {
       currentAprendeTab = tabId;
       document.querySelectorAll('.aprende-sub-sec').forEach(sec => sec.classList.add('hidden'));
-      const target = document.getElementById('sub-' + tabId);
-      if (target) target.classList.remove('hidden');
+      document.getElementById('sub-' + tabId).classList.remove('hidden');
 
       document.querySelectorAll('.aprende-tab-btn').forEach(btn => {
-        btn.classList.remove('text-white', 'border-accentBlue');
+        btn.classList.remove('text-white', 'border-blue-500');
         btn.classList.add('text-slate-400', 'border-transparent');
       });
 
       const activeTab = document.getElementById('tab-' + tabId);
-      if (activeTab) {
-        activeTab.classList.remove('text-slate-400', 'border-transparent');
-        activeTab.classList.add('text-white', 'border-accentBlue');
-      }
-
-      const btnText = document.getElementById('publishBtnText');
-      if (btnText) {
-        if (tabId === 'dudas') btnText.textContent = 'Publicar Duda';
-        else if (tabId === 'flashcards') btnText.textContent = 'Crear Flashcard';
-        else if (tabId === 'apuntes') btnText.textContent = 'Compartir Apunte';
-      }
+      activeTab.classList.remove('text-slate-400', 'border-transparent');
+      activeTab.classList.add('text-white', 'border-blue-500');
     }
 
     function openPublishModal() {
-      const modal = document.getElementById('publishModal');
-      const titleEl = document.getElementById('modalTitle');
-      const labelTitle = document.getElementById('labelPubTitle');
-      const labelContent = document.getElementById('labelPubContent');
-      const inputTitle = document.getElementById('pubTitle');
-      const inputContent = document.getElementById('pubContent');
-
-      if (currentAprendeTab === 'flashcards') {
-        titleEl.innerHTML = `<i class="fa-solid fa-bolt text-accentBlue"></i> Crear Nueva Flashcard`;
-        labelTitle.textContent = "Pregunta o Término";
-        inputTitle.placeholder = "Ej. ¿Cuál es la fórmula del área del círculo?";
-        labelContent.textContent = "Respuesta / Fórmula Correcta";
-        inputContent.placeholder = "Ej. A = π · r²";
-      } else if (currentAprendeTab === 'apuntes') {
-        titleEl.innerHTML = `<i class="fa-solid fa-book-open text-accentBlue"></i> Compartir Apunte o Resumen`;
-        labelTitle.textContent = "Título del Resumen o Ficha";
-        inputTitle.placeholder = "Ej. Resumen de Revolución Francesa";
-        labelContent.textContent = "Descripción o Puntos Clave";
-        inputContent.placeholder = "Escribe los puntos clave...";
-      } else {
-        titleEl.innerHTML = `<i class="fa-solid fa-pen-to-square text-accentBlue"></i> Publicar en Dudas & Explicaciones`;
-        labelTitle.textContent = "Título de la Duda";
-        inputTitle.placeholder = "Ej. ¿Por qué el resultado es negativo?";
-        labelContent.textContent = "Detalle / Procedimiento";
-        inputContent.placeholder = "Explica detalladamente tu consulta...";
-      }
-
-      if (modal) modal.classList.remove('hidden');
+      document.getElementById('publishModal').classList.remove('hidden');
     }
 
     function togglePublishModal(show) {
       const modal = document.getElementById('publishModal');
-      if (modal) {
-        if (show) modal.classList.remove('hidden');
-        else modal.classList.add('hidden');
-      }
+      if (show) modal.classList.remove('hidden');
+      else modal.classList.add('hidden');
     }
 
-    // GESTOR DE TAREAS
+    /* ===== Gestor de Tareas Personales ===== */
     function handleCreateTask(e) {
       e.preventDefault();
       const userKey = getUserUniqueKey();
@@ -671,14 +910,7 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
       const subject = document.getElementById('taskSubject').value;
       const date = document.getElementById('taskDate').value;
 
-      const newTask = {
-        id: 'task_' + Date.now(),
-        title: title,
-        subject: subject,
-        date: date,
-        completed: false
-      };
-
+      const newTask = { id: 'task_' + Date.now(), title, subject, date, completed: false };
       let tasks = JSON.parse(localStorage.getItem('mindclass_tasks_' + userKey)) || [];
       tasks.push(newTask);
       localStorage.setItem('mindclass_tasks_' + userKey, JSON.stringify(tasks));
@@ -697,7 +929,7 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
       if (!container) return;
 
       const tasks = JSON.parse(localStorage.getItem('mindclass_tasks_' + userKey)) || [];
-      if (counter) counter.textContent = tasks.length + (tasks.length === 1 ? ' tarea' : ' tareas');
+      counter.textContent = tasks.length + (tasks.length === 1 ? ' pendiente' : ' pendientes');
       container.innerHTML = '';
 
       if (tasks.length === 0) {
@@ -707,19 +939,17 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
 
       tasks.forEach((task) => {
         const itemDiv = document.createElement('div');
-        itemDiv.className = `bg-darkBg border border-borderBg rounded-xl p-3.5 flex items-center justify-between gap-3 transition-all ${task.completed ? 'opacity-60' : ''}`;
+        itemDiv.className = `bg-darkBg border border-borderBg rounded-xl p-3 flex items-center justify-between gap-3 ${task.completed ? 'opacity-60' : ''}`;
         itemDiv.innerHTML = `
           <div class="flex items-center space-x-3 min-w-0">
-            <input type="checkbox" ${task.completed ? 'checked' : ''} onclick="toggleTaskComplete('${task.id}')" class="w-4 h-4 accent-accentBlue rounded cursor-pointer">
+            <input type="checkbox" ${task.completed ? 'checked' : ''} onclick="toggleTaskComplete('${task.id}')" class="w-4 h-4 accent-blue-500 rounded cursor-pointer">
             <div class="min-w-0">
-              <span class="text-[10px] bg-accentBlue/20 text-accentBlue font-bold px-2 py-0.5 rounded">${task.subject}</span>
+              <span class="text-[10px] bg-blue-500/20 text-blue-400 font-bold px-2 py-0.5 rounded">${task.subject}</span>
               <h4 class="text-xs font-bold text-white truncate mt-1 ${task.completed ? 'line-through text-slate-500' : ''}">${task.title}</h4>
-              <p class="text-[10px] text-amber-400 mt-0.5"><i class="fa-regular fa-calendar mr-1"></i>Fecha límite: <strong>${task.date}</strong></p>
+              <p class="text-[10px] text-amber-400 mt-0.5"><i class="fa-regular fa-calendar mr-1"></i>Vence: ${task.date}</p>
             </div>
           </div>
-          <button onclick="deleteTask('${task.id}')" class="text-slate-500 hover:text-red-400 text-xs p-1" title="Eliminar tarea">
-            <i class="fa-solid fa-trash"></i>
-          </button>
+          <button onclick="deleteTask('${task.id}')" class="text-slate-500 hover:text-red-400 text-xs p-1"><i class="fa-solid fa-trash"></i></button>
         `;
         container.appendChild(itemDiv);
       });
@@ -729,10 +959,7 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
       const userKey = getUserUniqueKey();
       if (!userKey) return;
       let tasks = JSON.parse(localStorage.getItem('mindclass_tasks_' + userKey)) || [];
-      tasks = tasks.map(t => {
-        if (t.id === taskId) t.completed = !t.completed;
-        return t;
-      });
+      tasks = tasks.map(t => { if (t.id === taskId) t.completed = !t.completed; return t; });
       localStorage.setItem('mindclass_tasks_' + userKey, JSON.stringify(tasks));
       renderUserTasks();
     }
@@ -746,7 +973,7 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
       renderUserTasks();
     }
 
-    // TEMPORIZADOR POMODORO
+    /* ===== Temporizador Pomodoro ===== */
     let timerInterval = null;
     const totalTime = 25 * 60;
     let timeLeft = totalTime;
@@ -755,10 +982,7 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
     function updateTimerDisplay() {
       const minutes = Math.floor(timeLeft / 60);
       const seconds = timeLeft % 60;
-      const display = document.getElementById('timerDisplay');
-      if (display) {
-        display.textContent = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2, '0')}`;
-      }
+      document.getElementById('timerDisplay').textContent = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2, '0')}`;
       const circle = document.getElementById('timerProgressCircle');
       if (circle) {
         const progressOffset = circleCircumference - (timeLeft / totalTime) * circleCircumference;
@@ -768,67 +992,43 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
 
     function startTimer() {
       if (timerInterval) return;
-      const statusLabel = document.getElementById('timerStatusLabel');
-      if (statusLabel) {
-        statusLabel.textContent = 'Enfoque Activo';
-        statusLabel.className = 'text-[9px] text-emerald-400 uppercase tracking-widest font-bold';
-      }
+      document.getElementById('timerStatusLabel').textContent = 'Enfoque Activo';
+      document.getElementById('timerStatusLabel').className = 'text-[9px] text-emerald-400 uppercase tracking-widest font-bold mt-0.5';
       timerInterval = setInterval(() => {
-        if (timeLeft > 0) {
-          timeLeft--;
-          updateTimerDisplay();
-        } else {
-          clearInterval(timerInterval);
-          timerInterval = null;
-          alert("¡Tiempo de estudio cumplido! Tómate 5 minutos de descanso.");
-        }
+        if (timeLeft > 0) { timeLeft--; updateTimerDisplay(); }
+        else { clearInterval(timerInterval); timerInterval = null; alert("¡Sesión de estudio terminada! Tómate un descanso."); }
       }, 1000);
     }
 
     function pauseTimer() {
-      clearInterval(timerInterval);
-      timerInterval = null;
-      const statusLabel = document.getElementById('timerStatusLabel');
-      if (statusLabel) {
-        statusLabel.textContent = 'Pausado';
-        statusLabel.className = 'text-[9px] text-amber-400 uppercase tracking-widest font-bold';
-      }
+      clearInterval(timerInterval); timerInterval = null;
+      document.getElementById('timerStatusLabel').textContent = 'Pausado';
+      document.getElementById('timerStatusLabel').className = 'text-[9px] text-amber-400 uppercase tracking-widest font-bold mt-0.5';
     }
 
     function resetTimer() {
-      clearInterval(timerInterval);
-      timerInterval = null;
-      timeLeft = totalTime;
+      clearInterval(timerInterval); timerInterval = null; timeLeft = totalTime;
       updateTimerDisplay();
-      const statusLabel = document.getElementById('timerStatusLabel');
-      if (statusLabel) {
-        statusLabel.textContent = 'Listo para iniciar';
-        statusLabel.className = 'text-[9px] text-slate-400 uppercase tracking-widest font-bold';
-      }
+      document.getElementById('timerStatusLabel').textContent = 'Listo para iniciar';
+      document.getElementById('timerStatusLabel').className = 'text-[9px] text-slate-400 uppercase tracking-widest font-bold mt-0.5';
     }
 
-    // PUBLICACIÓN UNIVERSAL
+    /* ===== Publicación Universal ===== */
     function handleUniversalPublish(e) {
       e.preventDefault();
       const subject = document.getElementById('pubSubject').value;
       const title = document.getElementById('pubTitle').value;
       const content = document.getElementById('pubContent').value;
       const userKey = getUserUniqueKey();
-      if (!userKey || !currentUser) return;
+      if (!userKey) return;
 
       let targetNode = 'aprendeJunto/dudas';
       if (currentAprendeTab === 'flashcards') targetNode = 'aprendeJunto/flashcards';
       if (currentAprendeTab === 'apuntes') targetNode = 'aprendeJunto/apuntes';
 
       const newItem = {
-        subject: subject,
-        title: title,
-        content: content,
-        author: currentUser.name,
-        authorEmail: currentUser.email,
-        timestamp: firebase.database.ServerValue.TIMESTAMP,
-        likes: 0,
-        voters: {}
+        subject, title, content, author: currentUser.name, authorEmail: currentUser.email,
+        timestamp: firebase.database.ServerValue.TIMESTAMP, likes: 0, voters: {}
       };
 
       database.ref(targetNode).push(newItem).then(() => {
@@ -838,7 +1038,7 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
       });
     }
 
-    // FIREBASE LISTENERS Y LIKES
+    /* ===== Firebase Listeners ===== */
     function initFirebaseListeners() {
       const userKey = getUserUniqueKey();
 
@@ -847,28 +1047,24 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
         if (!container) return;
         container.innerHTML = '';
         const data = snapshot.val();
-        if (!data) {
-          container.innerHTML = '<p class="text-xs text-slate-500 text-center py-6">No hay publicaciones activas en Dudas.</p>';
-          return;
-        }
+        if (!data) { container.innerHTML = '<p class="text-xs text-slate-500 text-center py-6">No hay consultas publicadas.</p>'; return; }
+
         Object.keys(data).reverse().forEach(key => {
           const item = data[key];
-          const voters = item.voters || {};
-          const hasVoted = userKey && voters[userKey];
-
+          const hasVoted = userKey && item.voters && item.voters[userKey];
           const card = document.createElement('div');
-          card.className = "bg-cardBg border border-borderBg rounded-2xl p-5 space-y-3";
+          card.className = "bg-cardBg border border-borderBg rounded-2xl p-4 space-y-2";
           card.innerHTML = `
-            <div class="flex items-center justify-between">
-              <span class="text-[10px] bg-accentBlue/20 text-accentBlue font-bold px-2.5 py-1 rounded-md border border-accentBlue/30">${item.subject}</span>
-              <span class="text-[10px] text-slate-500">${new Date(item.timestamp || Date.now()).toLocaleDateString()}</span>
+            <div class="flex justify-between items-center text-[10px]">
+              <span class="bg-blue-500/20 text-blue-400 font-bold px-2 py-0.5 rounded border border-blue-500/30">${item.subject}</span>
+              <span class="text-slate-500">${new Date(item.timestamp || Date.now()).toLocaleDateString()}</span>
             </div>
-            <h3 class="font-bold text-white text-sm">${item.title}</h3>
+            <h4 class="font-bold text-white text-xs">${item.title}</h4>
             <p class="text-xs text-slate-300 leading-relaxed">${item.content}</p>
-            <div class="flex items-center justify-between pt-2 border-t border-borderBg text-xs text-slate-400">
-              <span>Por: <strong class="text-slate-200">${item.author}</strong></span>
-              <button onclick="toggleLike('dudas', '${key}')" class="${hasVoted ? 'text-accentBlue font-bold' : 'text-slate-400'} hover:text-accentBlue flex items-center gap-1 transition-colors">
-                <i class="${hasVoted ? 'fa-solid' : 'fa-regular'} fa-thumbs-up"></i><span>(${item.likes || 0})</span>
+            <div class="flex justify-between items-center text-[10px] text-slate-400 pt-2 border-t border-borderBg">
+              <span>Por: ${item.author}</span>
+              <button onclick="toggleLike('dudas', '${key}')" class="${hasVoted ? 'text-blue-400 font-bold' : 'text-slate-400'} hover:text-blue-400 flex items-center gap-1">
+                <i class="${hasVoted ? 'fa-solid' : 'fa-regular'} fa-thumbs-up"></i> (${item.likes || 0})
               </button>
             </div>
           `;
@@ -876,6 +1072,7 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
         });
       });
 
+      // Flashcards
       database.ref('aprendeJunto/flashcards').on('value', (snapshot) => {
         const container = document.getElementById('flashcardsFeedContainer');
         if (!container) return;
@@ -886,36 +1083,35 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
           fc1: { subject: "Álgebra", title: "¿Cuál es la fórmula de la diferencia de cuadrados?", content: "a² - b² = (a + b) (a - b)" },
           fc2: { subject: "Física", title: "¿Qué mide la aceleración en el MRUV?", content: "El cambio de velocidad por cada unidad de tiempo." }
         };
-        
         const cardsToRender = data ? { ...defaultCards, ...data } : defaultCards;
 
         Object.keys(cardsToRender).forEach(key => {
           const item = cardsToRender[key];
           const cardDiv = document.createElement('div');
-          cardDiv.className = "bg-darkBg border border-borderBg rounded-xl p-5 cursor-pointer transition-all space-y-2 hover:border-accentBlue text-center select-none";
-          
-          let isFlipped = false;
+          cardDiv.className = "bg-darkBg border border-borderBg rounded-xl p-4 cursor-pointer text-center hover:border-blue-500 transition-all select-none";
+          let flipped = false;
+
           cardDiv.innerHTML = `
-            <span class="text-[10px] text-accentBlue font-bold uppercase">${item.subject} • Flashcard</span>
-            <h4 class="text-xs font-bold text-white">${item.title}</h4>
-            <p class="text-[11px] text-slate-400 italic pt-1">(Haz clic para ver la respuesta)</p>
+            <span class="text-[10px] text-blue-400 font-bold uppercase">${item.subject} • Flashcard</span>
+            <h4 class="text-xs font-bold text-white my-2">${item.title}</h4>
+            <p class="text-[10px] text-slate-500 italic">(Haz clic para voltear)</p>
           `;
 
           cardDiv.addEventListener('click', () => {
-            isFlipped = !isFlipped;
-            if (isFlipped) {
-              cardDiv.className = "bg-accentBlue/20 border border-accentBlue rounded-xl p-5 cursor-pointer transition-all space-y-2 text-center select-none";
+            flipped = !flipped;
+            if (flipped) {
+              cardDiv.className = "bg-blue-600/20 border border-blue-500 rounded-xl p-4 cursor-pointer text-center transition-all select-none";
               cardDiv.innerHTML = `
                 <span class="text-[10px] text-sky-300 font-bold uppercase">${item.subject} • Respuesta</span>
-                <h4 class="text-xs font-bold text-white">${item.content}</h4>
-                <p class="text-[11px] text-sky-200/70 italic pt-1">(Haz clic para volver a la pregunta)</p>
+                <h4 class="text-xs font-bold text-white my-2">${item.content}</h4>
+                <p class="text-[10px] text-sky-200/70 italic">(Haz clic para volver a la pregunta)</p>
               `;
             } else {
-              cardDiv.className = "bg-darkBg border border-borderBg rounded-xl p-5 cursor-pointer transition-all space-y-2 hover:border-accentBlue text-center select-none";
+              cardDiv.className = "bg-darkBg border border-borderBg rounded-xl p-4 cursor-pointer text-center hover:border-blue-500 transition-all select-none";
               cardDiv.innerHTML = `
-                <span class="text-[10px] text-accentBlue font-bold uppercase">${item.subject} • Flashcard</span>
-                <h4 class="text-xs font-bold text-white">${item.title}</h4>
-                <p class="text-[11px] text-slate-400 italic pt-1">(Haz clic para ver la respuesta)</p>
+                <span class="text-[10px] text-blue-400 font-bold uppercase">${item.subject} • Flashcard</span>
+                <h4 class="text-xs font-bold text-white my-2">${item.title}</h4>
+                <p class="text-[10px] text-slate-500 italic">(Haz clic para voltear)</p>
               `;
             }
           });
@@ -923,20 +1119,17 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
         });
       });
 
+      // Apuntes
       database.ref('aprendeJunto/apuntes').on('value', (snapshot) => {
         const container = document.getElementById('apuntesFeedContainer');
         if (!container) return;
         container.innerHTML = '';
         const data = snapshot.val();
-        if (!data) {
-          container.innerHTML = '<p class="text-xs text-slate-500 text-center py-6 col-span-2">Aún no hay apuntes compartidos. ¡Sé el primero en subir uno!</p>';
-          return;
-        }
+        if (!data) { container.innerHTML = '<p class="text-xs text-slate-500 text-center py-6 col-span-2">No hay apuntes compartidos.</p>'; return; }
+
         Object.keys(data).reverse().forEach(key => {
           const item = data[key];
-          const voters = item.voters || {};
-          const hasVoted = userKey && voters[userKey];
-
+          const hasVoted = userKey && item.voters && item.voters[userKey];
           const card = document.createElement('div');
           card.className = "bg-darkBg border border-borderBg rounded-xl p-3.5 space-y-2";
           card.innerHTML = `
@@ -944,9 +1137,9 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
             <h4 class="text-xs font-bold text-white">${item.title}</h4>
             <p class="text-[11px] text-slate-300">${item.content}</p>
             <div class="flex justify-between items-center text-[10px] text-slate-500 pt-2 border-t border-borderBg/50">
-              <span>Aportado por: ${item.author}</span>
-              <button onclick="toggleLike('apuntes', '${key}')" class="${hasVoted ? 'text-accentBlue font-bold' : 'text-slate-400'} hover:text-accentBlue flex items-center gap-1 transition-colors">
-                <i class="${hasVoted ? 'fa-solid' : 'fa-regular'} fa-thumbs-up mr-1"></i>Útil (${item.likes || 0})
+              <span>Por: ${item.author}</span>
+              <button onclick="toggleLike('apuntes', '${key}')" class="${hasVoted ? 'text-blue-400 font-bold' : 'text-slate-400'} hover:text-blue-400">
+                <i class="${hasVoted ? 'fa-solid' : 'fa-regular'} fa-thumbs-up"></i> (${item.likes || 0})
               </button>
             </div>
           `;
@@ -975,22 +1168,17 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
       });
     }
 
-    // VOZ ESCOLAR
+    /* ===== VozEscolar ===== */
     function handleVozEscolarSubmit(e) {
       e.preventDefault();
       const title = document.getElementById('vozTitle').value;
       const desc = document.getElementById('vozDesc').value;
       const userKey = getUserUniqueKey();
-      if (!userKey || !currentUser) return;
+      if (!userKey) return;
 
       const newPropuesta = {
-        title: title,
-        description: desc,
-        author: currentUser.name,
-        authorEmail: currentUser.email,
-        votes: 0,
-        voters: {},
-        timestamp: firebase.database.ServerValue.TIMESTAMP
+        title, description: desc, author: currentUser.name, authorEmail: currentUser.email,
+        votes: 0, voters: {}, timestamp: firebase.database.ServerValue.TIMESTAMP
       };
 
       database.ref('vozEscolar').push(newPropuesta).then(() => {
@@ -1006,33 +1194,22 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
         if (!container) return;
         container.innerHTML = '';
         const data = snapshot.val();
-        if (!data) {
-          container.innerHTML = '<p class="text-xs text-slate-500 text-center py-4">No hay propuestas activas en este momento.</p>';
-          return;
-        }
+        if (!data) { container.innerHTML = '<p class="text-xs text-slate-500 text-center py-4">No hay propuestas registradas.</p>'; return; }
+
         Object.keys(data).reverse().forEach(key => {
           const item = data[key];
-          const voters = item.voters || {};
-          const hasVoted = userKey && voters[userKey];
-
+          const hasVoted = userKey && item.voters && item.voters[userKey];
           const card = document.createElement('div');
           card.className = "bg-darkBg border border-borderBg rounded-xl p-4 space-y-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3";
           card.innerHTML = `
             <div class="space-y-1 min-w-0">
-              <div class="flex items-center gap-2 text-[10px] text-slate-400">
-                <span class="text-purple-400 font-bold">${item.author}</span>
-                <span>•</span>
-                <span>${new Date(item.timestamp || Date.now()).toLocaleDateString()}</span>
-              </div>
+              <span class="text-[10px] text-purple-400 font-bold">${item.author}</span>
               <h5 class="text-xs font-bold text-white">${item.title}</h5>
-              <p class="text-[11px] text-slate-300 leading-relaxed">${item.description}</p>
+              <p class="text-[11px] text-slate-300">${item.description}</p>
             </div>
-            <div class="flex items-center gap-3 self-end sm:self-center flex-shrink-0">
-              <button onclick="votePropuesta('${key}')" class="${hasVoted ? 'bg-purple-600 text-white border-purple-400 font-bold' : 'bg-purple-600/20 text-purple-300 border-purple-500/40'} hover:bg-purple-600 hover:text-white border px-3 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5">
-                <i class="fa-solid fa-thumbs-up"></i>
-                <span>${hasVoted ? 'Votado' : 'Me parece bien'} (${item.votes || 0})</span>
-              </button>
-            </div>
+            <button onclick="votePropuesta('${key}')" class="${hasVoted ? 'bg-purple-600 text-white font-bold' : 'bg-purple-600/20 text-purple-300'} border border-purple-500/40 px-3 py-1.5 rounded-xl text-xs flex items-center gap-1.5 self-end sm:self-center">
+              <i class="fa-solid fa-thumbs-up"></i> <span>${hasVoted ? 'Votado' : 'Apoyar'} (${item.votes || 0})</span>
+            </button>
           `;
           container.appendChild(card);
         });
@@ -1059,38 +1236,27 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
       });
     }
 
-    // CHAT DE SALÓN
+    /* ===== Chat de Salón ===== */
     function initChatSalonListener() {
       if (!currentUser || !currentUser.grade) return;
       const gradeKey = currentUser.grade.replace(/[.#$/[\]]/g, "_");
-      const roomTitle = document.getElementById('chatRoomTitle');
-      if (roomTitle) roomTitle.textContent = currentUser.grade;
+      document.getElementById('chatRoomTitle').textContent = currentUser.grade;
 
       database.ref('chatSalones/' + gradeKey).on('value', (snapshot) => {
         const container = document.getElementById('chatMessagesContainer');
         if (!container) return;
         container.innerHTML = '';
         const data = snapshot.val();
-        if (!data) {
-          container.innerHTML = '<p class="text-xs text-slate-500 text-center py-8">Aún no hay mensajes en este salón. ¡Sé el primero en escribir!</p>';
-          return;
-        }
+        if (!data) { container.innerHTML = '<p class="text-xs text-slate-500 text-center py-8">Aún no hay mensajes en este salón.</p>'; return; }
+
         Object.keys(data).forEach(key => {
           const msg = data[key];
           const isMe = currentUser && (msg.authorEmail === currentUser.email);
           const msgDiv = document.createElement('div');
           msgDiv.className = `flex flex-col ${isMe ? 'items-end' : 'items-start'} space-y-1`;
           msgDiv.innerHTML = `
-            <div class="flex items-center gap-2 text-[10px] text-slate-400">
-              <span class="font-bold ${isMe ? 'text-accentBlue' : 'text-emerald-400'}">${isMe ? 'Tú' : msg.author}</span>
-              <span>•</span>
-              <span>${new Date(msg.timestamp || Date.now()).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-            </div>
-            <div class="max-w-[80%] rounded-2xl px-4 py-2 text-xs leading-relaxed ${
-              isMe 
-              ? 'bg-accentBlue text-white rounded-tr-none shadow-md shadow-accentBlue/20' 
-              : 'bg-sidebarBg border border-borderBg text-slate-200 rounded-tl-none'
-            }">
+            <span class="text-[10px] text-slate-400">${isMe ? 'Tú' : msg.author}</span>
+            <div class="max-w-[80%] rounded-2xl px-4 py-2 text-xs ${isMe ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-sidebarBg border border-borderBg text-slate-200 rounded-tl-none'}">
               ${msg.text}
             </div>
           `;
@@ -1108,15 +1274,10 @@ html,body{margin:0;background:#e6e5fc;font-family:'Outfit',system-ui,sans-serif;
 
       const gradeKey = currentUser.grade.replace(/[.#$/[\]]/g, "_");
       const newMessage = {
-        text: text,
-        author: currentUser.name,
-        authorEmail: currentUser.email || '',
-        timestamp: firebase.database.ServerValue.TIMESTAMP
+        text, author: currentUser.name, authorEmail: currentUser.email || '', timestamp: firebase.database.ServerValue.TIMESTAMP
       };
 
-      database.ref('chatSalones/' + gradeKey).push(newMessage).then(() => {
-        if (input) input.value = '';
-      });
+      database.ref('chatSalones/' + gradeKey).push(newMessage).then(() => { input.value = ''; });
     }
 
     function logout() {
